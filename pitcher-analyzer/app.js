@@ -159,20 +159,30 @@ function safeScore(value) {
         : 0;
 }
 
-// -------------------------------
-// Utility: Fetch pitcher data
-// -------------------------------
 async function loadPitcher(name, season) {
-    const url = `/api/pitchers?name=${encodeURIComponent(name)}&season=${season}`;
+    const url = `data/pitchers_${season}.json`;
     const res = await fetch(url);
 
     if (!res.ok) {
+        alert("Season data not found.");
+        return null;
+    }
+
+    const seasonData = await res.json();
+
+    // Find the pitcher inside the JSON
+    const pitcher = seasonData.find(p =>
+        p.Player.toLowerCase().includes(name.toLowerCase())
+    );
+
+    if (!pitcher) {
         alert("Pitcher not found.");
         return null;
     }
 
-    return await res.json();
+    return pitcher;
 }
+
 
 // -------------------------------
 // Battery fill updater
