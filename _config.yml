@@ -1,3 +1,11 @@
-title: 8X
-theme: jekyll-theme-minimal
-description:  QB Analyzer and Pitcher Analyzer Available!  Defense Analyzer and Batter Analyzer coming soon!
+title: "Pitcher & QB Analyzer"
+description: "Clean, modern analytics tools built with HTML, CSS, JS, and R/CSV."
+theme: null
+markdown: kramdown
+exclude:
+  - README.md
+  - LICENSE
+  - node_modules/
+  - "*.R"
+  - "*.csv"
+  - "*.Rproj"
