@@ -704,3 +704,28 @@ async function loadLastUpdated(season) {
         `Last updated on ${formatted}`;
 }
 
+// -------------------------------
+// Wire up UI buttons
+// -------------------------------
+document.getElementById("loadBtn").addEventListener("click", handleLoad);
+document.getElementById("resetBtn").addEventListener("click", handleReset);
+document.getElementById("compareBtn").addEventListener("click", showCompareModal);
+document.getElementById("rankBtn").addEventListener("click", () => {
+    document.getElementById("rankModal").style.display = "flex";
+});
+
+// Trend buttons
+document.querySelectorAll(".trend-btn").forEach(btn => {
+    btn.addEventListener("click", () => showTrend(btn.dataset.stat));
+});
+
+// Close modals
+document.getElementById("trendClose").onclick = () =>
+    document.getElementById("trendModal").style.display = "none";
+
+document.getElementById("compareClose").onclick = () =>
+    document.getElementById("compareModal").style.display = "none";
+
+document.getElementById("rankClose").onclick = () =>
+    document.getElementById("rankModal").style.display = "none";
+
