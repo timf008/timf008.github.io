@@ -654,8 +654,10 @@ document.getElementById("swapBtn").onclick = function () {
     name2.value = tempName;
     season2.value = tempSeason;
 
-    document.getElementById("btnGenerate").click();
+    // FIXED: Trigger the correct load button
+    document.getElementById("loadBtn").click();
 };
+
 
 // -------------------------------
 // Spinner Helpers
