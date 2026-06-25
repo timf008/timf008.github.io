@@ -159,28 +159,19 @@ function safeScore(value) {
         : 0;
 }
 
+// -------------------------------
+// Utility: Fetch pitcher data
+// -------------------------------
 async function loadPitcher(name, season) {
-    const url = `data/pitchers_${season}.json`;
+    const url = `https://pitcher-analyzer-backend.onrender.com/api/pitchers?name=${encodeURIComponent(name)}&season=${season}`;
     const res = await fetch(url);
 
     if (!res.ok) {
-        alert("Season data not found.");
-        return null;
-    }
-
-    const seasonData = await res.json();
-
-    // Find the pitcher inside the JSON
-    const pitcher = seasonData.find(p =>
-        p.Player.toLowerCase().includes(name.toLowerCase())
-    );
-
-    if (!pitcher) {
         alert("Pitcher not found.");
         return null;
     }
 
-    return pitcher;
+    return await res.json();
 }
 
 
@@ -599,7 +590,7 @@ async function fetchTrendData(name, stat) {
     }
 
     // 2. Fallback to backend
-    const url = `/api/pitcherTrend?name=${encodeURIComponent(name)}&stat=${stat}`;
+    const url = `https://pitcher-analyzer-backend.onrender.com/api/pitcherTrend?name=${encodeURIComponent(name)}&stat=${stat}`;
     const res = await fetch(url);
 
     if (!res.ok) {
@@ -609,6 +600,7 @@ async function fetchTrendData(name, stat) {
 
     return await res.json();
 }
+
 
 
 // -------------------------------
@@ -804,10 +796,13 @@ function getPitcherTier(score) {
 // Rank Button
 // -------------------------------
 async function fetchPitcherList(season) {
-    const res = await fetch(`/api/pitcherList?season=${season}`);
+    const url = `https://pitcher-analyzer-backend.onrender.com/api/pitcherList?season=${season}`;
+    const res = await fetch(url);
+
     if (!res.ok) return [];
     return await res.json();
 }
+
 
 // ⭐ Batch loader to prevent resource exhaustion
 async function fetchInBatches(list, season, batchSize = 10) {
@@ -996,7 +991,8 @@ function handleReset() {
 // Latest Update Timestamp
 // -------------------------------
 async function loadLastUpdated(season) {
-    const res = await fetch(`/api/last-updated/pitchers/${season}`);
+    const url = `https://pitcher-analyzer-backend.onrender.com/api/last-updated/pitchers/${season}`;
+    const res = await fetch(url);
     const data = await res.json();
 
     const date = new Date(data.lastUpdated);
@@ -1009,6 +1005,7 @@ async function loadLastUpdated(season) {
     document.getElementById('lastUpdated').textContent =
         `Last updated on ${formatted}`;
 }
+
 
 
 
