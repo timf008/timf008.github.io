@@ -1,148 +1,7 @@
 // -----------------------------------------------------
 // Pitcher Analyzer - app.js
-// Clean, modular, single-file architecture
+// Backend-only, no CSV preload
 // -----------------------------------------------------
-
-
-// -------------------------------
-// Multi Season Preload
-// -------------------------------
-const PRELOAD_SEASONS = [2026, 2025, 2024, 2023, 2022, 2021, 2020];
-
-const PRELOADED_PITCHING = {};
-const PRELOAD_COMPLETE = {};
-
-PRELOAD_SEASONS.forEach(season => {
-  PRELOADED_PITCHING[season] = [];
-  PRELOAD_COMPLETE[season] = false;
-});
-
-function loadCSV(path) {
-  const request = new XMLHttpRequest();
-  request.open("GET", path, false); // synchronous
-  request.send(null);
-
-  const lines = request.responseText.trim().split("\n");
-  const headers = lines[0].split(",");
-
-  return lines.slice(1).map(line => {
-    const values = line.split(",");
-    const obj = {};
-    headers.forEach((h, i) => obj[h] = values[i]);
-
-// 1. Convert numeric-looking fields
-for (const key in obj) {
-  const num = parseFloat(obj[key]);
-  if (!isNaN(num)) obj[key] = num;
-}
-
-// 2. Normalize Stathead column names
-if (obj["HR/9"]) obj.HR9 = obj["HR/9"];
-if (obj["BB/9"]) obj.BB9 = obj["BB/9"];
-if (obj["SO/9"]) obj.SO9 = obj["SO/9"];
-
-// 3. Compute missing rate stats
-if (obj.SO && obj.BF) obj.Kpct = (obj.SO / obj.BF) * 100;
-if (obj.BB && obj.BF) obj.BBpct = (obj.BB / obj.BF) * 100;
-
-// ⭐ 4. Compute KBB (K/BB ratio) — FINAL FIX
-if (typeof obj.SO === "number" && typeof obj.BB === "number" && obj.BB > 0) {
-    obj.KBB = obj.SO / obj.BB;
-}
-
-// 5. Convert IP from Stathead format
-if (obj.IP !== undefined) {
-  const ip = obj.IP;
-  const whole = Math.floor(ip);
-  const decimal = ip - whole;
-
-  let converted = whole;
-
-  if (decimal > 0 && decimal < 0.34) converted += 1/3;
-  else if (decimal >= 0.34) converted += 2/3;
-
-  obj.IP = converted;
-}
-
-// 6. Round values
-const roundKeys = ["ERA", "WHIP", "HR9", "BB9", "SO9", "Kpct", "BBpct", "KBB", "IP"];
-for (const key of roundKeys) {
-  if (typeof obj[key] === "number") {
-    obj[key] = Math.round(obj[key] * 100) / 100;
-  }
-}
-
-
-
-    return obj;
-  });
-}
-
-async function preloadPitcherData() {
-    const overlay = document.getElementById("preloadOverlay");
-    const text = document.getElementById("preloadText");
-    const fill = document.getElementById("preloadFill");
-
-    overlay.style.display = "flex";
-
-    const totalSeasons = PRELOAD_SEASONS.length;
-    let completedSeasons = 0;
-
-    // Load each season (no row-by-row animation)
-    for (const season of PRELOAD_SEASONS) {
-
-        text.textContent = `Loading ${season}…`;
-
-        // Load CSV for this season
-        const path = `PitcherAnalyzer/stathead_pitching_${season}.csv`;
-        PRELOADED_PITCHING[season] = loadCSV(path);
-
-        PRELOAD_COMPLETE[season] = true;
-
-        // Update progress bar based on seasons completed
-        completedSeasons++;
-        const pct = Math.floor((completedSeasons / totalSeasons) * 100);
-        fill.style.width = pct + "%";
-
-        // Smooth animation
-        await new Promise(r => setTimeout(r, 150));
-    }
-
-    // Done
-    text.textContent = "Complete!";
-    fill.style.width = "100%";
-
-    setTimeout(() => {
-        overlay.style.display = "none";
-    }, 400);
-}
-
-
-
-// -------------------------------
-// Helpers
-// -------------------------------
-function getPitcherList(season) {
-    if (!PRELOAD_COMPLETE[season]) return [];
-
-    return PRELOADED_PITCHING[season]
-        .filter(row => row.GS >= 10)   // ⭐ minimum 10 starts
-        .map(row => row.Player);
-}
-
-
-function getPitcherRow(name, season) {
-  if (!PRELOAD_COMPLETE[season]) return null;
-
-  const lower = name.toLowerCase();
-
-  return PRELOADED_PITCHING[season].find(row =>
-    row.Player && row.Player.toLowerCase().includes(lower)
-  );
-}
-
-
-
 
 // -------------------------------
 // Safe helpers
@@ -167,13 +26,13 @@ async function loadPitcher(name, season) {
     const res = await fetch(url);
 
     if (!res.ok) {
+        console.error("Pitcher fetch failed", await res.text());
         alert("Pitcher not found.");
         return null;
     }
 
-    return await res.json();
+    return await res.json(); // API returns an array
 }
-
 
 // -------------------------------
 // Battery fill updater
@@ -184,16 +43,15 @@ function updateBattery(id, score) {
 
     const fill = (score / 10) * 100;
 
-    // Decide color based on score
     let color;
     if (score < 3) {
-        color = "#d50000";      // red
+        color = "#d50000";
     } else if (score < 5.5) {
-        color = "#ff9800";      // orange
+        color = "#ff9800";
     } else if (score < 7.5) {
-        color = "#ffb400";      // yellow-orange
+        color = "#ffb400";
     } else {
-        color = "#00c853";      // green
+        color = "#00c853";
     }
 
     el.style.setProperty("--fillWidth", `${fill}%`);
@@ -229,6 +87,17 @@ function updateOverall(score) {
     updateBattery("battery-overall", safeScore(score));
 }
 
+function getTierClass(tier) {
+    switch (tier) {
+        case "Ace": return "tier-great";
+        case "Top Starter": return "tier-good";
+        case "Mid Rotation": return "tier-fair";
+        case "Back End": return "tier-average";
+        case "Depth": return "tier-belowavg";
+        default: return "";
+    }
+}
+
 function updateTier(score) {
     let tier = "—";
 
@@ -238,11 +107,9 @@ function updateTier(score) {
     else if (score >= 4.0) tier = "Back End";
     else tier = "Depth";
 
-    // Use badge HTML instead of plain text
     document.getElementById("overallTier").innerHTML =
         `<span class="tier-badge ${getTierClass(tier)}">${tier}</span>`;
 }
-
 
 // -------------------------------
 // Scouting note generator
@@ -251,45 +118,27 @@ function updateScoutingNote(p) {
     const strengths = [];
     const concerns = [];
 
-    // -------------------------
-    // Strikeout traits (K%)
-    // -------------------------
     if (p.Kpct > 28) strengths.push("impact swing‑and‑miss");
     else if (p.Kpct > 24) strengths.push("above‑average bat‑missing ability");
     else if (p.Kpct < 20) concerns.push("below‑average bat‑missing ability");
 
-    // -------------------------
-    // Traffic control (WHIP)
-    // -------------------------
     if (p.WHIP < 1.10) strengths.push("premium traffic control");
     else if (p.WHIP < 1.20) strengths.push("manageable baserunner profile");
     else if (p.WHIP > 1.30) concerns.push("inconsistent command leading to traffic");
 
-    // -------------------------
-    // Strike‑throwing efficiency (K/BB)
-    // -------------------------
     if (p.KBB > 4) strengths.push("efficient strike‑throwing");
     else if (p.KBB > 3) strengths.push("workable command");
     else if (p.KBB < 2) concerns.push("erratic strike‑throwing");
 
-    // -------------------------
-    // ⭐ NEW: Walk rate tiers (BB%)
-    // -------------------------
     if (p.BBpct < 5) strengths.push("plus walk suppression");
     else if (p.BBpct < 7) strengths.push("solid underlying command");
     else if (p.BBpct > 9) concerns.push("elevated walk rate that may limit consistency");
     else if (p.BBpct > 11) concerns.push("high‑risk command profile with frequent free passes");
 
-    // -------------------------
-    // Underlying indicators (FIP)
-    // -------------------------
     if (p.FIP < 3.5) strengths.push("supportive underlying metrics");
     else if (p.FIP < 4.0) strengths.push("stable underlying indicators");
     else if (p.FIP > 4.5) concerns.push("underlying indicators raise questions");
 
-    // -------------------------
-    // Build final note
-    // -------------------------
     let note = "";
 
     if (strengths.length && !concerns.length) {
@@ -306,20 +155,88 @@ function updateScoutingNote(p) {
             ".";
     }
 
-    // -------------------------
-    // Add W-L Context
-    // -------------------------
-if (p.W !== undefined && p.L !== undefined) {
-    const wl = `${p.W}-${p.L}`;
-    note += `\nW–L this season: ${wl}.`;
-}
-
+    if (p.W !== undefined && p.L !== undefined) {
+        const wl = `${p.W}-${p.L}`;
+        note += `\nW–L this season: ${wl}.`;
+    }
 
     document.getElementById("scoutingNote").innerHTML = note;
 }
 
 // -------------------------------
-// Main: Load player + update UI
+// Weighted Overall Score
+// -------------------------------
+function computeWeightedOverall({
+    eraScore,
+    whipScore,
+    kpctScore,
+    bbpctScore,
+    kbbScore,
+    ipScore,
+    hr9Score,
+    fipScore
+}) {
+    return (
+        eraScore  * 0.20 +
+        whipScore * 0.20 +
+        kpctScore * 0.15 +
+        bbpctScore* 0.10 +
+        kbbScore  * 0.15 +
+        ipScore   * 0.10 +
+        hr9Score  * 0.05 +
+        fipScore  * 0.05
+    );
+}
+
+function clamp(x, min, max) {
+    return Math.max(min, Math.min(max, x));
+}
+
+// ------------------------------
+// Scoring functions
+// ------------------------------
+function scoreERA(era) {
+    const score = 10 * (5.00 - era) / (5.00 - 2.00);
+    return clamp(score, 0, 10);
+}
+
+function scoreWHIP(whip) {
+    const score = 10 * (1.40 - whip) / (1.40 - 0.90);
+    return clamp(score, 0, 10);
+}
+
+function scoreKpct(kpct) {
+    const score = 10 * (kpct - 15) / (35 - 15);
+    return clamp(score, 0, 10);
+}
+
+function scoreBBpct(bbpct) {
+    const score = 10 * (10 - bbpct) / (10 - 3);
+    return clamp(score, 0, 10);
+}
+
+function scoreKBB(kbb) {
+    const score = 10 * (kbb - 1.5) / (6.0 - 1.5);
+    return clamp(score, 0, 10);
+}
+
+function scoreIP(ip) {
+    const score = 10 * (ip - 80) / (200 - 80);
+    return clamp(score, 0, 10);
+}
+
+function scoreHR9(hr9) {
+    const score = 10 * (1.8 - hr9) / (1.8 - 0.5);
+    return clamp(score, 0, 10);
+}
+
+function scoreFIP(fip) {
+    const score = 10 * (5.00 - fip) / (5.00 - 2.50);
+    return clamp(score, 0, 10);
+}
+
+// -------------------------------
+// Main: Load player + update UI (backend-only)
 // -------------------------------
 async function handleLoad() {
     showSpinner("spinner1");
@@ -328,27 +245,19 @@ async function handleLoad() {
         const name = document.getElementById("playerName").value.trim();
         const season = parseInt(document.getElementById("seasonSelect").value);
 
-
-
-
         if (!name) {
             alert("Enter a player name.");
             return;
         }
 
-        // -----------------------------------------
-        // USE PRELOADED CSV DATA ONLY
-        // -----------------------------------------
-        const p = getPitcherRow(name, season);
-
-        if (!p) {
+        const data = await loadPitcher(name, season);
+        if (!data || !data.length) {
             alert("Pitcher not found.");
             return;
         }
 
-        // ---------------------------
-        // SCORING
-        // ---------------------------
+        const p = data[0];
+
         const eraScore  = scoreERA(p.ERA);
         const whipScore = scoreWHIP(p.WHIP);
         const kpctScore = scoreKpct(p.Kpct);
@@ -358,9 +267,6 @@ async function handleLoad() {
         const hr9Score  = scoreHR9(p.HR9);
         const fipScore  = scoreFIP(p.FIP);
 
-        // ---------------------------
-        // Update UI (final values)
-        // ---------------------------
         updateERA(safeFixed(p.ERA, 2), eraScore);
         updateWHIP(safeFixed(p.WHIP, 2), whipScore);
         updateKpct(safeFixed(p.Kpct, 1), kpctScore);
@@ -392,100 +298,6 @@ async function handleLoad() {
     }
 }
 
-
-
-//-------Weighted Overall Score-------
-function computeWeightedOverall({
-    eraScore,
-    whipScore,
-    kpctScore,
-    bbpctScore,
-    kbbScore,
-    ipScore,
-    hr9Score,
-    fipScore
-}) {
-    return (
-        eraScore  * 0.20 +
-        whipScore * 0.20 +
-        kpctScore * 0.15 +
-        bbpctScore* 0.10 +
-        kbbScore  * 0.15 +
-        ipScore   * 0.10 +
-        hr9Score  * 0.05 +
-        fipScore  * 0.05
-    );
-}
-
-// Clamp helper
-function clamp(x, min, max) {
-    return Math.max(min, Math.min(max, x));
-}
-
-// ------------------------------
-// ERA (lower = better)
-// ------------------------------
-function scoreERA(era) {
-    const score = 10 * (5.00 - era) / (5.00 - 2.00);
-    return clamp(score, 0, 10);
-}
-
-// ------------------------------
-// WHIP (lower = better)
-// ------------------------------
-function scoreWHIP(whip) {
-    const score = 10 * (1.40 - whip) / (1.40 - 0.90);
-    return clamp(score, 0, 10);
-}
-
-// ------------------------------
-// K% (higher = better)
-// ------------------------------
-function scoreKpct(kpct) {
-    const score = 10 * (kpct - 15) / (35 - 15);
-    return clamp(score, 0, 10);
-}
-
-// ------------------------------
-// BB% (lower = better)
-// ------------------------------
-function scoreBBpct(bbpct) {
-    const score = 10 * (10 - bbpct) / (10 - 3);
-    return clamp(score, 0, 10);
-}
-
-// ------------------------------
-// K/BB (higher = better)
-// ------------------------------
-function scoreKBB(kbb) {
-    const score = 10 * (kbb - 1.5) / (6.0 - 1.5);
-    return clamp(score, 0, 10);
-}
-
-// ------------------------------
-// IP (higher = better)
-// ------------------------------
-function scoreIP(ip) {
-    const score = 10 * (ip - 80) / (200 - 80);
-    return clamp(score, 0, 10);
-}
-
-// ------------------------------
-// HR/9 (lower = better)
-// ------------------------------
-function scoreHR9(hr9) {
-    const score = 10 * (1.8 - hr9) / (1.8 - 0.5);
-    return clamp(score, 0, 10);
-}
-
-// ------------------------------
-// FIP (lower = better)
-// ------------------------------
-function scoreFIP(fip) {
-    const score = 10 * (5.00 - fip) / (5.00 - 2.50);
-    return clamp(score, 0, 10);
-}
-
 // -------------------------------
 // Show Trend Emoji Button
 // -------------------------------
@@ -513,13 +325,11 @@ async function showTrend(stat) {
     let seasons = trend.map(t => t.season);
     let values = trend.map(t => t.value);
 
-    // Remove leading nulls
     while (values.length > 0 && (values[0] === null || values[0] === undefined)) {
         values.shift();
         seasons.shift();
     }
 
-    // Rookie / not enough data check
     if (seasons.length < 3) {
         document.getElementById("trendTitle").textContent =
             `${statNames[stat] || stat} Trend`;
@@ -535,7 +345,6 @@ async function showTrend(stat) {
         return;
     }
 
-    // Correct chart title
     document.getElementById("trendTitle").textContent =
         `${statNames[stat] || stat} Trend`;
 
@@ -544,64 +353,20 @@ async function showTrend(stat) {
     document.getElementById("trendModal").style.display = "flex";
 }
 
-
 // -------------------------------
-// Trend from Preload
-// -------------------------------
-function getTrendFromPreload(name, stat) {
-    const lower = name.toLowerCase();
-    const trend = [];
-
-    for (const season of PRELOAD_SEASONS) {
-        const rows = PRELOADED_PITCHING[season];
-        if (!rows) continue;
-
-        const row = rows.find(r =>
-            r.Player && r.Player.toLowerCase().includes(lower)
-        );
-
-        if (!row) {
-            trend.push({ season, value: null });
-            continue;
-        }
-
-        const raw = row[stat];
-        const value = raw !== undefined ? Number(raw) : null;
-
-        trend.push({ season, value });
-    }
-
-    return trend;
-}
-
-
-// -------------------------------
-// Show Trend Fetch (Preload First)
+// Show Trend Fetch (backend-only)
 // -------------------------------
 async function fetchTrendData(name, stat) {
-    // 1. Try preload first
-    const preloadTrend = getTrendFromPreload(name, stat);
-
-    const validCount = preloadTrend.filter(t => t.value !== null).length;
-
-    // If preload has enough data, use it
-    if (validCount >= 3) {
-        return preloadTrend;
-    }
-
-    // 2. Fallback to backend
     const url = `https://pitcher-analyzer-backend.onrender.com/api/pitcherTrend?name=${encodeURIComponent(name)}&stat=${stat}`;
     const res = await fetch(url);
 
     if (!res.ok) {
-        console.error("Trend fetch failed");
+        console.error("Trend fetch failed", await res.text());
         return null;
     }
 
     return await res.json();
 }
-
-
 
 // -------------------------------
 // Render Chart.js Line Graph
@@ -609,8 +374,6 @@ async function fetchTrendData(name, stat) {
 let trendChart = null;
 
 function renderTrendChart(seasons, values, stat) {
-
-    // ⭐ FIX: Reverse arrays so chart is oldest → newest
     seasons = [...seasons].reverse();
     values  = [...values].reverse();
 
@@ -643,9 +406,8 @@ function renderTrendChart(seasons, values, stat) {
     });
 }
 
-
 // -------------------------------
-// Compare Modal Function (Updated for Preload Only)
+// Compare Modal Function (backend-only)
 // -------------------------------
 async function showCompareModal() {
     showSpinner("spinner2");
@@ -663,11 +425,11 @@ async function showCompareModal() {
             return;
         }
 
-        // -----------------------------------------
-        // ⭐ 1. PRELOAD LOOKUP ONLY
-        // -----------------------------------------
-        const data1 = getPitcherRow(p1, s1);
-        const data2 = getPitcherRow(p2, s2);
+        const data1Arr = await loadPitcher(p1, s1);
+        const data2Arr = await loadPitcher(p2, s2);
+
+        const data1 = data1Arr && data1Arr[0];
+        const data2 = data2Arr && data2Arr[0];
 
         if (!data1 || !data2) {
             alert("One or both pitchers not found.");
@@ -677,9 +439,6 @@ async function showCompareModal() {
         document.getElementById("compareName1").textContent = `${p1} (${s1})`;
         document.getElementById("compareName2").textContent = `${p2} (${s2})`;
 
-        // -----------------------------------------
-        // ⭐ 2. Compute Score Components
-        // -----------------------------------------
         const s1_ERA  = scoreERA(data1.ERA);
         const s1_WHIP = scoreWHIP(data1.WHIP);
         const s1_Kpct = scoreKpct(data1.Kpct);
@@ -698,32 +457,28 @@ async function showCompareModal() {
         const s2_HR9 = scoreHR9(data2.HR9);
         const s2_FIP = scoreFIP(data2.FIP);
 
-        // -----------------------------------------
-        // ⭐ 3. Weighted Overall Score
-        // -----------------------------------------
-        const overall1 =
-            s1_ERA * 0.20 +
-            s1_WHIP * 0.20 +
-            s1_Kpct * 0.15 +
-            s1_BBpct * 0.10 +
-            s1_KBB * 0.15 +
-            s1_IP * 0.10 +
-            s1_HR9 * 0.05 +
-            s1_FIP * 0.05;
+        const overall1 = computeWeightedOverall({
+            eraScore: s1_ERA,
+            whipScore: s1_WHIP,
+            kpctScore: s1_Kpct,
+            bbpctScore: s1_BBpct,
+            kbbScore: s1_KBB,
+            ipScore: s1_IP,
+            hr9Score: s1_HR9,
+            fipScore: s1_FIP
+        });
 
-        const overall2 =
-            s2_ERA * 0.20 +
-            s2_WHIP * 0.20 +
-            s2_Kpct * 0.15 +
-            s2_BBpct * 0.10 +
-            s2_KBB * 0.15 +
-            s2_IP * 0.10 +
-            s2_HR9 * 0.05 +
-            s2_FIP * 0.05;
+        const overall2 = computeWeightedOverall({
+            eraScore: s2_ERA,
+            whipScore: s2_WHIP,
+            kpctScore: s2_Kpct,
+            bbpctScore: s2_BBpct,
+            kbbScore: s2_KBB,
+            ipScore: s2_IP,
+            hr9Score: s2_HR9,
+            fipScore: s2_FIP
+        });
 
-        // -----------------------------------------
-        // ⭐ 4. Stats Table
-        // -----------------------------------------
         const stats = [
             ["ERA", data1.ERA, data2.ERA],
             ["WHIP", data1.WHIP, data2.WHIP],
@@ -779,8 +534,6 @@ async function showCompareModal() {
     }
 }
 
-
-
 // -------------------------------
 // Pitcher Tier Assignment
 // -------------------------------
@@ -793,71 +546,43 @@ function getPitcherTier(score) {
 }
 
 // -------------------------------
-// Rank Button
+// Rank Button backend fetches
 // -------------------------------
 async function fetchPitcherList(season) {
     const url = `https://pitcher-analyzer-backend.onrender.com/api/pitcherList?season=${season}`;
     const res = await fetch(url);
 
-    if (!res.ok) return [];
-    return await res.json();
-}
-
-
-// ⭐ Batch loader to prevent resource exhaustion
-async function fetchInBatches(list, season, batchSize = 10) {
-    const results = [];
-
-    for (let i = 0; i < list.length; i += batchSize) {
-        const batch = list.slice(i, i + batchSize);
-
-        const batchResults = await Promise.all(
-            batch.map(p => loadPitcher(p.name, season))
-        );
-
-        results.push(...batchResults);
+    if (!res.ok) {
+        console.error("Pitcher list fetch failed", await res.text());
+        return [];
     }
-
-    return results;
+    return await res.json(); // [{ name, id }]
 }
 
-// -------------------------------
-// Rank Button (Updated for Preload Only)
-// -------------------------------
 document.getElementById("rankBtn").addEventListener("click", async () => {
     const season = document.getElementById("seasonSelect2").value;
 
     document.getElementById("rankTitle").textContent =
         `Top Pitcher Rankings — ${season}`;
 
-    // -----------------------------------------
-    // ⭐ 1. Get pitcher list from PRELOAD
-    // -----------------------------------------
-    const list = getPitcherList(season);
+    const list = await fetchPitcherList(season);
     if (!list || list.length === 0) {
         alert("No pitchers found for this season.");
         return;
     }
 
-    // -----------------------------------------
-// ⭐ 2. Get pitcher rows directly from PRELOAD (with GS filter)
-// -----------------------------------------
-const stats = [];
+    const stats = [];
 
-for (const name of list) {
-    const p = getPitcherRow(name, season);   // ⭐ use preloaded data only
-    if (!p) continue;
+    for (const { name } of list) {
+        const dataArr = await loadPitcher(name, season);
+        const p = dataArr && dataArr[0];
+        if (!p) continue;
 
-    // ⭐ FILTER: Only include real starters
-    if (typeof p.GS !== "number" || p.GS < 10) continue;
+        if (typeof p.GS !== "number" || p.GS < 10) continue;
 
-    stats.push({ name, p });
-}
+        stats.push({ name, p });
+    }
 
-
-    // -----------------------------------------
-    // ⭐ 3. Compute weighted scores
-    // -----------------------------------------
     const scored = stats
         .map(({ name, p }) => {
             const score = computeWeightedOverall({
@@ -879,16 +604,10 @@ for (const name of list) {
         })
         .filter(x => x && !Number.isNaN(x.score));
 
-    // -----------------------------------------
-    // ⭐ 4. Sort + Render
-    // -----------------------------------------
     scored.sort((a, b) => b.score - a.score);
 
     renderPitcherRankModal(scored.slice(0, 40), season);
 });
-
-
-
 
 // -------------------------------
 // Render Rank Modal
@@ -910,27 +629,11 @@ function renderPitcherRankModal(list, season) {
         tbody.appendChild(tr);
     });
 
-    // Update modal title
     document.getElementById("rankTitle").textContent =
         `Top Pitcher Rankings — ${season}`;
 
-    // Show modal
     document.getElementById("rankModal").style.display = "flex";
 }
-
-function getTierClass(tier) {
-    switch (tier) {
-        case "Ace": return "tier-great";
-        case "Top Starter": return "tier-good";
-        case "Mid Rotation": return "tier-fair";
-        case "Back End": return "tier-average";
-        case "Depth": return "tier-belowavg";
-        default: return "";
-    }
-}
-
-
-
 
 // -------------------------------
 // Swap Button
@@ -942,7 +645,6 @@ document.getElementById("swapBtn").onclick = function () {
     const name2 = document.getElementById("playerName2");
     const season2 = document.getElementById("seasonSelect2");
 
-    // Swap values
     const tempName = name1.value;
     const tempSeason = season1.value;
 
@@ -952,7 +654,6 @@ document.getElementById("swapBtn").onclick = function () {
     name2.value = tempName;
     season2.value = tempSeason;
 
-    // Trigger your existing update logic
     document.getElementById("btnGenerate").click();
 };
 
@@ -971,20 +672,17 @@ function hideSpinner(id) {
 // Reset UI
 // -------------------------------
 function handleReset() {
-    // Reset text
     document.querySelectorAll(".metric-raw").forEach(el => el.textContent = "--");
     document.querySelectorAll(".metric-score").forEach(el => el.textContent = "--");
 
-    // Reset batteries visually
     document.querySelectorAll(".battery").forEach(el => {
         el.style.setProperty("--fillWidth", "0%");
-        el.style.setProperty("--fillColor", "#d50000"); // default low score color
+        el.style.setProperty("--fillColor", "#d50000");
     });
 
-    // Reset overall
     document.getElementById("overallScore").textContent = "--";
-    document.getElementById("overallTier").textContent = "--";
-    document.getElementById("scoutingNote").textContent = "--";
+    document.getElementById("overallTier").innerHTML = "";
+    document.getElementById("scoutingNote").innerHTML = "";
 }
 
 // -------------------------------
@@ -1006,58 +704,3 @@ async function loadLastUpdated(season) {
         `Last updated on ${formatted}`;
 }
 
-
-
-
-
-// -------------------------------
-// Event listeners
-// -------------------------------
-document.getElementById("loadBtn").addEventListener("click", handleLoad);
-document.getElementById("resetBtn").addEventListener("click", handleReset);
-
-document.querySelectorAll(".trend-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-        const stat = btn.dataset.stat;
-        showTrend(stat);
-    });
-});
-
-
-// ------------------------------
-// Trend Modal Close Button
-// ------------------------------
-document.getElementById("trendClose").addEventListener("click", () => {
-    document.getElementById("trendModal").style.display = "none";
-});
-
-
-// ------------------------------
-// Compare Modal Close Button
-// ------------------------------
-document.getElementById("compareBtn").addEventListener("click", () => {
-    showCompareModal();
-});
-
-document.getElementById("compareClose").addEventListener("click", () => {
-    document.getElementById("compareModal").style.display = "none";
-});
-
-// ------------------------------
-// Rank Modal Close Button
-// ------------------------------
-document.getElementById("rankClose").addEventListener("click", () => {
-    document.getElementById("rankModal").style.display = "none";
-});
-
-// ------------------------------
-// Latest Updated CSV Timestamp
-// ------------------------------
-document.addEventListener("DOMContentLoaded", () => {
-    const seasonSelect = document.getElementById("seasonSelect");
-    const defaultSeason = seasonSelect.value;
-    loadLastUpdated(defaultSeason);
-});
-
-
-window.addEventListener("load", preloadPitcherData);
