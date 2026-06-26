@@ -578,7 +578,7 @@ async function fetchPitcherList(season) {
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 // -------------------------------
-// Rank Handler (Old Fast Method)
+// Rank Handler (GS + ERA Pre-Filter)
 // -------------------------------
 async function handleRank() {
     console.log("Rank clicked");
@@ -597,18 +597,30 @@ async function handleRank() {
         return;
     }
 
+    // -----------------------------------------
+    // NEW: Pre-filter by GS >= 10 AND valid ERA
+    // -----------------------------------------
+    const filtered = list
+        .filter(p =>
+            typeof p.GS === "number" &&
+            p.GS >= 10 &&
+            typeof p.ERA === "number" &&
+            p.ERA > 0
+        )
+        .sort((a, b) => a.ERA - b.ERA)   // best ERA first
+        .slice(0, 10);                   // only take top 10 ERA pitchers
+
     const ranked = [];
 
-    // FAST METHOD:
-    // Stop after 10 valid pitchers (GS >= 10)
-    for (const { name } of list) {
+    // -----------------------------------------
+    // OLD FAST METHOD, but only for filtered guys
+    // -----------------------------------------
+    for (const { name } of filtered) {
         await sleep(0); // keep UI responsive
 
         const dataArr = await loadPitcher(name, season);
         const p = dataArr && dataArr[0];
         if (!p) continue;
-
-        if (typeof p.GS !== "number" || p.GS < 10) continue;
 
         const score = computeWeightedOverall({
             eraScore:   scoreERA(p.ERA),
@@ -628,19 +640,15 @@ async function handleRank() {
             score,
             tier: getPitcherTier(score)
         });
-
-        // OLD FAST METHOD: stop after 10
-        if (ranked.length >= 10) break;
     }
 
-    // Sort only the 10 we collected
+    // Sort final 10 by your real score
     ranked.sort((a, b) => b.score - a.score);
 
     document.getElementById("rankLoading").style.display = "none";
 
     renderPitcherRankModal(ranked, season);
 }
-
 
 
 
