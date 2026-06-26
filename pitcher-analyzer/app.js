@@ -299,59 +299,73 @@ async function handleLoad() {
 }
 
 // -------------------------------
-// Show Trend Emoji Button
+// Show Trend Emoji Button (with spinner1)
 // -------------------------------
 async function showTrend(stat) {
     const name = document.getElementById("playerName").value.trim();
     if (!name) return alert("Enter a player name first.");
 
-    const trend = await fetchTrendData(name, stat);
-    if (!trend || trend.length === 0) {
-        alert("No trend data available.");
-        return;
-    }
+    // Show spinner1 immediately
+    const spinner = document.getElementById("spinner1");
+    spinner.style.display = "block";
 
-    const statNames = {
-        ERA: "Earned Run Average",
-        WHIP: "Walks + Hits per Inning",
-        Kpct: "Strikeout Rate",
-        BBpct: "Walk Rate",
-        KBB: "Strikeout-to-Walk Ratio",
-        IP: "Innings Pitched",
-        HR9: "Home Runs per 9",
-        FIP: "Fielding Independent Pitching"
-    };
+    try {
+        const trend = await fetchTrendData(name, stat);
+        if (!trend || trend.length === 0) {
+            alert("No trend data available.");
+            return;
+        }
 
-    let seasons = trend.map(t => t.season);
-    let values = trend.map(t => t.value);
+        const statNames = {
+            ERA: "Earned Run Average",
+            WHIP: "Walks + Hits per Inning",
+            Kpct: "Strikeout Rate",
+            BBpct: "Walk Rate",
+            KBB: "Strikeout-to-Walk Ratio",
+            IP: "Innings Pitched",
+            HR9: "Home Runs per 9",
+            FIP: "Fielding Independent Pitching"
+        };
 
-    while (values.length > 0 && (values[0] === null || values[0] === undefined)) {
-        values.shift();
-        seasons.shift();
-    }
+        let seasons = trend.map(t => t.season);
+        let values = trend.map(t => t.value);
 
-    if (seasons.length < 3) {
+        // Remove leading nulls
+        while (values.length > 0 && (values[0] === null || values[0] === undefined)) {
+            values.shift();
+            seasons.shift();
+        }
+
+        // Rookie / not enough data
+        if (seasons.length < 3) {
+            document.getElementById("trendTitle").textContent =
+                `${statNames[stat] || stat} Trend`;
+
+            document.getElementById("trendChartContainer").innerHTML = `
+                <div class="no-data-message">
+                    Not enough data to generate a trend chart.<br>
+                    (Minimum 3 seasons required)
+                </div>
+            `;
+
+            document.getElementById("trendModal").style.display = "flex";
+            return;
+        }
+
+        // Normal chart
         document.getElementById("trendTitle").textContent =
             `${statNames[stat] || stat} Trend`;
 
-        document.getElementById("trendChartContainer").innerHTML = `
-            <div class="no-data-message">
-                Not enough data to generate a trend chart.<br>
-                (Minimum 3 seasons required)
-            </div>
-        `;
+        renderTrendChart(seasons, values, stat);
 
         document.getElementById("trendModal").style.display = "flex";
-        return;
+
+    } finally {
+        // Always hide spinner, even if errors or early returns
+        spinner.style.display = "none";
     }
-
-    document.getElementById("trendTitle").textContent =
-        `${statNames[stat] || stat} Trend`;
-
-    renderTrendChart(seasons, values, stat);
-
-    document.getElementById("trendModal").style.display = "flex";
 }
+
 
 // -------------------------------
 // Show Trend Fetch (backend-only)
