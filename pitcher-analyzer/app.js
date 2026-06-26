@@ -597,7 +597,7 @@ async function handleRank() {
         return;
     }
 
-    // NEW: GS + ERA pre-filter (robust)
+// NEW: GS + ERA pre-filter
 const filtered = list
     .map(p => ({
         name: p.name,
@@ -613,38 +613,37 @@ const filtered = list
     .sort((a, b) => a.era - b.era)
     .slice(0, 10);
 
+// ⭐ THIS MUST EXIST BEFORE THE LOOP
+const ranked = [];
 
+// Now your loop is safe
+for (const { name } of filtered) {
+    await sleep(0);
 
+    const dataArr = await loadPitcher(name, season);
+    const p = dataArr && dataArr[0];
+    if (!p) continue;
 
-    // -----------------------------------------
-    // OLD FAST METHOD, but only for filtered guys
-    // -----------------------------------------
-    for (const { name } of filtered) {
-        await sleep(0); // keep UI responsive
+    const score = computeWeightedOverall({
+        eraScore:   scoreERA(p.ERA),
+        whipScore:  scoreWHIP(p.WHIP),
+        kpctScore:  scoreKpct(p.Kpct),
+        bbpctScore: scoreBBpct(p.BBpct),
+        kbbScore:   scoreKBB(p.KBB),
+        ipScore:    scoreIP(p.IP),
+        hr9Score:   scoreHR9(p.HR9),
+        fipScore:   scoreFIP(p.FIP)
+    });
 
-        const dataArr = await loadPitcher(name, season);
-        const p = dataArr && dataArr[0];
-        if (!p) continue;
+    if (Number.isNaN(score)) continue;
 
-        const score = computeWeightedOverall({
-            eraScore:   scoreERA(p.ERA),
-            whipScore:  scoreWHIP(p.WHIP),
-            kpctScore:  scoreKpct(p.Kpct),
-            bbpctScore: scoreBBpct(p.BBpct),
-            kbbScore:   scoreKBB(p.KBB),
-            ipScore:    scoreIP(p.IP),
-            hr9Score:   scoreHR9(p.HR9),
-            fipScore:   scoreFIP(p.FIP)
-        });
+    ranked.push({
+        name,
+        score,
+        tier: getPitcherTier(score)
+    });
+}
 
-        if (Number.isNaN(score)) continue;
-
-        ranked.push({
-            name,
-            score,
-            tier: getPitcherTier(score)
-        });
-    }
 
     // Sort final 10 by your real score
     ranked.sort((a, b) => b.score - a.score);
