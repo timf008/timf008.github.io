@@ -410,7 +410,7 @@ function renderTrendChart(seasons, values, stat) {
 // Compare Modal Function (backend-only)
 // -------------------------------
 async function showCompareModal() {
-    showSpinner("spinner2");
+    showSpinner("spinner1");
     console.log("COMPARE BUTTON CLICKED");
 
     try {
@@ -530,7 +530,7 @@ async function showCompareModal() {
     } catch (err) {
         console.error("Compare error:", err);
     } finally {
-        hideSpinner("spinner2");
+        hideSpinner("spinner1");
     }
 }
 
