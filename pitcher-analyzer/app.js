@@ -597,20 +597,23 @@ async function handleRank() {
         return;
     }
 
-    // -----------------------------------------
-    // NEW: Pre-filter by GS >= 10 AND valid ERA
-    // -----------------------------------------
-    const filtered = list
-        .filter(p =>
-            typeof p.GS === "number" &&
-            p.GS >= 10 &&
-            typeof p.ERA === "number" &&
-            p.ERA > 0
-        )
-        .sort((a, b) => a.ERA - b.ERA)   // best ERA first
-        .slice(0, 10);                   // only take top 10 ERA pitchers
+    // NEW: GS + ERA pre-filter (robust)
+const filtered = list
+    .filter(p => {
+        const gs = Number(p.GS);
+        const era = Number(p.ERA);
 
-    const ranked = [];
+        return (
+            !Number.isNaN(gs) &&
+            gs >= 10 &&
+            !Number.isNaN(era) &&
+            era > 0
+        );
+    })
+    .sort((a, b) => Number(a.ERA) - Number(b.ERA))
+    .slice(0, 10);
+
+
 
     // -----------------------------------------
     // OLD FAST METHOD, but only for filtered guys
