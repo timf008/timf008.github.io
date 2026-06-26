@@ -571,43 +571,41 @@ document.getElementById("rankBtn").addEventListener("click", async () => {
         return;
     }
 
-    const stats = [];
+    const ranked = [];
 
     for (const { name } of list) {
+        // Load stats using NAME (your backend requires this)
         const dataArr = await loadPitcher(name, season);
         const p = dataArr && dataArr[0];
         if (!p) continue;
 
         if (typeof p.GS !== "number" || p.GS < 10) continue;
 
-        stats.push({ name, p });
+        const score = computeWeightedOverall({
+            eraScore:   scoreERA(p.ERA),
+            whipScore:  scoreWHIP(p.WHIP),
+            kpctScore:  scoreKpct(p.Kpct),
+            bbpctScore: scoreBBpct(p.BBpct),
+            kbbScore:   scoreKBB(p.KBB),
+            ipScore:    scoreIP(p.IP),
+            hr9Score:   scoreHR9(p.HR9),
+            fipScore:   scoreFIP(p.FIP)
+        });
+
+        if (Number.isNaN(score)) continue;
+
+        ranked.push({
+            name,
+            score,
+            tier: getPitcherTier(score)
+        });
     }
 
-    const scored = stats
-        .map(({ name, p }) => {
-            const score = computeWeightedOverall({
-                eraScore:   scoreERA(p.ERA),
-                whipScore:  scoreWHIP(p.WHIP),
-                kpctScore:  scoreKpct(p.Kpct),
-                bbpctScore: scoreBBpct(p.BBpct),
-                kbbScore:   scoreKBB(p.KBB),
-                ipScore:    scoreIP(p.IP),
-                hr9Score:   scoreHR9(p.HR9),
-                fipScore:   scoreFIP(p.FIP)
-            });
+    ranked.sort((a, b) => b.score - a.score);
 
-            return {
-                name,
-                score,
-                tier: getPitcherTier(score)
-            };
-        })
-        .filter(x => x && !Number.isNaN(x.score));
-
-    scored.sort((a, b) => b.score - a.score);
-
-    renderPitcherRankModal(scored.slice(0, 40), season);
+    renderPitcherRankModal(ranked.slice(0, 40), season);
 });
+
 
 // -------------------------------
 // Render Rank Modal
