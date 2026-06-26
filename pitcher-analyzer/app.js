@@ -599,19 +599,20 @@ async function handleRank() {
 
     // NEW: GS + ERA pre-filter (robust)
 const filtered = list
-    .filter(p => {
-        const gs = Number(p.GS);
-        const era = Number(p.ERA);
-
-        return (
-            !Number.isNaN(gs) &&
-            gs >= 10 &&
-            !Number.isNaN(era) &&
-            era > 0
-        );
-    })
-    .sort((a, b) => Number(a.ERA) - Number(b.ERA))
+    .map(p => ({
+        name: p.name,
+        gs: Number(p.GS),
+        era: Number(p.ERA)
+    }))
+    .filter(p =>
+        !Number.isNaN(p.gs) &&
+        p.gs >= 10 &&
+        !Number.isNaN(p.era) &&
+        p.era > 0
+    )
+    .sort((a, b) => a.era - b.era)
     .slice(0, 10);
+
 
 
 
