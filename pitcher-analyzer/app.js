@@ -563,7 +563,7 @@ async function fetchPitcherList(season) {
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 // -------------------------------
-// Rank Handler (Top 10 Only)
+// Rank Handler (Top 10 Only — Corrected)
 // -------------------------------
 async function handleRank() {
     console.log("Rank clicked");
@@ -612,17 +612,18 @@ async function handleRank() {
             score,
             tier: getPitcherTier(score)
         });
-
-        // Stop after Top 10 valid pitchers
-        if (ranked.length >= 10) break;
     }
 
+    // Sort all pitchers
     ranked.sort((a, b) => b.score - a.score);
 
+    // Hide loading indicator
     document.getElementById("rankLoading").style.display = "none";
 
-    renderPitcherRankModal(ranked, season);
+    // Render ONLY the Top 10
+    renderPitcherRankModal(ranked.slice(0, 10), season);
 }
+
 
 
 // -------------------------------
