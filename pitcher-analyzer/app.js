@@ -559,14 +559,20 @@ async function fetchPitcherList(season) {
     return await res.json(); // [{ name, id }]
 }
 
+// Small yield helper to keep UI responsive
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
 // -------------------------------
-// Rank Handler (FULL LOGIC)
+// Rank Handler (Top 10 Only)
 // -------------------------------
 async function handleRank() {
     console.log("Rank clicked");
 
-    const season = document.getElementById("seasonSelect2").value;
+    // Show modal immediately
+    document.getElementById("rankModal").style.display = "flex";
+    document.getElementById("rankLoading").style.display = "block";
 
+    const season = document.getElementById("seasonSelect2").value;
     document.getElementById("rankTitle").textContent =
         `Top Pitcher Rankings — ${season}`;
 
@@ -578,19 +584,15 @@ async function handleRank() {
 
     const ranked = [];
 
+    // Sequential loop — safe for 512MB server
     for (const { name } of list) {
+        await sleep(0); // allow UI to update
+
         const dataArr = await loadPitcher(name, season);
         const p = dataArr && dataArr[0];
+        if (!p) continue;
 
-        if (!p) {
-            console.log("No data for:", name);
-            continue;
-        }
-
-        if (typeof p.GS !== "number" || p.GS < 10) {
-            console.log("Skipping (GS < 10):", name, p.GS);
-            continue;
-        }
+        if (typeof p.GS !== "number" || p.GS < 10) continue;
 
         const score = computeWeightedOverall({
             eraScore:   scoreERA(p.ERA),
@@ -603,22 +605,25 @@ async function handleRank() {
             fipScore:   scoreFIP(p.FIP)
         });
 
-        if (Number.isNaN(score)) {
-            console.log("NaN score for:", name, p);
-            continue;
-        }
+        if (Number.isNaN(score)) continue;
 
         ranked.push({
             name,
             score,
             tier: getPitcherTier(score)
         });
+
+        // Stop after Top 10 valid pitchers
+        if (ranked.length >= 10) break;
     }
 
     ranked.sort((a, b) => b.score - a.score);
 
-    renderPitcherRankModal(ranked.slice(0, 40), season);
+    document.getElementById("rankLoading").style.display = "none";
+
+    renderPitcherRankModal(ranked, season);
 }
+
 
 // -------------------------------
 // Render Rank Modal
