@@ -302,14 +302,15 @@ async function handleLoad() {
 // Show Trend Emoji Button (with spinner1)
 // -------------------------------
 async function showTrend(stat) {
-    const name = document.getElementById("playerName").value.trim();
-    if (!name) return alert("Enter a player name first.");
-
-    // Show spinner1 immediately
-    const spinner = document.getElementById("spinner1");
-    spinner.style.display = "block";
+    showSpinner("spinner1");
 
     try {
+        const name = document.getElementById("playerName").value.trim();
+        if (!name) {
+            alert("Enter a player name first.");
+            return;
+        }
+
         const trend = await fetchTrendData(name, stat);
         if (!trend || trend.length === 0) {
             alert("No trend data available.");
@@ -361,8 +362,8 @@ async function showTrend(stat) {
         document.getElementById("trendModal").style.display = "flex";
 
     } finally {
-        // Always hide spinner, even if errors or early returns
-        spinner.style.display = "none";
+        // ALWAYS hide spinner, even on early return or error
+        hideSpinner("spinner1");
     }
 }
 
