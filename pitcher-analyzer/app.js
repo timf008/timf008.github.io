@@ -563,7 +563,7 @@ async function fetchPitcherList(season) {
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 // -------------------------------
-// Rank Handler (Top 10 Only — Corrected)
+// Rank Handler (Old Fast Method)
 // -------------------------------
 async function handleRank() {
     console.log("Rank clicked");
@@ -584,9 +584,10 @@ async function handleRank() {
 
     const ranked = [];
 
-    // Sequential loop — safe for 512MB server
+    // FAST METHOD:
+    // Stop after 10 valid pitchers (GS >= 10)
     for (const { name } of list) {
-        await sleep(0); // allow UI to update
+        await sleep(0); // keep UI responsive
 
         const dataArr = await loadPitcher(name, season);
         const p = dataArr && dataArr[0];
@@ -612,17 +613,19 @@ async function handleRank() {
             score,
             tier: getPitcherTier(score)
         });
+
+        // OLD FAST METHOD: stop after 10
+        if (ranked.length >= 10) break;
     }
 
-    // Sort all pitchers
+    // Sort only the 10 we collected
     ranked.sort((a, b) => b.score - a.score);
 
-    // Hide loading indicator
     document.getElementById("rankLoading").style.display = "none";
 
-    // Render ONLY the Top 10
-    renderPitcherRankModal(ranked.slice(0, 10), season);
+    renderPitcherRankModal(ranked, season);
 }
+
 
 
 
