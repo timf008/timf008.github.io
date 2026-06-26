@@ -571,40 +571,57 @@ document.getElementById("rankBtn").addEventListener("click", async () => {
         return;
     }
 
-    const ranked = [];
+    console.log("Pitcher list size:", list.length);
 
-    for (const { name } of list) {
-        // Load stats using NAME (your backend requires this)
-        const dataArr = await loadPitcher(name, season);
-        const p = dataArr && dataArr[0];
-        if (!p) continue;
+const stats = [];
 
-        if (typeof p.GS !== "number" || p.GS < 10) continue;
+for (const { name } of list) {
+    const dataArr = await loadPitcher(name, season);
+    const p = dataArr && dataArr[0];
+    console.log("Loaded", name, "→", p);
 
-        const score = computeWeightedOverall({
-            eraScore:   scoreERA(p.ERA),
-            whipScore:  scoreWHIP(p.WHIP),
-            kpctScore:  scoreKpct(p.Kpct),
-            bbpctScore: scoreBBpct(p.BBpct),
-            kbbScore:   scoreKBB(p.KBB),
-            ipScore:    scoreIP(p.IP),
-            hr9Score:   scoreHR9(p.HR9),
-            fipScore:   scoreFIP(p.FIP)
-        });
+    if (!p) continue;
 
-        if (Number.isNaN(score)) continue;
-
-        ranked.push({
-            name,
-            score,
-            tier: getPitcherTier(score)
-        });
+    if (typeof p.GS !== "number" || p.GS < 10) {
+        console.log("Skipping (GS < 10):", name, p.GS);
+        continue;
     }
 
-    ranked.sort((a, b) => b.score - a.score);
+    stats.push({ name, p });
+}
 
-    renderPitcherRankModal(ranked.slice(0, 40), season);
+console.log("Stats count:", stats.length);
+
+const scored = stats.map(({ name, p }) => {
+    const score = computeWeightedOverall({
+        eraScore:   scoreERA(p.ERA),
+        whipScore:  scoreWHIP(p.WHIP),
+        kpctScore:  scoreKpct(p.Kpct),
+        bbpctScore: scoreBBpct(p.BBpct),
+        kbbScore:   scoreKBB(p.KBB),
+        ipScore:    scoreIP(p.IP),
+        hr9Score:   scoreHR9(p.HR9),
+        fipScore:   scoreFIP(p.FIP)
+    });
+
+    console.log("Score for", name, "→", score);
+
+    return {
+        name,
+        score,
+        tier: getPitcherTier(score)
+    };
 });
+
+console.log("Scored count (before filter):", scored.length);
+
+const scoredFiltered = scored.filter(x => x && !Number.isNaN(x.score));
+
+console.log("Scored count (after filter):", scoredFiltered.length);
+
+scoredFiltered.sort((a, b) => b.score - a.score);
+
+renderPitcherRankModal(scoredFiltered.slice(0, 40), season);
 
 
 // -------------------------------
