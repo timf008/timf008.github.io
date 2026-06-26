@@ -726,24 +726,26 @@ async function loadLastUpdated(season) {
 // -------------------------------
 // Wire up UI buttons
 // -------------------------------
-document.getElementById("loadBtn").addEventListener("click", handleLoad);
-document.getElementById("resetBtn").addEventListener("click", handleReset);
-document.getElementById("compareBtn").addEventListener("click", showCompareModal);
-document.getElementById("rankBtn").addEventListener("click", handleRank);
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("loadBtn").addEventListener("click", handleLoad);
+    document.getElementById("resetBtn").addEventListener("click", handleReset);
+    document.getElementById("compareBtn").addEventListener("click", showCompareModal);
+    document.getElementById("rankBtn").addEventListener("click", handleRank);
 
+    // Trend buttons
+    document.querySelectorAll(".trend-btn").forEach(btn => {
+        btn.addEventListener("click", () => showTrend(btn.dataset.stat));
+    });
 
-// Trend buttons
-document.querySelectorAll(".trend-btn").forEach(btn => {
-    btn.addEventListener("click", () => showTrend(btn.dataset.stat));
+    // Close modals
+    document.getElementById("trendClose").onclick = () =>
+        document.getElementById("trendModal").style.display = "none";
+
+    document.getElementById("compareClose").onclick = () =>
+        document.getElementById("compareModal").style.display = "none";
+
+    document.getElementById("rankClose").onclick = () =>
+        document.getElementById("rankModal").style.display = "none";
 });
 
-// Close modals
-document.getElementById("trendClose").onclick = () =>
-    document.getElementById("trendModal").style.display = "none";
-
-document.getElementById("compareClose").onclick = () =>
-    document.getElementById("compareModal").style.display = "none";
-
-document.getElementById("rankClose").onclick = () =>
-    document.getElementById("rankModal").style.display = "none";
 
