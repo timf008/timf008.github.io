@@ -559,6 +559,9 @@ async function fetchPitcherList(season) {
     return await res.json(); // [{ name, id }]
 }
 
+// -------------------------------
+// Rank Handler (FULL LOGIC)
+// -------------------------------
 async function handleRank() {
     console.log("Rank clicked");
 
@@ -578,9 +581,16 @@ async function handleRank() {
     for (const { name } of list) {
         const dataArr = await loadPitcher(name, season);
         const p = dataArr && dataArr[0];
-        if (!p) continue;
 
-        if (typeof p.GS !== "number" || p.GS < 10) continue;
+        if (!p) {
+            console.log("No data for:", name);
+            continue;
+        }
+
+        if (typeof p.GS !== "number" || p.GS < 10) {
+            console.log("Skipping (GS < 10):", name, p.GS);
+            continue;
+        }
 
         const score = computeWeightedOverall({
             eraScore:   scoreERA(p.ERA),
@@ -593,7 +603,10 @@ async function handleRank() {
             fipScore:   scoreFIP(p.FIP)
         });
 
-        if (Number.isNaN(score)) continue;
+        if (Number.isNaN(score)) {
+            console.log("NaN score for:", name, p);
+            continue;
+        }
 
         ranked.push({
             name,
@@ -606,7 +619,6 @@ async function handleRank() {
 
     renderPitcherRankModal(ranked.slice(0, 40), season);
 }
-
 
 // -------------------------------
 // Render Rank Modal
@@ -633,6 +645,7 @@ function renderPitcherRankModal(list, season) {
 
     document.getElementById("rankModal").style.display = "flex";
 }
+
 
 // -------------------------------
 // Swap Button
