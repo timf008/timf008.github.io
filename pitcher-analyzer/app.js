@@ -314,16 +314,27 @@ async function handleLeaders() {
         const results = [];
 
         for (const name of list) {
-            const data = await loadPitcher(name, season);
-            if (!data) continue;
+            try {
+                // Timeout protection (prevents spinner freeze)
+                const data = await Promise.race([
+                    loadPitcher(name, season),
+                    new Promise(res => setTimeout(() => res(null), 3000))
+                ]);
 
-            const p = Array.isArray(data) ? data[0] : data;
+                if (!data) continue;
 
-            results.push({
-                name,
-                team: p.Team || "--",
-                K: Number(p.K) || 0
-            });
+                const p = Array.isArray(data) ? data[0] : data;
+
+                results.push({
+                    name,
+                    team: p.Team || "--",
+                    K: Number(p.K) || 0
+                });
+
+            } catch (err) {
+                console.warn("Failed loading pitcher:", name, err);
+                continue;
+            }
         }
 
         // 3. Sort by strikeouts
@@ -346,6 +357,7 @@ async function handleLeaders() {
         hideSpinner("spinner1");
     }
 }
+
 
 // -------------------------------
 // Build Leaders Table
