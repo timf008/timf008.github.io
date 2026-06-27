@@ -294,7 +294,6 @@ async function getPitcherList(season) {
 }
 
 
-
 // -------------------------------
 // Leaders: Top 20 Strikeout List
 // -------------------------------
@@ -304,8 +303,8 @@ async function handleLeaders() {
     try {
         const season = Number(document.getElementById("seasonSelect").value);
 
-        // 1. Get pitcher list for the season
-        const list = getPitcherList(season);
+        // 1. Get pitcher list for the season (AWAIT THIS)
+        const list = await getPitcherList(season);
         if (!list || list.length === 0) {
             alert("No pitchers found for this season.");
             return;
