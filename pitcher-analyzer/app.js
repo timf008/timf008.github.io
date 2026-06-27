@@ -293,9 +293,8 @@ async function getPitcherList(season) {
     return data.map(p => p.name);
 }
 
-
 // -------------------------------
-// Leaders: Top 20 Strikeout List
+// Leaders: Top 20 Strikeout List (Parallel Loader)
 // -------------------------------
 async function handleLeaders() {
     showSpinner("spinner1");
@@ -303,47 +302,50 @@ async function handleLeaders() {
     try {
         const season = Number(document.getElementById("seasonSelect").value);
 
-        // 1. Get pitcher list for the season (AWAIT THIS)
+        // 1. Get pitcher list
         const list = await getPitcherList(season);
         if (!list || list.length === 0) {
             alert("No pitchers found for this season.");
             return;
         }
 
-        // 2. Load Ks + Team only (fast)
+        // 2. Build parallel tasks
+        const tasks = list.map(name => {
+            return Promise.race([
+                loadPitcher(name, season),
+                new Promise(res => setTimeout(() => res("TIMEOUT"), 6000))
+            ]).then(data => ({ name, data }));
+        });
+
+        // 3. Run all in parallel
+        const settled = await Promise.allSettled(tasks);
+
+        // 4. Extract valid results
         const results = [];
 
-        for (const name of list) {
-            try {
-                // Timeout protection (prevents spinner freeze)
-                const data = await Promise.race([
-                    loadPitcher(name, season),
-                    new Promise(res => setTimeout(() => res(null), 3000))
-                ]);
+        for (const item of settled) {
+            if (item.status !== "fulfilled") continue;
 
-                if (!data) continue;
+            const { name, data } = item.value;
 
-                const p = Array.isArray(data) ? data[0] : data;
+            if (!data || data === "TIMEOUT") continue;
 
-                results.push({
-                    name,
-                    team: p.Team || "--",
-                    K: Number(p.K) || 0
-                });
+            const p = Array.isArray(data) ? data[0] : data;
 
-            } catch (err) {
-                console.warn("Failed loading pitcher:", name, err);
-                continue;
-            }
+            results.push({
+                name,
+                team: p.Team || "--",
+                K: Number(p.K) || 0
+            });
         }
 
-        // 3. Sort by strikeouts
+        // 5. Sort by strikeouts
         results.sort((a, b) => b.K - a.K);
 
-        // 4. Take top 20
+        // 6. Take top 20
         const top20 = results.slice(0, 20);
 
-        // 5. Render table
+        // 7. Render table
         const html = buildLeadersTable(top20, season);
 
         document.getElementById("leadersTitle").textContent =
@@ -357,6 +359,7 @@ async function handleLeaders() {
         hideSpinner("spinner1");
     }
 }
+
 
 
 // -------------------------------
