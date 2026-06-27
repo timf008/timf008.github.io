@@ -254,12 +254,14 @@ async function handleLoad() {
         }
 
         const data = await loadPitcher(name, season);
-        if (!data || !data.length) {
+
+        // ⭐ FIXED: handle object OR array
+        if (!data) {
             alert("Pitcher not found.");
             return;
         }
 
-        const p = data[0];
+        const p = Array.isArray(data) ? data[0] : data;
 
         // ⭐ Only 5 metrics now
         const eraScore   = scoreERA(p.ERA);
@@ -268,14 +270,12 @@ async function handleLoad() {
         const bbpctScore = scoreBBpct(p.BBpct);
         const kbbScore   = scoreKBB(p.KBB);
 
-        // ⭐ Update only the 5 UI metrics
         updateERA(safeFixed(p.ERA, 2), eraScore);
         updateWHIP(safeFixed(p.WHIP, 2), whipScore);
         updateKpct(safeFixed(p.Kpct, 1), kpctScore);
         updateBBpct(safeFixed(p.BBpct, 1), bbpctScore);
         updateKBB(safeFixed(p.KBB, 2), kbbScore);
 
-        // ⭐ New 5‑metric weighted score
         const overall = computeWeightedOverall({
             eraScore,
             whipScore,
@@ -294,6 +294,7 @@ async function handleLoad() {
         hideSpinner("spinner1");
     }
 }
+
 
 // -------------------------------
 // Get Pitchers List - Season
@@ -421,10 +422,10 @@ function buildLeadersTable(list, season) {
     `;
 }
 
-
 // -------------------------------
 // Trend Handler (Season Comparison)
 // -------------------------------
+
 async function handleTrend() {
     showSpinner("spinner1");
 
@@ -435,34 +436,29 @@ async function handleTrend() {
             return;
         }
 
-        // ⭐ loadPitcher() now normalizes internally, so we pass rawName
         const season = Number(document.getElementById("seasonSelect").value);
         const lastSeason = season - 1;
 
-        // Fetch both seasons
         const [currArr, prevArr] = await Promise.all([
             loadPitcher(rawName, season),
             loadPitcher(rawName, lastSeason)
         ]);
 
-        const curr = currArr && currArr[0];
-        const prev = prevArr && prevArr[0];
+        const curr = Array.isArray(currArr) ? currArr[0] : currArr;
+        const prev = Array.isArray(prevArr) ? prevArr[0] : prevArr;
 
         if (!curr || !prev) {
             alert("Not enough data for season comparison.");
             return;
         }
 
-        // Build comparison table
         const html = buildSeasonComparison(curr, prev, season, lastSeason);
 
-        // Inject into modal
         document.getElementById("trendTitle").textContent =
             `Season Comparison (${season} vs ${lastSeason})`;
 
         document.getElementById("trendBody").innerHTML = html;
 
-        // Show modal
         document.getElementById("trendModal").style.display = "flex";
 
     } finally {
@@ -530,9 +526,6 @@ function buildSeasonComparison(curr, prev, season, lastSeason) {
 }
 
 
-// -------------------------------
-// Compare Modal Function (backend-only)
-// -------------------------------
 async function showCompareModal() {
     showSpinner("spinner1");
     console.log("COMPARE BUTTON CLICKED");
@@ -549,23 +542,21 @@ async function showCompareModal() {
             return;
         }
 
-        // ⭐ DO NOT normalize here — loadPitcher() handles it
         const data1Arr = await loadPitcher(p1_raw, s1);
         const data2Arr = await loadPitcher(p2_raw, s2);
 
-        const data1 = data1Arr && data1Arr[0];
-        const data2 = data2Arr && data2Arr[0];
+        // ⭐ FIXED: handle object OR array
+        const data1 = Array.isArray(data1Arr) ? data1Arr[0] : data1Arr;
+        const data2 = Array.isArray(data2Arr) ? data2Arr[0] : data2Arr;
 
         if (!data1 || !data2) {
             alert("One or both pitchers not found.");
             return;
         }
 
-        // ⭐ Display original names
         document.getElementById("compareName1").textContent = `${p1_raw} (${s1})`;
         document.getElementById("compareName2").textContent = `${p2_raw} (${s2})`;
 
-        // ⭐ Only 5 metrics now
         const s1_ERA   = scoreERA(data1.ERA);
         const s1_WHIP  = scoreWHIP(data1.WHIP);
         const s1_Kpct  = scoreKpct(data1.Kpct);
@@ -578,7 +569,6 @@ async function showCompareModal() {
         const s2_BBpct = scoreBBpct(data2.BBpct);
         const s2_KBB   = scoreKBB(data2.KBB);
 
-        // ⭐ New 5‑metric weighted score
         const overall1 = computeWeightedOverall({
             eraScore: s1_ERA,
             whipScore: s1_WHIP,
@@ -595,7 +585,6 @@ async function showCompareModal() {
             kbbScore: s2_KBB
         });
 
-        // ⭐ Compare table — only 5 metrics + overall
         const stats = [
             ["ERA",  data1.ERA,  data2.ERA],
             ["WHIP", data1.WHIP, data2.WHIP],
@@ -641,6 +630,7 @@ async function showCompareModal() {
         hideSpinner("spinner1");
     }
 }
+
 
 
 
