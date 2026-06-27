@@ -280,127 +280,100 @@ async function handleLoad() {
     }
 }
 
-
 // -------------------------------
-// Show Trend Emoji Button (with spinner1)
+// Trend Handler (Season Comparison)
 // -------------------------------
-async function showTrend(stat) {
-    showSpinner("spinner1");
-
-    try {
-        const name = document.getElementById("playerName").value.trim();
-        if (!name) {
-            alert("Enter a player name first.");
-            return;
-        }
-
-        const trend = await fetchTrendData(name, stat);
-        if (!trend || trend.length === 0) {
-            alert("No trend data available.");
-            return;
-        }
-
-        // ⭐ Only the 5 supported metrics now
-        const statNames = {
-            ERA:  "Earned Run Average",
-            WHIP: "Walks + Hits per Inning",
-            Kpct: "Strikeout Rate",
-            BBpct:"Walk Rate",
-            KBB:  "Strikeout-to-Walk Ratio"
-        };
-
-        let seasons = trend.map(t => t.season);
-        let values  = trend.map(t => t.value);
-
-        // Remove leading nulls
-        while (values.length > 0 && (values[0] === null || values[0] === undefined)) {
-            values.shift();
-            seasons.shift();
-        }
-
-        // Rookie / not enough data
-        if (seasons.length < 3) {
-            document.getElementById("trendTitle").textContent =
-                `${statNames[stat] || stat} Trend`;
-
-            document.getElementById("trendChartContainer").innerHTML = `
-                <div class="no-data-message">
-                    Not enough data to generate a trend chart.<br>
-                    (Minimum 3 seasons required)
-                </div>
-            `;
-
-            document.getElementById("trendModal").style.display = "flex";
-            return;
-        }
-
-        // Normal chart
-        document.getElementById("trendTitle").textContent =
-            `${statNames[stat] || stat} Trend`;
-
-        renderTrendChart(seasons, values, stat);
-
-        document.getElementById("trendModal").style.display = "flex";
-
-    } finally {
-        hideSpinner("spinner1");
-    }
-}
-
-
-
-// -------------------------------
-// Show Trend Fetch (backend-only)
-// -------------------------------
-async function fetchTrendData(name, stat) {
-    const url = `https://pitcher-analyzer-backend.onrender.com/api/pitcherTrend?name=${encodeURIComponent(name)}&stat=${stat}`;
-    const res = await fetch(url);
-
-    if (!res.ok) {
-        console.error("Trend fetch failed", await res.text());
-        return null;
+async function handleTrend() {
+    const name = document.getElementById("playerName").value.trim();
+    if (!name) {
+        alert("Enter a player name first.");
+        return;
     }
 
-    return await res.json();
+    const season = Number(document.getElementById("seasonSelect").value);
+    const lastSeason = season - 1;
+
+    // Fetch both seasons
+    const [currArr, prevArr] = await Promise.all([
+        loadPitcher(name, season),
+        loadPitcher(name, lastSeason)
+    ]);
+
+    const curr = currArr && currArr[0];
+    const prev = prevArr && prevArr[0];
+
+    if (!curr || !prev) {
+        alert("Not enough data for season comparison.");
+        return;
+    }
+
+    // Build comparison table
+    const html = buildSeasonComparison(curr, prev, season, lastSeason);
+
+    // Inject into modal
+    document.getElementById("trendTitle").textContent =
+        `Season Comparison (${season} vs ${lastSeason})`;
+
+    document.getElementById("trendBody").innerHTML = html;
+
+    // Show modal
+    document.getElementById("trendModal").style.display = "flex";
 }
 
 // -------------------------------
-// Render Chart.js Line Graph
+// Build Season Comparison Table
 // -------------------------------
-let trendChart = null;
+function buildSeasonComparison(curr, prev, season, lastSeason) {
 
-function renderTrendChart(seasons, values, stat) {
-    seasons = [...seasons].reverse();
-    values  = [...values].reverse();
+    const stats = [
+        { key: "ERA",     label: "ERA",     higherIsBetter: false },
+        { key: "WHIP",    label: "WHIP",    higherIsBetter: false },
+        { key: "Kpct",    label: "K%",      higherIsBetter: true  },
+        { key: "BBpct",   label: "BB%",     higherIsBetter: false },
+        { key: "KBB",     label: "K/BB",    higherIsBetter: true  },
+        { key: "HardHit", label: "HardHit%",higherIsBetter: false },
+        { key: "Velo",    label: "Velo",    higherIsBetter: true  },
+        { key: "IP",      label: "Innings", higherIsBetter: true  }
+    ];
 
-    const container = document.getElementById("trendChartContainer");
-    container.innerHTML = '<canvas id="trendChart"></canvas>';
+    let rows = stats.map(s => {
+        const a = Number(curr[s.key]);
+        const b = Number(prev[s.key]);
 
-    const ctx = document.getElementById("trendChart").getContext("2d");
+        const arrow =
+            a === b ? "➖" :
+            s.higherIsBetter
+                ? (a > b ? "▲" : "▼")
+                : (a < b ? "▲" : "▼");
 
-    if (trendChart) trendChart.destroy();
+        return `
+            <tr>
+                <td>${s.label}</td>
+                <td>${isNaN(a) ? "--" : a}</td>
+                <td>${isNaN(b) ? "--" : b}</td>
+                <td>${arrow}</td>
+            </tr>
+        `;
+    }).join("");
 
-    trendChart = new Chart(ctx, {
-        type: "line",
-        data: {
-            labels: seasons,
-            datasets: [{
-                label: stat + " Trend",
-                data: values,
-                borderColor: "#007bff",
-                backgroundColor: "rgba(0,123,255,0.2)",
-                borderWidth: 2,
-                tension: 0.3,
-                pointRadius: 4
-            }]
-        },
-        options: {
-            scales: {
-                y: { beginAtZero: false }
-            }
-        }
-    });
+    return `
+        <table class="trend-table">
+            <thead>
+                <tr>
+                    <th>Stat</th>
+                    <th>${season}</th>
+                    <th>${lastSeason}</th>
+                    <th>Trend</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${rows}
+            </tbody>
+        </table>
+    `;
 }
+
+
 
 // -------------------------------
 // Compare Modal Function (backend-only)
@@ -527,126 +500,7 @@ function getPitcherTier(score) {
     return "Depth";
 }
 
-// -------------------------------
-// Rank Button backend fetches
-// -------------------------------
-async function fetchPitcherList(season) {
-    const url = `https://pitcher-analyzer-backend.onrender.com/api/pitcherList?season=${season}`;
-    const res = await fetch(url);
 
-    if (!res.ok) {
-        console.error("Pitcher list fetch failed", await res.text());
-        return [];
-    }
-    return await res.json(); // [{ name, id }]
-}
-
-// Small yield helper to keep UI responsive
-const sleep = ms => new Promise(r => setTimeout(r, ms));
-
-// -------------------------------
-// Rank Handler (GS + ERA Pre-Filter)
-// -------------------------------
-async function handleRank() {
-    console.log("Rank clicked");
-
-    // Reset modal state every time
-    document.getElementById("rankModal").style.display = "flex";
-    document.getElementById("rankLoading").style.display = "block";
-    document.getElementById("rankBody").innerHTML = "";
-
-    const season = document.getElementById("seasonSelect2").value;
-    document.getElementById("rankTitle").textContent =
-        `Top Pitcher Rankings — ${season}`;
-
-
-    const list = await fetchPitcherList(season);
-    if (!list || list.length === 0) {
-        alert("No pitchers found for this season.");
-        return;
-    }
-
-    // ⭐ GS + ERA pre-filter (unchanged)
-    const filtered = list
-        .map(p => ({
-            name: p.name,
-            gs: Number(p.GS),
-            era: Number(p.ERA)
-        }))
-        .filter(p =>
-            !Number.isNaN(p.gs) &&
-            p.gs >= 10 &&
-            !Number.isNaN(p.era) &&
-            p.era > 0
-        )
-        .sort((a, b) => a.era - b.era)
-        .slice(0, 10);
-
-    // ⭐ Must exist before loop
-    const ranked = [];
-
-    // ⭐ Loop through filtered pitchers
-    for (const { name } of filtered) {
-        await sleep(0);
-
-        const dataArr = await loadPitcher(name, season);
-        const p = dataArr && dataArr[0];
-        if (!p) continue;
-
-        // ⭐ New 5‑metric scoring
-        const score = computeWeightedOverall({
-            eraScore:   scoreERA(p.ERA),
-            whipScore:  scoreWHIP(p.WHIP),
-            kpctScore:  scoreKpct(p.Kpct),
-            bbpctScore: scoreBBpct(p.BBpct),
-            kbbScore:   scoreKBB(p.KBB)
-        });
-
-        if (Number.isNaN(score)) continue;
-
-        ranked.push({
-            name,
-            score,
-            tier: getPitcherTier(score)
-        });
-    }
-
-    // ⭐ Sort final 10 by real score
-    ranked.sort((a, b) => b.score - a.score);
-
-    document.getElementById("rankLoading").style.display = "none";
-
-    renderPitcherRankModal(ranked, season);
-}
-
-
-
-
-// -------------------------------
-// Render Rank Modal
-// -------------------------------
-function renderPitcherRankModal(list, season) {
-    const tbody = document.getElementById("rankBody");
-    tbody.innerHTML = "";
-
-    list.forEach((p, i) => {
-        const tr = document.createElement("tr");
-
-        tr.innerHTML = `
-            <td>${i + 1}</td>
-            <td>${p.name}</td>
-            <td>${p.score.toFixed(1)}</td>
-            <td><span class="tier-badge ${getTierClass(p.tier)}">${p.tier}</span></td>
-        `;
-
-        tbody.appendChild(tr);
-    });
-
-    document.getElementById("rankTitle").textContent =
-        `Top Pitcher Rankings — ${season}`;
-
-    document.getElementById("rankModal").style.display = "flex";
-}
 
 
 // -------------------------------
@@ -727,12 +581,9 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("loadBtn").addEventListener("click", handleLoad);
     document.getElementById("resetBtn").addEventListener("click", handleReset);
     document.getElementById("compareBtn").addEventListener("click", showCompareModal);
-    document.getElementById("rankBtn").addEventListener("click", handleRank);
 
-    // Trend buttons
-    document.querySelectorAll(".trend-btn").forEach(btn => {
-        btn.addEventListener("click", () => showTrend(btn.dataset.stat));
-    });
+    // NEW: Single Trend button
+    document.getElementById("trendBtn").addEventListener("click", handleTrend);
 
     // Close modals
     document.getElementById("trendClose").onclick = () =>
@@ -740,9 +591,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("compareClose").onclick = () =>
         document.getElementById("compareModal").style.display = "none";
-
-    document.getElementById("rankClose").onclick = () =>
-        document.getElementById("rankModal").style.display = "none";
 });
+
 
 
