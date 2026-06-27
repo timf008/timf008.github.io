@@ -65,7 +65,7 @@
 
     <button id="compareBtn">Compare🆚</button>
     <button id="swapBtn">Swap🔀</button>
-    <button id="rankBtn">Rank🏆</button>
+    <button id="trendBtn">Trend</button>
 
     <!-- Spinner for row 2 -->
     <div class="spinner" id="spinner2"></div>
@@ -84,7 +84,6 @@
         <span class="metric-raw" id="raw-era">--</span>
         <div class="battery" id="battery-era"></div>
         <span class="metric-score" id="score-era">--</span>
-        <button class="trend-btn" data-stat="ERA">📈</button>
     </div>
 
     <div class="metric-row">
@@ -92,7 +91,6 @@
         <span class="metric-raw" id="raw-whip">--</span>
         <div class="battery" id="battery-whip"></div>
         <span class="metric-score" id="score-whip">--</span>
-        <button class="trend-btn" data-stat="WHIP">📈</button>
     </div>
 
     <div class="metric-row">
@@ -100,7 +98,6 @@
         <span class="metric-raw" id="raw-kpct">--</span>
         <div class="battery" id="battery-kpct"></div>
         <span class="metric-score" id="score-kpct">--</span>
-        <button class="trend-btn" data-stat="Kpct">📈</button>
     </div>
 
     <div class="metric-row">
@@ -108,7 +105,6 @@
         <span class="metric-raw" id="raw-bbpct">--</span>
         <div class="battery" id="battery-bbpct"></div>
         <span class="metric-score" id="score-bbpct">--</span>
-        <button class="trend-btn" data-stat="BBpct">📈</button>
     </div>
 
     <div class="metric-row">
@@ -116,10 +112,9 @@
         <span class="metric-raw" id="raw-kbb">--</span>
         <div class="battery" id="battery-kbb"></div>
         <span class="metric-score" id="score-kbb">--</span>
-        <button class="trend-btn" data-stat="KBB">📈</button>
     </div>
-
 </section>
+
 
 
 
@@ -145,16 +140,18 @@
             </div>
         </section>
 
-        <!-- Trend Modal -->
+       <!-- Trend Modal (Season Comparison) -->
 <div id="trendModal" class="modal hidden">
     <div class="modal-content">
         <span id="trendClose" class="close">&times;</span>
-        <h2 id="trendTitle">Trend (Last 6 Seasons)</h2>
-        <div id="trendChartContainer">
-            <canvas id="trendChart"></canvas>
+        <h2 id="trendTitle">Season Comparison</h2>
+
+        <div id="trendBody">
+            <!-- JS will inject the comparison table here -->
         </div>
     </div>
 </div>
+
 
 
        <!-- Compare Modal -->
@@ -176,36 +173,6 @@
             </tbody>
         </table>
     </div>
-</div>
-
-<!-- Rank Modal -->
-<div id="rankModal" class="modal">
-  <div class="modal-content">
-    <span id="rankClose" class="close">&times;</span>
-    <h2 id="rankTitle">Top Pitcher Rankings</h2>
-
-    <!-- Loading indicator (PATCH) -->
-    <div id="rankLoading" style="
-        display:none;
-        padding:10px 0;
-        font-weight:bold;
-        text-align:center;
-    ">
-      Loading Top 10 pitchers…
-    </div>
-
-    <table class="rank-table">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Pitcher</th>
-          <th>Score</th>
-          <th>Tier</th>
-        </tr>
-      </thead>
-      <tbody id="rankBody"></tbody>
-    </table>
-  </div>
 </div>
 
 
