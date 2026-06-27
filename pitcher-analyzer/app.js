@@ -425,7 +425,6 @@ function buildLeadersTable(list, season) {
 // -------------------------------
 // Trend Handler (Season Comparison)
 // -------------------------------
-
 async function handleTrend() {
     showSpinner("spinner1");
 
@@ -439,32 +438,39 @@ async function handleTrend() {
         const season = Number(document.getElementById("seasonSelect").value);
         const lastSeason = season - 1;
 
+        // Fetch both seasons
         const [currArr, prevArr] = await Promise.all([
             loadPitcher(rawName, season),
             loadPitcher(rawName, lastSeason)
         ]);
 
+        // ⭐ FIXED: handle object OR array safely
         const curr = Array.isArray(currArr) ? currArr[0] : currArr;
         const prev = Array.isArray(prevArr) ? prevArr[0] : prevArr;
 
-        if (!curr || !prev) {
+        // ⭐ FIXED: ensure both objects actually contain stats
+        if (!curr || !prev || !curr.ERA || !prev.ERA) {
             alert("Not enough data for season comparison.");
             return;
         }
 
+        // Build comparison table
         const html = buildSeasonComparison(curr, prev, season, lastSeason);
 
+        // Inject into modal
         document.getElementById("trendTitle").textContent =
             `Season Comparison (${season} vs ${lastSeason})`;
 
         document.getElementById("trendBody").innerHTML = html;
 
+        // Show modal
         document.getElementById("trendModal").style.display = "flex";
 
     } finally {
         hideSpinner("spinner1");
     }
 }
+
 
 
 
