@@ -66,6 +66,8 @@
 
     <button id="compareBtn">Compare🆚</button>
     <button id="swapBtn">Swap🔀</button>
+    <button id="leadersBtn">Leaders</button>
+
 
     <!-- Spinner for row 2 -->
     <div class="spinner" id="spinner2"></div>
@@ -172,6 +174,14 @@
                 <!-- Filled dynamically -->
             </tbody>
         </table>
+    </div>
+</div>
+
+<div id="leadersModal" class="modal hidden">
+    <div class="modal-content">
+        <span id="leadersClose" onclick="leadersModal.style.display='none'">&times;</span>
+        <h2 id="leadersTitle"></h2>
+        <div id="leadersBody"></div>
     </div>
 </div>
 
