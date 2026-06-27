@@ -550,13 +550,15 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
 async function handleRank() {
     console.log("Rank clicked");
 
-    // Show modal immediately
+    // Reset modal state every time
     document.getElementById("rankModal").style.display = "flex";
     document.getElementById("rankLoading").style.display = "block";
+    document.getElementById("rankBody").innerHTML = "";
 
     const season = document.getElementById("seasonSelect2").value;
     document.getElementById("rankTitle").textContent =
         `Top Pitcher Rankings — ${season}`;
+
 
     const list = await fetchPitcherList(season);
     if (!list || list.length === 0) {
