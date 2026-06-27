@@ -19,19 +19,16 @@ function safeScore(value) {
 }
 
 // =====================================================
-// Utility: Normalize name to match R script (LAST FIRST)
+// Utility: Normalize name to match R script (First Last)
 // =====================================================
 function normalizeNameFrontend(x) {
     return x
         .normalize("NFKD")               // strip accents
         .replace(/[^\w\s-]/g, "")        // remove non-ASCII
         .replace(/\s+/g, " ")            // collapse spaces
-        .trim()
-        .split(" ")                      // split into words
-        .reverse()                       // reverse → LAST FIRST
-        .join(" ")
-        .toUpperCase();
+        .trim();                         // keep First Last order
 }
+
 
 // -------------------------------
 // Utility: Fetch pitcher data
@@ -49,6 +46,7 @@ async function loadPitcher(name, season) {
 
     return await res.json(); // API returns an array
 }
+
 
 
 // -------------------------------
@@ -531,6 +529,7 @@ function buildSeasonComparison(curr, prev, season, lastSeason) {
     `;
 }
 
+
 // -------------------------------
 // Compare Modal Function (backend-only)
 // -------------------------------
@@ -550,14 +549,9 @@ async function showCompareModal() {
             return;
         }
 
-        // ⭐ Normalize names to match R script format
-        const p1 = normalizeNameFrontend(p1_raw);
-        const p2 = normalizeNameFrontend(p2_raw);
-
-        console.log("COMPARE CLEAN NAMES:", p1, p2);
-
-        const data1Arr = await loadPitcher(p1, s1);
-        const data2Arr = await loadPitcher(p2, s2);
+        // ⭐ DO NOT normalize here — loadPitcher() handles it
+        const data1Arr = await loadPitcher(p1_raw, s1);
+        const data2Arr = await loadPitcher(p2_raw, s2);
 
         const data1 = data1Arr && data1Arr[0];
         const data2 = data2Arr && data2Arr[0];
@@ -567,7 +561,7 @@ async function showCompareModal() {
             return;
         }
 
-        // ⭐ Display original names, not normalized ones
+        // ⭐ Display original names
         document.getElementById("compareName1").textContent = `${p1_raw} (${s1})`;
         document.getElementById("compareName2").textContent = `${p2_raw} (${s2})`;
 
