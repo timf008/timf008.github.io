@@ -295,6 +295,84 @@ button.reset:hover {
 }
 
 /* -----------------------------------------
+   Trend Modal (Season Comparison)
+----------------------------------------- */
+
+#trendModal .modal-content {
+    width: 600px;
+    max-width: 90%;
+    background: #1e1e1e !important;
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+}
+
+/* Title */
+#trendTitle {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+/* Trend Table */
+.trend-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.trend-table th,
+.trend-table td {
+    padding: 8px;
+    border-bottom: 1px solid #444;
+    text-align: center;
+}
+
+.trend-table th {
+    font-weight: bold;
+}
+
+/* Arrows */
+.trend-table td:last-child {
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+/* Close button */
+#trendClose {
+    float: right;
+    font-size: 1.6em;
+    cursor: pointer;
+    color: #bbb;
+}
+
+#trendClose:hover {
+    color: #fff;
+}
+
+/* -----------------------------------------
+   Trend Arrow Colors (Match Compare Modal)
+----------------------------------------- */
+
+.trend-up {
+    color: #4caf50; /* green */
+    font-weight: 700;
+}
+
+.trend-down {
+    color: #e53935; /* red */
+    font-weight: 700;
+}
+
+.trend-flat {
+    color: #cccccc; /* gray */
+    font-weight: 700;
+}
+
+
+
+
+/* -----------------------------------------
    Compare Modal
 ----------------------------------------- */
 .compare-box {
@@ -552,6 +630,10 @@ button.reset:hover {
   color: #888;
   margin-top: 6px;
 }
+
+
+
+
 
 /* -----------------------------------------
    Footer
