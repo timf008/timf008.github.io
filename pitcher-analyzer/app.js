@@ -294,7 +294,7 @@ async function getPitcherList(season) {
 }
 
 // -------------------------------
-// Leaders: Top 20 Strikeout List (Parallel Loader)
+// Leaders: Top 10 Strikeout List (Sequential Loader)
 // -------------------------------
 async function handleLeaders() {
     showSpinner("spinner1");
@@ -306,33 +306,27 @@ async function handleLeaders() {
         // 1. Get pitcher list
         const list = await getPitcherList(season);
         console.log("Leaders: Pitcher list loaded:", list.length, "names");
+
         if (!list || list.length === 0) {
             alert("No pitchers found for this season.");
             return;
         }
 
-        // 2. Build parallel tasks
-        const tasks = list.map(name => {
-            return Promise.race([
-                loadPitcher(name, season),
-                new Promise(res => setTimeout(() => res("TIMEOUT"), 6000))
-            ]).then(data => ({ name, data }));
-        });
+        // Limit to first 10 pitchers for now
+        const limitedList = list.slice(0, 10);
+        console.log("Leaders: Using first 10 pitchers:", limitedList);
 
-        // 3. Run all in parallel
-        const settled = await Promise.allSettled(tasks);
-        console.log("Leaders: Parallel load complete. Settled count =", settled.length);
-
-        // 4. Extract valid results
         const results = [];
 
-        for (const item of settled) {
-            if (item.status !== "fulfilled") {
-                console.warn("Leaders: Promise rejected:", item.reason);
-                continue;
-            }
+        // 2. Sequential loading
+        for (const name of limitedList) {
+            console.log("Loading pitcher:", name);
 
-            const { name, data } = item.value;
+            // Timeout wrapper
+            const data = await Promise.race([
+                loadPitcher(name, season),
+                new Promise(res => setTimeout(() => res("TIMEOUT"), 6000))
+            ]);
 
             if (data === "TIMEOUT") {
                 console.warn("Leaders: TIMEOUT loading pitcher:", name);
@@ -355,20 +349,20 @@ async function handleLeaders() {
             });
         }
 
-        console.log("Leaders: Results after filtering:", results);
+        console.log("Leaders: Results after sequential load:", results);
 
-        // 5. Sort by strikeouts
+        // 3. Sort by strikeouts
         results.sort((a, b) => b.K - a.K);
 
-        // 6. Take top 20
-        const top20 = results.slice(0, 20);
-        console.log("Leaders: Top 20:", top20);
+        // 4. Take top 10
+        const top10 = results.slice(0, 10);
+        console.log("Leaders: Top 10:", top10);
 
-        // 7. Render table
-        const html = buildLeadersTable(top20, season);
+        // 5. Render table
+        const html = buildLeadersTable(top10, season);
 
         document.getElementById("leadersTitle").textContent =
-            `Top 20 Strikeout Leaders — ${season}`;
+            `Top 10 Strikeout Leaders — ${season}`;
 
         document.getElementById("leadersBody").innerHTML = html;
 
@@ -379,7 +373,6 @@ async function handleLeaders() {
         hideSpinner("spinner1");
     }
 }
-
 
 
 
