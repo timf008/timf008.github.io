@@ -423,6 +423,54 @@ button.reset:hover {
     color: #cccccc;
 }
 
+/* -----------------------------------------
+   Leaders Modal
+----------------------------------------- */
+
+#leadersModal .modal-content {
+    width: 600px;
+    max-width: 90%;
+    background: #1e1e1e !important;
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+}
+
+#leadersTitle {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.leaders-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.leaders-table th,
+.leaders-table td {
+    padding: 8px;
+    border-bottom: 1px solid #444;
+    text-align: center;
+}
+
+.leaders-table th {
+    font-weight: bold;
+}
+
+#leadersClose {
+    float: right;
+    font-size: 1.6em;
+    cursor: pointer;
+    color: #bbb;
+}
+
+#leadersClose:hover {
+    color: #fff;
+}
+
+
 
 /* -----------------------------------------
    Batteries
