@@ -284,41 +284,49 @@ async function handleLoad() {
 // Trend Handler (Season Comparison)
 // -------------------------------
 async function handleTrend() {
-    const name = document.getElementById("playerName").value.trim();
-    if (!name) {
-        alert("Enter a player name first.");
-        return;
+    showSpinner("spinner1");
+
+    try {
+        const name = document.getElementById("playerName").value.trim();
+        if (!name) {
+            alert("Enter a player name first.");
+            return;
+        }
+
+        const season = Number(document.getElementById("seasonSelect").value);
+        const lastSeason = season - 1;
+
+        // Fetch both seasons
+        const [currArr, prevArr] = await Promise.all([
+            loadPitcher(name, season),
+            loadPitcher(name, lastSeason)
+        ]);
+
+        const curr = currArr && currArr[0];
+        const prev = prevArr && prevArr[0];
+
+        if (!curr || !prev) {
+            alert("Not enough data for season comparison.");
+            return;
+        }
+
+        // Build comparison table
+        const html = buildSeasonComparison(curr, prev, season, lastSeason);
+
+        // Inject into modal
+        document.getElementById("trendTitle").textContent =
+            `Season Comparison (${season} vs ${lastSeason})`;
+
+        document.getElementById("trendBody").innerHTML = html;
+
+        // Show modal
+        document.getElementById("trendModal").style.display = "flex";
+
+    } finally {
+        hideSpinner("spinner1");
     }
-
-    const season = Number(document.getElementById("seasonSelect").value);
-    const lastSeason = season - 1;
-
-    // Fetch both seasons
-    const [currArr, prevArr] = await Promise.all([
-        loadPitcher(name, season),
-        loadPitcher(name, lastSeason)
-    ]);
-
-    const curr = currArr && currArr[0];
-    const prev = prevArr && prevArr[0];
-
-    if (!curr || !prev) {
-        alert("Not enough data for season comparison.");
-        return;
-    }
-
-    // Build comparison table
-    const html = buildSeasonComparison(curr, prev, season, lastSeason);
-
-    // Inject into modal
-    document.getElementById("trendTitle").textContent =
-        `Season Comparison (${season} vs ${lastSeason})`;
-
-    document.getElementById("trendBody").innerHTML = html;
-
-    // Show modal
-    document.getElementById("trendModal").style.display = "flex";
 }
+
 
 // -------------------------------
 // Build Season Comparison Table
@@ -326,32 +334,36 @@ async function handleTrend() {
 function buildSeasonComparison(curr, prev, season, lastSeason) {
 
     const stats = [
-        { key: "ERA",     label: "ERA",     higherIsBetter: false },
-        { key: "WHIP",    label: "WHIP",    higherIsBetter: false },
-        { key: "Kpct",    label: "K%",      higherIsBetter: true  },
-        { key: "BBpct",   label: "BB%",     higherIsBetter: false },
-        { key: "KBB",     label: "K/BB",    higherIsBetter: true  },
-        { key: "HardHit", label: "HardHit%",higherIsBetter: false },
-        { key: "Velo",    label: "Velo",    higherIsBetter: true  },
-        { key: "IP",      label: "Innings", higherIsBetter: true  }
+        { key: "ERA",   label: "ERA",   higherIsBetter: false },
+        { key: "WHIP",  label: "WHIP",  higherIsBetter: false },
+        { key: "Kpct",  label: "K%",    higherIsBetter: true  },
+        { key: "BBpct", label: "BB%",   higherIsBetter: false },
+        { key: "KBB",   label: "K/BB",  higherIsBetter: true  }
     ];
 
     let rows = stats.map(s => {
         const a = Number(curr[s.key]);
         const b = Number(prev[s.key]);
 
+        // Determine arrow
         const arrow =
             a === b ? "➖" :
             s.higherIsBetter
                 ? (a > b ? "▲" : "▼")
                 : (a < b ? "▲" : "▼");
 
+        // Determine CSS class
+        const arrowClass =
+            arrow === "▲" ? "trend-up" :
+            arrow === "▼" ? "trend-down" :
+            "trend-flat";
+
         return `
             <tr>
                 <td>${s.label}</td>
                 <td>${isNaN(a) ? "--" : a}</td>
                 <td>${isNaN(b) ? "--" : b}</td>
-                <td>${arrow}</td>
+                <td class="${arrowClass}">${arrow}</td>
             </tr>
         `;
     }).join("");
@@ -372,6 +384,8 @@ function buildSeasonComparison(curr, prev, season, lastSeason) {
         </table>
     `;
 }
+
+
 
 
 
