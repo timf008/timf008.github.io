@@ -301,9 +301,11 @@ async function handleLeaders() {
 
     try {
         const season = Number(document.getElementById("seasonSelect").value);
+        console.log("Leaders: Selected season =", season);
 
         // 1. Get pitcher list
         const list = await getPitcherList(season);
+        console.log("Leaders: Pitcher list loaded:", list.length, "names");
         if (!list || list.length === 0) {
             alert("No pitchers found for this season.");
             return;
@@ -319,18 +321,32 @@ async function handleLeaders() {
 
         // 3. Run all in parallel
         const settled = await Promise.allSettled(tasks);
+        console.log("Leaders: Parallel load complete. Settled count =", settled.length);
 
         // 4. Extract valid results
         const results = [];
 
         for (const item of settled) {
-            if (item.status !== "fulfilled") continue;
+            if (item.status !== "fulfilled") {
+                console.warn("Leaders: Promise rejected:", item.reason);
+                continue;
+            }
 
             const { name, data } = item.value;
 
-            if (!data || data === "TIMEOUT") continue;
+            if (data === "TIMEOUT") {
+                console.warn("Leaders: TIMEOUT loading pitcher:", name);
+                continue;
+            }
+
+            if (!data) {
+                console.warn("Leaders: No data returned for:", name);
+                continue;
+            }
 
             const p = Array.isArray(data) ? data[0] : data;
+
+            console.log("Leaders: Loaded pitcher:", name, "Raw:", p);
 
             results.push({
                 name,
@@ -339,11 +355,14 @@ async function handleLeaders() {
             });
         }
 
+        console.log("Leaders: Results after filtering:", results);
+
         // 5. Sort by strikeouts
         results.sort((a, b) => b.K - a.K);
 
         // 6. Take top 20
         const top20 = results.slice(0, 20);
+        console.log("Leaders: Top 20:", top20);
 
         // 7. Render table
         const html = buildLeadersTable(top20, season);
@@ -356,9 +375,11 @@ async function handleLeaders() {
         document.getElementById("leadersModal").style.display = "flex";
 
     } finally {
+        console.log("Leaders: Hiding spinner");
         hideSpinner("spinner1");
     }
 }
+
 
 
 
