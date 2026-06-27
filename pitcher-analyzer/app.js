@@ -281,6 +281,90 @@ async function handleLoad() {
 }
 
 // -------------------------------
+// Leaders: Top 20 Strikeout List
+// -------------------------------
+async function handleLeaders() {
+    showSpinner("spinner1");
+
+    try {
+        const season = Number(document.getElementById("seasonSelect").value);
+
+        // 1. Get pitcher list for the season
+        const list = getPitcherList(season);
+        if (!list || list.length === 0) {
+            alert("No pitchers found for this season.");
+            return;
+        }
+
+        // 2. Load Ks + Team only (fast)
+        const results = [];
+
+        for (const name of list) {
+            const data = await loadPitcher(name, season);
+            if (!data) continue;
+
+            const p = Array.isArray(data) ? data[0] : data;
+
+            results.push({
+                name,
+                team: p.Team || "--",
+                K: Number(p.K) || 0
+            });
+        }
+
+        // 3. Sort by strikeouts
+        results.sort((a, b) => b.K - a.K);
+
+        // 4. Take top 20
+        const top20 = results.slice(0, 20);
+
+        // 5. Render table
+        const html = buildLeadersTable(top20, season);
+
+        document.getElementById("leadersTitle").textContent =
+            `Top 20 Strikeout Leaders — ${season}`;
+
+        document.getElementById("leadersBody").innerHTML = html;
+
+        document.getElementById("leadersModal").style.display = "flex";
+
+    } finally {
+        hideSpinner("spinner1");
+    }
+}
+
+// -------------------------------
+// Build Leaders Table
+// -------------------------------
+function buildLeadersTable(list, season) {
+    const rows = list.map((p, i) => `
+        <tr>
+            <td>${i + 1}</td>
+            <td>${p.name}</td>
+            <td>${p.team}</td>
+            <td>${p.K}</td>
+        </tr>
+    `).join("");
+
+    return `
+        <table class="leaders-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Player</th>
+                    <th>Team</th>
+                    <th>K</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${rows}
+            </tbody>
+        </table>
+    `;
+}
+
+
+// -------------------------------
 // Trend Handler (Season Comparison)
 // -------------------------------
 async function handleTrend() {
@@ -329,7 +413,7 @@ async function handleTrend() {
 
 
 // -------------------------------
-// Build Season Comparison Table
+// Trend Table (Season Comparison)
 // -------------------------------
 function buildSeasonComparison(curr, prev, season, lastSeason) {
 
@@ -596,8 +680,12 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("resetBtn").addEventListener("click", handleReset);
     document.getElementById("compareBtn").addEventListener("click", showCompareModal);
 
-    // NEW: Single Trend button
+    //Single Trend button
     document.getElementById("trendBtn").addEventListener("click", handleTrend);
+
+    //Leaders Button
+document.getElementById("leadersBtn").addEventListener("click", handleLeaders);
+
 
     // Close modals
     document.getElementById("trendClose").onclick = () =>
