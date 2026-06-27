@@ -18,21 +18,38 @@ function safeScore(value) {
         : 0;
 }
 
+// =====================================================
+// Utility: Normalize name to match R script (LAST FIRST)
+// =====================================================
+function normalizeNameFrontend(x) {
+    return x
+        .normalize("NFKD")               // strip accents
+        .replace(/[^\w\s-]/g, "")        // remove non-ASCII
+        .replace(/\s+/g, " ")            // collapse spaces
+        .trim()
+        .split(" ")                      // split into words
+        .reverse()                       // reverse → LAST FIRST
+        .join(" ")
+        .toUpperCase();
+}
+
 // -------------------------------
 // Utility: Fetch pitcher data
 // -------------------------------
 async function loadPitcher(name, season) {
-    const url = `https://pitcher-analyzer-backend.onrender.com/api/pitchers?name=${encodeURIComponent(name)}&season=${season}`;
+    const clean = normalizeNameFrontend(name);
+
+    const url = `https://pitcher-analyzer-backend.onrender.com/api/pitchers?name=${encodeURIComponent(clean)}&season=${season}`;
     const res = await fetch(url);
 
     if (!res.ok) {
         console.error("Pitcher fetch failed", await res.text());
-        alert("Pitcher not found.");
         return null;
     }
 
     return await res.json(); // API returns an array
 }
+
 
 // -------------------------------
 // Battery fill updater
@@ -414,19 +431,20 @@ async function handleTrend() {
     showSpinner("spinner1");
 
     try {
-        const name = document.getElementById("playerName").value.trim();
-        if (!name) {
+        const rawName = document.getElementById("playerName").value.trim();
+        if (!rawName) {
             alert("Enter a player name first.");
             return;
         }
 
+        // ⭐ loadPitcher() now normalizes internally, so we pass rawName
         const season = Number(document.getElementById("seasonSelect").value);
         const lastSeason = season - 1;
 
         // Fetch both seasons
         const [currArr, prevArr] = await Promise.all([
-            loadPitcher(name, season),
-            loadPitcher(name, lastSeason)
+            loadPitcher(rawName, season),
+            loadPitcher(rawName, lastSeason)
         ]);
 
         const curr = currArr && currArr[0];
@@ -453,6 +471,7 @@ async function handleTrend() {
         hideSpinner("spinner1");
     }
 }
+
 
 
 // -------------------------------
@@ -512,10 +531,6 @@ function buildSeasonComparison(curr, prev, season, lastSeason) {
     `;
 }
 
-
-
-
-
 // -------------------------------
 // Compare Modal Function (backend-only)
 // -------------------------------
@@ -524,16 +539,22 @@ async function showCompareModal() {
     console.log("COMPARE BUTTON CLICKED");
 
     try {
-        const p1 = document.getElementById("playerName").value.trim();
+        const p1_raw = document.getElementById("playerName").value.trim();
         const s1 = document.getElementById("seasonSelect").value;
 
-        const p2 = document.getElementById("playerName2").value.trim();
+        const p2_raw = document.getElementById("playerName2").value.trim();
         const s2 = document.getElementById("seasonSelect2").value;
 
-        if (!p1 || !p2) {
+        if (!p1_raw || !p2_raw) {
             alert("Enter both pitcher names.");
             return;
         }
+
+        // ⭐ Normalize names to match R script format
+        const p1 = normalizeNameFrontend(p1_raw);
+        const p2 = normalizeNameFrontend(p2_raw);
+
+        console.log("COMPARE CLEAN NAMES:", p1, p2);
 
         const data1Arr = await loadPitcher(p1, s1);
         const data2Arr = await loadPitcher(p2, s2);
@@ -546,8 +567,9 @@ async function showCompareModal() {
             return;
         }
 
-        document.getElementById("compareName1").textContent = `${p1} (${s1})`;
-        document.getElementById("compareName2").textContent = `${p2} (${s2})`;
+        // ⭐ Display original names, not normalized ones
+        document.getElementById("compareName1").textContent = `${p1_raw} (${s1})`;
+        document.getElementById("compareName2").textContent = `${p2_raw} (${s2})`;
 
         // ⭐ Only 5 metrics now
         const s1_ERA   = scoreERA(data1.ERA);
@@ -599,13 +621,10 @@ async function showCompareModal() {
             let class2 = "tie";
 
             if (v1 != null && v2 != null) {
-                // ⭐ Lower is better for ERA, WHIP, BB%
                 if (label === "ERA" || label === "WHIP" || label === "BB%") {
                     if (v1 < v2) { class1 = "win"; class2 = "lose"; }
                     else if (v2 < v1) { class1 = "lose"; class2 = "win"; }
-                } 
-                // ⭐ Higher is better for K%, K/BB, Overall
-                else {
+                } else {
                     if (v1 > v2) { class1 = "win"; class2 = "lose"; }
                     else if (v2 > v1) { class1 = "lose"; class2 = "win"; }
                 }
@@ -628,6 +647,7 @@ async function showCompareModal() {
         hideSpinner("spinner1");
     }
 }
+
 
 
 // -------------------------------
