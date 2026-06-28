@@ -321,11 +321,12 @@ async function handleTrend() {
         const stats = ["ERA", "WHIP", "Kpct", "BBpct", "KBB"];
 
         async function fetchTrend(stat, seasonNumber) {
-            const url = `/api/pitcherTrend?name=${encodeURIComponent(rawName)}&stat=${stat}&season=${seasonNumber}`;
-            const res = await fetch(url);
-            const json = await res.json();
-            return json.value ?? null;
-        }
+    const url = `https://pitcher-analyzer-backend.onrender.com/api/pitcherTrend?name=${encodeURIComponent(rawName)}&stat=${stat}&season=${seasonNumber}`;
+    const res = await fetch(url);
+    const json = await res.json();
+    return json.value ?? null;
+}
+
 
         const curr = {};
         const prev = {};
