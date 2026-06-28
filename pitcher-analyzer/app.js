@@ -318,23 +318,25 @@ async function handleTrend() {
         const season = Number(document.getElementById("seasonSelect").value);
         const lastSeason = season - 1;
 
-        // Fetch both seasons
-        const [currArr, prevArr] = await Promise.all([
-            loadPitcher(rawName, season),
-            loadPitcher(rawName, lastSeason)
-        ]);
+        const stats = ["ERA", "WHIP", "Kpct", "BBpct", "KBB"];
 
-        // Normalize to objects
-        const curr = Array.isArray(currArr) ? currArr[0] : currArr;
-        const prev = Array.isArray(prevArr) ? prevArr[0] : prevArr;
-
-        // ⭐ Correct error handling
-        if (!curr || curr.error || !prev || prev.error) {
-            alert("Not enough data for season comparison.");
-            return;
+        async function fetchTrend(stat, seasonNumber) {
+            const url = `/api/pitcherTrend?name=${encodeURIComponent(rawName)}&stat=${stat}&season=${seasonNumber}`;
+            const res = await fetch(url);
+            const json = await res.json();
+            return json.value ?? null;
         }
 
-        // ⭐ ERA must be checked for null/undefined, NOT falsy
+        // Fetch all stats for both seasons
+        const curr = {};
+        const prev = {};
+
+        for (const s of stats) {
+            curr[s] = await fetchTrend(s, season);
+            prev[s] = await fetchTrend(s, lastSeason);
+        }
+
+        // Validate
         if (curr.ERA == null || prev.ERA == null) {
             alert("Not enough data for season comparison.");
             return;
@@ -343,13 +345,10 @@ async function handleTrend() {
         // Build comparison table
         const html = buildSeasonComparison(curr, prev, season, lastSeason);
 
-        // Inject into modal
         document.getElementById("trendTitle").textContent =
             `Season Comparison (${season} vs ${lastSeason})`;
 
         document.getElementById("trendBody").innerHTML = html;
-
-        // Show modal
         document.getElementById("trendModal").style.display = "flex";
 
     } finally {
