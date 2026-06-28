@@ -382,13 +382,14 @@ function buildSeasonComparison(curr, prev, season, lastSeason) {
             "trend-flat";
 
         return `
-            <tr>
-                <td>${s.label}</td>
-                <td>${isNaN(a) ? "--" : a}</td>
-                <td>${isNaN(b) ? "--" : b}</td>
-                <td class="${arrowClass}">${arrow}</td>
-            </tr>
-        `;
+    <tr>
+        <td>${s.label}</td>
+        <td>${isNaN(a) ? "--" : a.toFixed(2)}</td>
+        <td>${isNaN(b) ? "--" : b.toFixed(2)}</td>
+        <td class="${arrowClass}">${arrow}</td>
+    </tr>
+`;
+
     }).join("");
 
     return `
