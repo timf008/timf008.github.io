@@ -327,7 +327,6 @@ async function handleTrend() {
             return json.value ?? null;
         }
 
-        // Fetch all stats for both seasons
         const curr = {};
         const prev = {};
 
@@ -336,13 +335,11 @@ async function handleTrend() {
             prev[s] = await fetchTrend(s, lastSeason);
         }
 
-        // Validate
         if (curr.ERA == null || prev.ERA == null) {
             alert("Not enough data for season comparison.");
             return;
         }
 
-        // Build comparison table
         const html = buildSeasonComparison(curr, prev, season, lastSeason);
 
         document.getElementById("trendTitle").textContent =
@@ -355,6 +352,7 @@ async function handleTrend() {
         hideSpinner("spinner1");
     }
 }
+
 
 
 
