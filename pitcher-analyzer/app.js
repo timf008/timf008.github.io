@@ -300,8 +300,6 @@ async function handleLoad() {
     }
 }
 
-
-
 // -------------------------------
 // Trend Handler (Season Comparison)
 // -------------------------------
@@ -318,22 +316,19 @@ async function handleTrend() {
         const season = Number(document.getElementById("seasonSelect").value);
         const lastSeason = season - 1;
 
-        const stats = ["ERA", "WHIP", "Kpct", "BBpct", "KBB"];
+        // Fetch both seasons using stathead.r API
+        const currArr = await fetch(`https://pitcher-analyzer-backend.onrender.com/api/pitchers?name=${encodeURIComponent(rawName)}&season=${season}`)
+            .then(r => r.json());
 
-        async function fetchTrend(stat, seasonNumber) {
-    const url = `https://pitcher-analyzer-backend.onrender.com/api/pitcherTrend?name=${encodeURIComponent(rawName)}&stat=${stat}&season=${seasonNumber}`;
-    const res = await fetch(url);
-    const json = await res.json();
-    return json.value ?? null;
-}
+        const prevArr = await fetch(`https://pitcher-analyzer-backend.onrender.com/api/pitchers?name=${encodeURIComponent(rawName)}&season=${lastSeason}`)
+            .then(r => r.json());
 
+        const curr = Array.isArray(currArr) ? currArr[0] : currArr;
+        const prev = Array.isArray(prevArr) ? prevArr[0] : prevArr;
 
-        const curr = {};
-        const prev = {};
-
-        for (const s of stats) {
-            curr[s] = await fetchTrend(s, season);
-            prev[s] = await fetchTrend(s, lastSeason);
+        if (!curr || curr.error || !prev || prev.error) {
+            alert("Not enough data for season comparison.");
+            return;
         }
 
         if (curr.ERA == null || prev.ERA == null) {
@@ -353,9 +348,6 @@ async function handleTrend() {
         hideSpinner("spinner1");
     }
 }
-
-
-
 
 
 
