@@ -1,6 +1,6 @@
 title: "Pitcher & QB Analyzer"
 description: "Custom baseball and football analytics tools built with HTML, CSS, JavaScript, and JSON."
-theme: null
+theme: jekyll-theme-cayman
 markdown: kramdown
 exclude:
   - README.md
