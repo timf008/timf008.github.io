@@ -44,8 +44,12 @@ async function loadPitcher(name, season) {
         return null;
     }
 
-    return await res.json(); // API returns an array
+    const data = await res.json();
+
+    // ⭐ Normalize backend output: ALWAYS return an array
+    return Array.isArray(data) ? data : [data];
 }
+
 
 
 
@@ -255,12 +259,13 @@ async function handleLoad() {
 
         const data = await loadPitcher(name, season);
 
-        // ⭐ FIXED: handle object OR array
-        if (!data) {
+        // ⭐ Correct error handling
+        if (!data || data.error || (Array.isArray(data) && data.length === 0)) {
             alert("Pitcher not found.");
             return;
         }
 
+        // ⭐ Always normalize to object
         const p = Array.isArray(data) ? data[0] : data;
 
         // ⭐ Only 5 metrics now
@@ -294,6 +299,7 @@ async function handleLoad() {
         hideSpinner("spinner1");
     }
 }
+
 
 
 // -------------------------------
@@ -444,12 +450,18 @@ async function handleTrend() {
             loadPitcher(rawName, lastSeason)
         ]);
 
-        // ⭐ FIXED: handle object OR array safely
+        // Normalize to objects
         const curr = Array.isArray(currArr) ? currArr[0] : currArr;
         const prev = Array.isArray(prevArr) ? prevArr[0] : prevArr;
 
-        // ⭐ FIXED: ensure both objects actually contain stats
-        if (!curr || !prev || !curr.ERA || !prev.ERA) {
+        // ⭐ Correct error handling
+        if (!curr || curr.error || !prev || prev.error) {
+            alert("Not enough data for season comparison.");
+            return;
+        }
+
+        // ⭐ ERA must be checked for null/undefined, NOT falsy
+        if (curr.ERA == null || prev.ERA == null) {
             alert("Not enough data for season comparison.");
             return;
         }
@@ -470,6 +482,7 @@ async function handleTrend() {
         hideSpinner("spinner1");
     }
 }
+
 
 
 
@@ -531,6 +544,9 @@ function buildSeasonComparison(curr, prev, season, lastSeason) {
     `;
 }
 
+// -------------------------------
+// Compare Button
+// -------------------------------
 
 async function showCompareModal() {
     showSpinner("spinner1");
@@ -551,12 +567,19 @@ async function showCompareModal() {
         const data1Arr = await loadPitcher(p1_raw, s1);
         const data2Arr = await loadPitcher(p2_raw, s2);
 
-        // ⭐ FIXED: handle object OR array
+        // ⭐ Normalize to objects
         const data1 = Array.isArray(data1Arr) ? data1Arr[0] : data1Arr;
         const data2 = Array.isArray(data2Arr) ? data2Arr[0] : data2Arr;
 
-        if (!data1 || !data2) {
+        // ⭐ Correct error handling
+        if (!data1 || data1.error || !data2 || data2.error) {
             alert("One or both pitchers not found.");
+            return;
+        }
+
+        // ⭐ Ensure stats exist (ERA can be 0, so check null/undefined)
+        if (data1.ERA == null || data2.ERA == null) {
+            alert("Not enough data for comparison.");
             return;
         }
 
@@ -636,6 +659,7 @@ async function showCompareModal() {
         hideSpinner("spinner1");
     }
 }
+
 
 
 
