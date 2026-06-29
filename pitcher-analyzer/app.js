@@ -527,7 +527,7 @@ async function showCompareModal() {
 
 
 // -------------------------------
-// Leaders Button
+// Leaders Button (Sequential Loader)
 // -------------------------------
 async function handleLeaders() {
     const leadersModal = document.getElementById("leadersModal");
@@ -548,7 +548,7 @@ async function handleLeaders() {
         );
         const pitcherList = await listRes.json();
 
-        // Trend-style shape validation
+        // Validate list response
         if (!Array.isArray(pitcherList)) {
             console.error("Invalid pitcher list:", pitcherList);
             leadersBody.innerHTML = `<p>No pitcher data available for season ${season}.</p>`;
@@ -559,39 +559,40 @@ async function handleLeaders() {
         const pitcherNames = pitcherList.map(p => p.name);
 
         // -------------------------------
-        // 2. Fetch each pitcher in parallel
+        // 2. Sequential pitcher loading
         // -------------------------------
-        const results = await Promise.all(
-            pitcherNames.map(async (name) => {
-                try {
-                    const res = await fetch(
-                        `https://pitcher-analyzer-backend.onrender.com/api/pitchers?name=${encodeURIComponent(name)}&season=${season}`
-                    );
-                    const data = await res.json();
+        const results = [];
 
-                    const pitcher = Array.isArray(data) ? data[0] : data;
+        for (const name of pitcherNames) {
+            try {
+                const res = await fetch(
+                    `https://pitcher-analyzer-backend.onrender.com/api/pitchers?name=${encodeURIComponent(name)}&season=${season}`
+                );
+                const data = await res.json();
 
-                    if (!pitcher || pitcher.error || !pitcher.stats) {
-                        return null;
-                    }
+                const pitcher = Array.isArray(data) ? data[0] : data;
 
-                    return {
-                        name: pitcher.name,
-                        team: pitcher.team,
-                        strikeouts: pitcher.stats.strikeouts ?? 0
-                    };
-                } catch (err) {
-                    console.error("Pitcher load failed:", name, err);
-                    return null;
+                if (!pitcher || pitcher.error || !pitcher.stats) {
+                    console.warn("Skipping pitcher:", name, pitcher);
+                    continue;
                 }
-            })
-        );
+
+                results.push({
+                    name: pitcher.name,
+                    team: pitcher.team,
+                    strikeouts: pitcher.stats.strikeouts ?? 0
+                });
+
+            } catch (err) {
+                console.error("Pitcher load failed:", name, err);
+                // Continue to next pitcher
+            }
+        }
 
         // -------------------------------
         // 3. Sort & filter
         // -------------------------------
         const sorted = results
-            .filter(p => p !== null)
             .sort((a, b) => b.strikeouts - a.strikeouts)
             .slice(0, 20);
 
@@ -636,6 +637,7 @@ async function handleLeaders() {
 
     leadersModal.style.display = "block";
 }
+
 
 
 
