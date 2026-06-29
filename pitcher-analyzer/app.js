@@ -548,13 +548,14 @@ function getLeague(team) {
 function getBadge(stats) {
     if (!stats) return "N/A";
 
-    if (stats.ERA < 3.00 && stats.WHIP < 1.10) return "Ace";
-    if (stats.Kpct >= 30) return "Strikeout Machine";
-    if (stats.BBpct <= 6) return "Control Freak";
-    if (stats.KBB >= 4.0) return "Dominator";
+    if (stats.era < 3.00 && stats.whip < 1.10) return "Ace";
+    if (stats.kpct >= 30) return "Strikeout Machine";
+    if (stats.bbpct <= 6) return "Control Freak";
+    if (stats.kbb >= 4.0) return "Dominator";
 
     return "Solid Contributor";
 }
+
 
 // -------------------------------
 // Player Card Function
