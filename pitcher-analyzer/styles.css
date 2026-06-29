@@ -572,30 +572,26 @@ button.reset:hover {
 }
 
 /* -----------------------------------------
-   Leaders Modal
------------------------------------------ */
-.leaders-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-
-.leaders-table th, .leaders-table td {
-    padding: 8px 12px;
-    border-bottom: 1px solid #ddd;
-}
-
-.leaders-table th {
-    background: #f2f2f2;
-    text-align: left;
-}
-
-
-/* -----------------------------------------
    Scouting Note W-L Spacing
 ----------------------------------------- */
 #scoutingNote {
     white-space: pre-line;
+}
+
+/* -----------------------------------------
+   Player Card CSS
+----------------------------------------- */
+.player-card {
+    padding: 20px;
+    font-size: 1.1rem;
+}
+
+.badge {
+    background: #007bff;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: bold;
 }
 
 
