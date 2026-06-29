@@ -578,22 +578,6 @@ button.reset:hover {
     white-space: pre-line;
 }
 
-/* -----------------------------------------
-   Player Card CSS
------------------------------------------ */
-.player-card {
-    padding: 20px;
-    font-size: 1.1rem;
-}
-
-.badge {
-    background: #007bff;
-    color: white;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-weight: bold;
-}
-
 
 /* -----------------------------------------
    Preload Progress Bar
