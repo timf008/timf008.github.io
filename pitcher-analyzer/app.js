@@ -556,7 +556,6 @@ function getBadge(stats) {
     return "Solid Contributor";
 }
 
-
 // -------------------------------
 // Player Card Function
 // -------------------------------
@@ -571,6 +570,9 @@ async function handlePlayerCard() {
 
     const arr = await loadPitcher(rawName, season);
     const p = arr[0];
+
+    console.log("PLAYER OBJECT:", p);
+    console.log("STATS OBJECT:", p.stats);
 
     if (!p || p.error) {
         alert("Player not found.");
@@ -595,6 +597,7 @@ async function handlePlayerCard() {
     document.getElementById("playerCardBody").innerHTML = html;
     document.getElementById("playerCardModal").style.display = "flex";
 }
+
 
 
 // -------------------------------
