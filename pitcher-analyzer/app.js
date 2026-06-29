@@ -526,108 +526,6 @@ async function showCompareModal() {
 }
 
 
-// -------------------------------
-// Leaders Button (Sequential Loader using loadPitcher)
-// -------------------------------
-async function handleLeaders() {
-    const leadersModal = document.getElementById("leadersModal");
-    const leadersTitle = document.getElementById("leadersTitle");
-    const leadersBody = document.getElementById("leadersBody");
-
-    leadersTitle.textContent = "Strikeout Leaders";
-    leadersBody.innerHTML = "<p>Loading leaders...</p>";
-
-    try {
-        const season = document.getElementById("seasonSelect").value;
-
-        // -----------------------------------------
-        // 1. Use your existing frontend pitcher list
-        // -----------------------------------------
-        // This MUST match whatever list your dropdown/autocomplete uses
-        const pitcherNames = window.allPitchers || [];
-
-        if (!Array.isArray(pitcherNames) || pitcherNames.length === 0) {
-            leadersBody.innerHTML = "<p>No pitcher list available.</p>";
-            leadersModal.style.display = "block";
-            return;
-        }
-
-        // -----------------------------------------
-        // 2. Sequential pitcher loading via loadPitcher()
-        // -----------------------------------------
-        const results = [];
-
-        for (const name of pitcherNames) {
-            try {
-                const arr = await loadPitcher(name, season);
-                const pitcher = arr[0];
-
-                if (!pitcher || pitcher.error || !pitcher.stats) {
-                    continue;
-                }
-
-                results.push({
-                    name: pitcher.name,
-                    team: pitcher.team,
-                    strikeouts: pitcher.stats.strikeouts ?? 0
-                });
-
-            } catch (err) {
-                console.error("Pitcher load failed:", name, err);
-            }
-        }
-
-        // -----------------------------------------
-        // 3. Sort & filter
-        // -----------------------------------------
-        const sorted = results
-            .sort((a, b) => b.strikeouts - a.strikeouts)
-            .slice(0, 20);
-
-        if (sorted.length === 0) {
-            leadersBody.innerHTML = `<p>No leaders found for season ${season}.</p>`;
-            leadersModal.style.display = "block";
-            return;
-        }
-
-        // -----------------------------------------
-        // 4. Build table
-        // -----------------------------------------
-        let html = `
-            <table class="leaders-table">
-                <thead>
-                    <tr>
-                        <th>Player</th>
-                        <th>Team</th>
-                        <th>K's</th>
-                    </tr>
-                </thead>
-                <tbody>
-        `;
-
-        sorted.forEach((p) => {
-            html += `
-                <tr>
-                    <td>${p.name}</td>
-                    <td>${p.team}</td>
-                    <td>${p.strikeouts}</td>
-                </tr>
-            `;
-        });
-
-        html += "</tbody></table>";
-        leadersBody.innerHTML = html;
-
-    } catch (err) {
-        leadersBody.innerHTML = "<p>Error loading leaders.</p>";
-        console.error("Leaders error:", err);
-    }
-
-    leadersModal.style.display = "block";
-}
-
-
-
 
 
 // -------------------------------
@@ -722,7 +620,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("loadBtn").addEventListener("click", handleLoad);
     document.getElementById("resetBtn").addEventListener("click", handleReset);
     document.getElementById("compareBtn").addEventListener("click", showCompareModal);
-    document.getElementById("leadersBtn").addEventListener("click", handleLeaders);
 
     // Single Trend button
     document.getElementById("trendBtn").addEventListener("click", handleTrend);
@@ -734,9 +631,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("compareClose").onclick = () =>
         document.getElementById("compareModal").style.display = "none";
 
-    document.getElementById("leadersClose").onclick = () =>
-        document.getElementById("leadersModal").style.display = "none";
 });
-
 
 
