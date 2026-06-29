@@ -527,7 +527,7 @@ async function showCompareModal() {
 
 
 // -------------------------------
-// Leaders Button (Sequential Loader)
+// Leaders Button (Sequential Loader using loadPitcher)
 // -------------------------------
 async function handleLeaders() {
     const leadersModal = document.getElementById("leadersModal");
@@ -540,40 +540,29 @@ async function handleLeaders() {
     try {
         const season = document.getElementById("seasonSelect").value;
 
-        // -------------------------------
-        // 1. Fetch pitcher list for season
-        // -------------------------------
-        const listRes = await fetch(
-            `https://pitcher-analyzer-backend.onrender.com/api/pitchers?season=${season}`
-        );
-        const pitcherList = await listRes.json();
+        // -----------------------------------------
+        // 1. Use your existing frontend pitcher list
+        // -----------------------------------------
+        // This MUST match whatever list your dropdown/autocomplete uses
+        const pitcherNames = window.allPitchers || [];
 
-        // Validate list response
-        if (!Array.isArray(pitcherList)) {
-            console.error("Invalid pitcher list:", pitcherList);
-            leadersBody.innerHTML = `<p>No pitcher data available for season ${season}.</p>`;
+        if (!Array.isArray(pitcherNames) || pitcherNames.length === 0) {
+            leadersBody.innerHTML = "<p>No pitcher list available.</p>";
             leadersModal.style.display = "block";
             return;
         }
 
-        const pitcherNames = pitcherList.map(p => p.name);
-
-        // -------------------------------
-        // 2. Sequential pitcher loading
-        // -------------------------------
+        // -----------------------------------------
+        // 2. Sequential pitcher loading via loadPitcher()
+        // -----------------------------------------
         const results = [];
 
         for (const name of pitcherNames) {
             try {
-                const res = await fetch(
-                    `https://pitcher-analyzer-backend.onrender.com/api/pitchers?name=${encodeURIComponent(name)}&season=${season}`
-                );
-                const data = await res.json();
-
-                const pitcher = Array.isArray(data) ? data[0] : data;
+                const arr = await loadPitcher(name, season);
+                const pitcher = arr[0];
 
                 if (!pitcher || pitcher.error || !pitcher.stats) {
-                    console.warn("Skipping pitcher:", name, pitcher);
                     continue;
                 }
 
@@ -585,13 +574,12 @@ async function handleLeaders() {
 
             } catch (err) {
                 console.error("Pitcher load failed:", name, err);
-                // Continue to next pitcher
             }
         }
 
-        // -------------------------------
+        // -----------------------------------------
         // 3. Sort & filter
-        // -------------------------------
+        // -----------------------------------------
         const sorted = results
             .sort((a, b) => b.strikeouts - a.strikeouts)
             .slice(0, 20);
@@ -602,9 +590,9 @@ async function handleLeaders() {
             return;
         }
 
-        // -------------------------------
+        // -----------------------------------------
         // 4. Build table
-        // -------------------------------
+        // -----------------------------------------
         let html = `
             <table class="leaders-table">
                 <thead>
