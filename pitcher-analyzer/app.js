@@ -525,6 +525,7 @@ async function showCompareModal() {
     }
 }
 
+
 // -------------------------------
 // Leaders Button
 // -------------------------------
@@ -543,10 +544,11 @@ async function handleLeaders() {
         // 1. Fetch pitcher list for season
         // -------------------------------
         const listRes = await fetch(
-            `https://pitcher-analyzer-backend.onrender.com/api/pitcherList?season=${season}`
+            `https://pitcher-analyzer-backend.onrender.com/api/pitchers?season=${season}`
         );
         const pitcherList = await listRes.json();
 
+        // Trend-style shape validation
         if (!Array.isArray(pitcherList)) {
             console.error("Invalid pitcher list:", pitcherList);
             leadersBody.innerHTML = `<p>No pitcher data available for season ${season}.</p>`;
@@ -585,6 +587,9 @@ async function handleLeaders() {
             })
         );
 
+        // -------------------------------
+        // 3. Sort & filter
+        // -------------------------------
         const sorted = results
             .filter(p => p !== null)
             .sort((a, b) => b.strikeouts - a.strikeouts)
@@ -596,6 +601,9 @@ async function handleLeaders() {
             return;
         }
 
+        // -------------------------------
+        // 4. Build table
+        // -------------------------------
         let html = `
             <table class="leaders-table">
                 <thead>
@@ -628,10 +636,6 @@ async function handleLeaders() {
 
     leadersModal.style.display = "block";
 }
-
-
-
-
 
 
 
