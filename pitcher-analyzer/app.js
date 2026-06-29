@@ -525,7 +525,6 @@ async function showCompareModal() {
     }
 }
 
-
 // -------------------------------
 // Leaders Button
 // -------------------------------
@@ -538,17 +537,26 @@ async function handleLeaders() {
     leadersBody.innerHTML = "<p>Loading leaders...</p>";
 
     try {
-        // 1. Get all pitchers for the selected season
+        // 1. Get selected season
         const season = document.getElementById("seasonSelect").value;
+
+        // 2. Fetch pitcher list for that season
         const listRes = await fetch(
             `https://pitcher-analyzer-backend.onrender.com/api/pitchers?season=${season}`
         );
         const pitcherList = await listRes.json();
 
+        // Validate response
+        if (!Array.isArray(pitcherList)) {
+            console.error("Invalid pitcher list:", pitcherList);
+            leadersBody.innerHTML = "<p>No pitcher data available for this season.</p>";
+            return;
+        }
+
         // Extract names
         const pitcherNames = pitcherList.map(p => p.name);
 
-        // 2. Load each pitcher’s season data in parallel
+        // 3. Load each pitcher’s season data in parallel
         const results = await Promise.all(
             pitcherNames.map(async (name) => {
                 try {
@@ -557,24 +565,33 @@ async function handleLeaders() {
                     );
                     const data = await res.json();
 
+                    // Validate single pitcher response
+                    if (!data || !data.stats) return null;
+
                     return {
                         name: data.name,
                         team: data.team,
-                        strikeouts: data.stats?.strikeouts ?? 0
+                        strikeouts: data.stats.strikeouts ?? 0
                     };
-                } catch {
+                } catch (err) {
+                    console.error("Pitcher load failed:", name, err);
                     return null;
                 }
             })
         );
 
-        // 3. Sort by strikeouts
+        // 4. Sort by strikeouts
         const sorted = results
             .filter(p => p !== null)
             .sort((a, b) => b.strikeouts - a.strikeouts)
             .slice(0, 20);
 
-        // 4. Build table
+        // 5. Build table
+        if (sorted.length === 0) {
+            leadersBody.innerHTML = "<p>No leaders found for this season.</p>";
+            return;
+        }
+
         let html = `
             <table class="leaders-table">
                 <thead>
@@ -607,6 +624,8 @@ async function handleLeaders() {
 
     leadersModal.style.display = "block";
 }
+
+
 
 
 
