@@ -525,7 +525,75 @@ async function showCompareModal() {
     }
 }
 
+// -------------------------------
+// Player Card Helper
+// -------------------------------
+function computeAge(birthDateStr) {
+    if (!birthDateStr) return "N/A";
+    const dob = new Date(birthDateStr);
+    const today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
+    const m = today.getMonth() - dob.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+        age--;
+    }
+    return age;
+}
 
+function getLeague(team) {
+    const alTeams = ["NYY","BOS","TOR","BAL","TB","CLE","DET","KC","CWS","MIN","HOU","SEA","LAA","TEX","OAK"];
+    return alTeams.includes(team) ? "AL" : "NL";
+}
+
+function getBadge(stats) {
+    if (!stats) return "N/A";
+
+    if (stats.ERA < 3.00 && stats.WHIP < 1.10) return "Ace";
+    if (stats.Kpct >= 30) return "Strikeout Machine";
+    if (stats.BBpct <= 6) return "Control Freak";
+    if (stats.KBB >= 4.0) return "Dominator";
+
+    return "Solid Contributor";
+}
+
+// -------------------------------
+// Player Card Function
+// -------------------------------
+async function handlePlayerCard() {
+    const rawName = document.getElementById("playerName").value.trim();
+    const season = Number(document.getElementById("seasonSelect").value);
+
+    if (!rawName) {
+        alert("Enter a player name first.");
+        return;
+    }
+
+    const arr = await loadPitcher(rawName, season);
+    const p = arr[0];
+
+    if (!p || p.error) {
+        alert("Player not found.");
+        return;
+    }
+
+    const age = computeAge(p.birth_date);
+    const league = getLeague(p.team);
+    const badge = getBadge(p.stats);
+
+    const html = `
+        <div class="player-card">
+            <h3>${p.name}</h3>
+            <p><strong>Age:</strong> ${age}</p>
+            <p><strong>Team:</strong> ${p.team}</p>
+            <p><strong>League:</strong> ${league}</p>
+            <p><strong>Badge:</strong> <span class="badge">${badge}</span></p>
+        </div>
+    `;
+
+    document.getElementById("playerCardTitle").textContent = `${p.name} — ${season}`;
+    document.getElementById("playerCardBody").innerHTML = html;
+    document.getElementById("playerCardModal").style.display = "flex";
+}
 
 
 // -------------------------------
@@ -623,6 +691,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Single Trend button
     document.getElementById("trendBtn").addEventListener("click", handleTrend);
+
+document.getElementById("cardBtn").addEventListener("click", handlePlayerCard);
+
+document.getElementById("playerCardClose").onclick = () =>
+    document.getElementById("playerCardModal").style.display = "none";
+
+
 
     // Close modals
     document.getElementById("trendClose").onclick = () =>
