@@ -525,6 +525,7 @@ async function showCompareModal() {
     }
 }
 
+
 // -------------------------------
 // Leaders Button
 // -------------------------------
@@ -537,26 +538,25 @@ async function handleLeaders() {
     leadersBody.innerHTML = "<p>Loading leaders...</p>";
 
     try {
-        // 1. Get selected season
         const season = document.getElementById("seasonSelect").value;
 
-        // 2. Fetch pitcher list for that season
+        // Fetch pitcher list
         const listRes = await fetch(
             `https://pitcher-analyzer-backend.onrender.com/api/pitchers?season=${season}`
         );
         const pitcherList = await listRes.json();
 
-        // Validate response
+        // If backend returns an error object instead of an array
         if (!Array.isArray(pitcherList)) {
             console.error("Invalid pitcher list:", pitcherList);
-            leadersBody.innerHTML = "<p>No pitcher data available for this season.</p>";
+            leadersBody.innerHTML = `<p>No pitcher data available for season ${season}.</p>`;
+            leadersModal.style.display = "block";
             return;
         }
 
-        // Extract names
         const pitcherNames = pitcherList.map(p => p.name);
 
-        // 3. Load each pitcher’s season data in parallel
+        // Load each pitcher in parallel
         const results = await Promise.all(
             pitcherNames.map(async (name) => {
                 try {
@@ -565,7 +565,6 @@ async function handleLeaders() {
                     );
                     const data = await res.json();
 
-                    // Validate single pitcher response
                     if (!data || !data.stats) return null;
 
                     return {
@@ -580,15 +579,14 @@ async function handleLeaders() {
             })
         );
 
-        // 4. Sort by strikeouts
         const sorted = results
             .filter(p => p !== null)
             .sort((a, b) => b.strikeouts - a.strikeouts)
             .slice(0, 20);
 
-        // 5. Build table
         if (sorted.length === 0) {
-            leadersBody.innerHTML = "<p>No leaders found for this season.</p>";
+            leadersBody.innerHTML = `<p>No leaders found for season ${season}.</p>`;
+            leadersModal.style.display = "block";
             return;
         }
 
@@ -624,10 +622,6 @@ async function handleLeaders() {
 
     leadersModal.style.display = "block";
 }
-
-
-
-
 
 
 
