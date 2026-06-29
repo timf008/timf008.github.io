@@ -541,14 +541,16 @@ async function handleLeaders() {
 
     try {
         // 1. Get all pitcher names
-        const listRes = await fetch("/api/pitcherList");
+        const listRes = await fetch("https://pitcher-analyzer-backend.onrender.com/api/pitcherList");
         const pitcherNames = await listRes.json();
 
         // 2. Load each pitcher’s season data in parallel
         const results = await Promise.all(
             pitcherNames.map(async (name) => {
                 try {
-                    const res = await fetch(`/api/pitcher?name=${encodeURIComponent(name)}`);
+                    const res = await fetch(
+                        `https://pitcher-analyzer-backend.onrender.com/api/pitcher?name=${encodeURIComponent(name)}`
+                    );
                     const data = await res.json();
 
                     return {
@@ -603,6 +605,7 @@ async function handleLeaders() {
     // 5. Show modal
     leadersModal.style.display = "block";
 }
+
 
 
 
