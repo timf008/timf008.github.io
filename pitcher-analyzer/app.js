@@ -525,7 +525,6 @@ async function showCompareModal() {
     }
 }
 
-
 // -------------------------------
 // Leaders Button
 // -------------------------------
@@ -544,7 +543,7 @@ async function handleLeaders() {
         // 1. Fetch pitcher list for season
         // -------------------------------
         const listRes = await fetch(
-            `https://pitcher-analyzer-backend.onrender.com/api/pitchers?season=${season}`
+            `https://pitcher-analyzer-backend.onrender.com/api/pitcherList?season=${season}`
         );
         const pitcherList = await listRes.json();
 
@@ -637,6 +636,7 @@ async function handleLeaders() {
 
     leadersModal.style.display = "block";
 }
+
 
 
 
