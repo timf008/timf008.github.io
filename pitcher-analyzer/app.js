@@ -571,17 +571,19 @@ async function handlePlayerCard() {
     const arr = await loadPitcher(rawName, season);
     const p = arr[0];
 
-    console.log("PLAYER OBJECT:", p);
-    console.log("STATS OBJECT:", p.stats);
-
     if (!p || p.error) {
         alert("Player not found.");
         return;
     }
 
-    const age = computeAge(p.birth_date);
+    // Your backend does NOT return birth_date
+    const age = "N/A";
+
+    // League works because p.team exists
     const league = getLeague(p.team);
-    const badge = getBadge(p.stats);
+
+    // Badge uses FLAT fields (ERA, WHIP, Kpct, BBpct, KBB)
+    const badge = getBadge(p);
 
     const html = `
         <div class="player-card">
