@@ -535,21 +535,25 @@ async function handleLeaders() {
     const leadersBody = document.getElementById("leadersBody");
 
     leadersTitle.textContent = "Strikeout Leaders";
-
-    // Clear previous content
     leadersBody.innerHTML = "<p>Loading leaders...</p>";
 
     try {
-        // 1. Get all pitcher names
-        const listRes = await fetch("https://pitcher-analyzer-backend.onrender.com/api/pitcherList");
-        const pitcherNames = await listRes.json();
+        // 1. Get all pitchers for the selected season
+        const season = document.getElementById("seasonSelect").value;
+        const listRes = await fetch(
+            `https://pitcher-analyzer-backend.onrender.com/api/pitchers?season=${season}`
+        );
+        const pitcherList = await listRes.json();
+
+        // Extract names
+        const pitcherNames = pitcherList.map(p => p.name);
 
         // 2. Load each pitcher’s season data in parallel
         const results = await Promise.all(
             pitcherNames.map(async (name) => {
                 try {
                     const res = await fetch(
-                        `https://pitcher-analyzer-backend.onrender.com/api/pitcher?name=${encodeURIComponent(name)}`
+                        `https://pitcher-analyzer-backend.onrender.com/api/pitchers?name=${encodeURIComponent(name)}&season=${season}`
                     );
                     const data = await res.json();
 
@@ -564,13 +568,13 @@ async function handleLeaders() {
             })
         );
 
-        // 3. Filter out nulls and sort by strikeouts
+        // 3. Sort by strikeouts
         const sorted = results
-            .filter((p) => p !== null)
+            .filter(p => p !== null)
             .sort((a, b) => b.strikeouts - a.strikeouts)
-            .slice(0, 20); // Top 20
+            .slice(0, 20);
 
-        // 4. Build leaderboard table
+        // 4. Build table
         let html = `
             <table class="leaders-table">
                 <thead>
@@ -594,7 +598,6 @@ async function handleLeaders() {
         });
 
         html += "</tbody></table>";
-
         leadersBody.innerHTML = html;
 
     } catch (err) {
@@ -602,9 +605,9 @@ async function handleLeaders() {
         console.error("Leaders error:", err);
     }
 
-    // 5. Show modal
     leadersModal.style.display = "block";
 }
+
 
 
 
