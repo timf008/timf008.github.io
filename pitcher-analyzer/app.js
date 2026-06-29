@@ -526,6 +526,84 @@ async function showCompareModal() {
 }
 
 
+// -------------------------------
+// Leaders Button
+// -------------------------------
+async function handleLeaders() {
+    const leadersModal = document.getElementById("leadersModal");
+    const leadersTitle = document.getElementById("leadersTitle");
+    const leadersBody = document.getElementById("leadersBody");
+
+    leadersTitle.textContent = "Strikeout Leaders";
+
+    // Clear previous content
+    leadersBody.innerHTML = "<p>Loading leaders...</p>";
+
+    try {
+        // 1. Get all pitcher names
+        const listRes = await fetch("/api/pitcherList");
+        const pitcherNames = await listRes.json();
+
+        // 2. Load each pitcher’s season data in parallel
+        const results = await Promise.all(
+            pitcherNames.map(async (name) => {
+                try {
+                    const res = await fetch(`/api/pitcher?name=${encodeURIComponent(name)}`);
+                    const data = await res.json();
+
+                    return {
+                        name: data.name,
+                        team: data.team,
+                        strikeouts: data.stats?.strikeouts ?? 0
+                    };
+                } catch {
+                    return null;
+                }
+            })
+        );
+
+        // 3. Filter out nulls and sort by strikeouts
+        const sorted = results
+            .filter((p) => p !== null)
+            .sort((a, b) => b.strikeouts - a.strikeouts)
+            .slice(0, 20); // Top 20
+
+        // 4. Build leaderboard table
+        let html = `
+            <table class="leaders-table">
+                <thead>
+                    <tr>
+                        <th>Player</th>
+                        <th>Team</th>
+                        <th>K's</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        sorted.forEach((p) => {
+            html += `
+                <tr>
+                    <td>${p.name}</td>
+                    <td>${p.team}</td>
+                    <td>${p.strikeouts}</td>
+                </tr>
+            `;
+        });
+
+        html += "</tbody></table>";
+
+        leadersBody.innerHTML = html;
+
+    } catch (err) {
+        leadersBody.innerHTML = "<p>Error loading leaders.</p>";
+        console.error("Leaders error:", err);
+    }
+
+    // 5. Show modal
+    leadersModal.style.display = "block";
+}
+
 
 
 
@@ -621,10 +699,10 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("loadBtn").addEventListener("click", handleLoad);
     document.getElementById("resetBtn").addEventListener("click", handleReset);
     document.getElementById("compareBtn").addEventListener("click", showCompareModal);
+    document.getElementById("leadersBtn").addEventListener("click", handleLeaders);
 
-    //Single Trend button
+    // Single Trend button
     document.getElementById("trendBtn").addEventListener("click", handleTrend);
-
 
     // Close modals
     document.getElementById("trendClose").onclick = () =>
@@ -632,6 +710,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("compareClose").onclick = () =>
         document.getElementById("compareModal").style.display = "none";
+
+    document.getElementById("leadersClose").onclick = () =>
+        document.getElementById("leadersModal").style.display = "none";
 });
 
 
