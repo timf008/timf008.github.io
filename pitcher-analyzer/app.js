@@ -593,6 +593,8 @@ function handleReset() {
     document.getElementById("scoutingNote").innerHTML = "";
 }
 
+const currentSeason = 2026
+
 // -------------------------------
 // Latest Update Timestamp (Improved)
 // -------------------------------
