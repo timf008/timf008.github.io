@@ -643,6 +643,9 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("resetBtn").addEventListener("click", handleReset);
     document.getElementById("compareBtn").addEventListener("click", showCompareModal);
 
+loadLastUpdated(currentSeason)
+
+
     // Single Trend button
     document.getElementById("trendBtn").addEventListener("click", handleTrend);
 
