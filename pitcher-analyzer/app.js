@@ -594,23 +594,46 @@ function handleReset() {
 }
 
 // -------------------------------
-// Latest Update Timestamp
+// Latest Update Timestamp (Improved)
 // -------------------------------
 async function loadLastUpdated(season) {
     const url = `https://pitcher-analyzer-backend.onrender.com/api/last-updated/pitchers/${season}`;
-    const res = await fetch(url);
-    const data = await res.json();
 
-    const date = new Date(data.lastUpdated);
-    const formatted = date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    });
+    try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("Network error");
 
-    document.getElementById('lastUpdated').textContent =
-        `Last updated on ${formatted}`;
+        const data = await res.json();
+        const raw = data?.lastUpdated;
+
+        const el = document.getElementById('lastUpdated');
+
+        // Handle missing or invalid date
+        if (!raw) {
+            el.textContent = "Last updated: unavailable";
+            return;
+        }
+
+        const date = new Date(raw);
+        if (isNaN(date.getTime())) {
+            el.textContent = "Last updated: invalid date";
+            return;
+        }
+
+        const formatted = new Intl.DateTimeFormat("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        }).format(date);
+
+        el.textContent = `Last updated on ${formatted}`;
+
+    } catch (err) {
+        document.getElementById('lastUpdated').textContent =
+            "Last updated: error loading timestamp";
+    }
 }
+
 
 // -------------------------------
 // Wire up UI buttons
