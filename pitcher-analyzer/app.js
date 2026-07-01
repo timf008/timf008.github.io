@@ -417,6 +417,14 @@ async function showCompareModal() {
     showSpinner("spinner1");
     console.log("COMPARE BUTTON CLICKED");
 
+    // ⭐ Helper: Normalize display names
+    function formatName(name) {
+        return name
+            .split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+            .join(' ');
+    }
+
     try {
         const p1_raw = document.getElementById("playerName").value.trim();
         const s1 = document.getElementById("seasonSelect").value;
@@ -448,8 +456,12 @@ async function showCompareModal() {
             return;
         }
 
-        document.getElementById("compareName1").textContent = `${p1_raw} (${s1})`;
-        document.getElementById("compareName2").textContent = `${p2_raw} (${s2})`;
+        // ⭐ Apply name normalization for display
+        const p1_display = formatName(p1_raw);
+        const p2_display = formatName(p2_raw);
+
+        document.getElementById("compareName1").textContent = `${p1_display} (${s1})`;
+        document.getElementById("compareName2").textContent = `${p2_display} (${s2})`;
 
         const s1_ERA   = scoreERA(data1.ERA);
         const s1_WHIP  = scoreWHIP(data1.WHIP);
@@ -524,6 +536,7 @@ async function showCompareModal() {
         hideSpinner("spinner1");
     }
 }
+
 
 
 
