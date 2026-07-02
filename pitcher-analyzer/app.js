@@ -417,7 +417,6 @@ async function showCompareModal() {
     showSpinner("spinner1");
     console.log("COMPARE BUTTON CLICKED");
 
-    // ⭐ Helper: Normalize display names
     function formatName(name) {
         return name
             .split(' ')
@@ -440,30 +439,25 @@ async function showCompareModal() {
         const data1Arr = await loadPitcher(p1_raw, s1);
         const data2Arr = await loadPitcher(p2_raw, s2);
 
-        // ⭐ Normalize to objects
         const data1 = Array.isArray(data1Arr) ? data1Arr[0] : data1Arr;
         const data2 = Array.isArray(data2Arr) ? data2Arr[0] : data2Arr;
 
-        // ⭐ Correct error handling
         if (!data1 || data1.error || !data2 || data2.error) {
             alert("One or both pitchers not found.");
             return;
         }
 
-        // ⭐ Ensure stats exist (ERA can be 0, so check null/undefined)
         if (data1.ERA == null || data2.ERA == null) {
             alert("Not enough data for comparison.");
             return;
         }
 
-        // ⭐ Use backend names (correct capitalization)
         const p1_display = formatName(data1.Name || p1_raw);
         const p2_display = formatName(data2.Name || p2_raw);
 
         document.getElementById("compareName1").textContent = `${p1_display} (${s1})`;
         document.getElementById("compareName2").textContent = `${p2_display} (${s2})`;
 
-        // ⭐ Compute scores
         const s1_ERA   = scoreERA(data1.ERA);
         const s1_WHIP  = scoreWHIP(data1.WHIP);
         const s1_Kpct  = scoreKpct(data1.Kpct);
@@ -492,7 +486,7 @@ async function showCompareModal() {
             kbbScore: s2_KBB
         });
 
-        // ⭐ NEW: raw + formatted values
+        // ⭐ RAW + FORMATTED VALUES
         const stats = [
             ["ERA",  data1.ERA,  data2.ERA,  data1.ERA.toFixed(2),  data2.ERA.toFixed(2)],
             ["WHIP", data1.WHIP, data2.WHIP, data1.WHIP.toFixed(2), data2.WHIP.toFixed(2)],
@@ -521,6 +515,7 @@ async function showCompareModal() {
                 }
             }
 
+            // ⭐ DISPLAY FORMATTED VALUES ONLY
             row.innerHTML = `
                 <td>${label}</td>
                 <td class="${class1}">${disp1}</td>
@@ -538,6 +533,7 @@ async function showCompareModal() {
         hideSpinner("spinner1");
     }
 }
+
 
 
 
