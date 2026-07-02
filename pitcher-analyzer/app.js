@@ -488,13 +488,14 @@ async function showCompareModal() {
 
         // ⭐ RAW + FORMATTED VALUES
         const stats = [
-            ["ERA",  data1.ERA,  data2.ERA,  data1.ERA.toFixed(2),  data2.ERA.toFixed(2)],
-            ["WHIP", data1.WHIP, data2.WHIP, data1.WHIP.toFixed(2), data2.WHIP.toFixed(2)],
-            ["K%",   data1.Kpct, data2.Kpct, data1.Kpct.toFixed(2), data2.Kpct.toFixed(2)],
-            ["BB%",  data1.BBpct,data2.BBpct,data1.BBpct.toFixed(2),data2.BBpct.toFixed(2)],
-            ["K/BB", data1.KBB,  data2.KBB,  data1.KBB.toFixed(2),  data2.KBB.toFixed(2)],
-            ["Overall Score", overall1, overall2, overall1.toFixed(2), overall2.toFixed(2)]
-        ];
+    ["ERA",  Number(data1.ERA),  Number(data2.ERA),  Number(data1.ERA).toFixed(2),  Number(data2.ERA).toFixed(2)],
+    ["WHIP", Number(data1.WHIP), Number(data2.WHIP), Number(data1.WHIP).toFixed(2), Number(data2.WHIP).toFixed(2)],
+    ["K%",   Number(data1.Kpct), Number(data2.Kpct), Number(data1.Kpct).toFixed(2), Number(data2.Kpct).toFixed(2)],
+    ["BB%",  Number(data1.BBpct),Number(data2.BBpct),Number(data1.BBpct).toFixed(2),Number(data2.BBpct).toFixed(2)],
+    ["K/BB", Number(data1.KBB),  Number(data2.KBB),  Number(data1.KBB).toFixed(2),  Number(data2.KBB).toFixed(2)],
+    ["Overall Score", Number(overall1), Number(overall2), Number(overall1).toFixed(2), Number(overall2).toFixed(2)]
+];
+
 
         const tbody = document.getElementById("compareBody");
         tbody.innerHTML = "";
