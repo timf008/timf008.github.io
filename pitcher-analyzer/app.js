@@ -457,13 +457,13 @@ async function showCompareModal() {
         }
 
         // ⭐ Use backend names (correct capitalization)
-const p1_display = formatName(data1.Name || p1_raw);
-const p2_display = formatName(data2.Name || p2_raw);
+        const p1_display = formatName(data1.Name || p1_raw);
+        const p2_display = formatName(data2.Name || p2_raw);
 
-document.getElementById("compareName1").textContent = `${p1_display} (${s1})`;
-document.getElementById("compareName2").textContent = `${p2_display} (${s2})`;
+        document.getElementById("compareName1").textContent = `${p1_display} (${s1})`;
+        document.getElementById("compareName2").textContent = `${p2_display} (${s2})`;
 
-
+        // ⭐ Compute scores
         const s1_ERA   = scoreERA(data1.ERA);
         const s1_WHIP  = scoreWHIP(data1.WHIP);
         const s1_Kpct  = scoreKpct(data1.Kpct);
@@ -492,38 +492,39 @@ document.getElementById("compareName2").textContent = `${p2_display} (${s2})`;
             kbbScore: s2_KBB
         });
 
+        // ⭐ NEW: raw + formatted values
         const stats = [
-            ["ERA",  data1.ERA,  data2.ERA],
-            ["WHIP", data1.WHIP, data2.WHIP],
-            ["K%",   data1.Kpct, data2.Kpct],
-            ["BB%",  data1.BBpct,data2.BBpct],
-            ["K/BB", data1.KBB,  data2.KBB],
-            ["Overall Score", overall1.toFixed(2), overall2.toFixed(2)]
+            ["ERA",  data1.ERA,  data2.ERA,  data1.ERA.toFixed(2),  data2.ERA.toFixed(2)],
+            ["WHIP", data1.WHIP, data2.WHIP, data1.WHIP.toFixed(2), data2.WHIP.toFixed(2)],
+            ["K%",   data1.Kpct, data2.Kpct, data1.Kpct.toFixed(2), data2.Kpct.toFixed(2)],
+            ["BB%",  data1.BBpct,data2.BBpct,data1.BBpct.toFixed(2),data2.BBpct.toFixed(2)],
+            ["K/BB", data1.KBB,  data2.KBB,  data1.KBB.toFixed(2),  data2.KBB.toFixed(2)],
+            ["Overall Score", overall1, overall2, overall1.toFixed(2), overall2.toFixed(2)]
         ];
 
         const tbody = document.getElementById("compareBody");
         tbody.innerHTML = "";
 
-        stats.forEach(([label, v1, v2]) => {
+        stats.forEach(([label, raw1, raw2, disp1, disp2]) => {
             const row = document.createElement("tr");
 
             let class1 = "tie";
             let class2 = "tie";
 
-            if (v1 != null && v2 != null) {
+            if (raw1 != null && raw2 != null) {
                 if (label === "ERA" || label === "WHIP" || label === "BB%") {
-                    if (v1 < v2) { class1 = "win"; class2 = "lose"; }
-                    else if (v2 < v1) { class1 = "lose"; class2 = "win"; }
+                    if (raw1 < raw2) { class1 = "win"; class2 = "lose"; }
+                    else if (raw2 < raw1) { class1 = "lose"; class2 = "win"; }
                 } else {
-                    if (v1 > v2) { class1 = "win"; class2 = "lose"; }
-                    else if (v2 > v1) { class1 = "lose"; class2 = "win"; }
+                    if (raw1 > raw2) { class1 = "win"; class2 = "lose"; }
+                    else if (raw2 > raw1) { class1 = "lose"; class2 = "win"; }
                 }
             }
 
             row.innerHTML = `
                 <td>${label}</td>
-                <td class="${class1}">${v1 ?? "—"}</td>
-                <td class="${class2}">${v2 ?? "—"}</td>
+                <td class="${class1}">${disp1}</td>
+                <td class="${class2}">${disp2}</td>
             `;
 
             tbody.appendChild(row);
@@ -537,6 +538,7 @@ document.getElementById("compareName2").textContent = `${p2_display} (${s2})`;
         hideSpinner("spinner1");
     }
 }
+
 
 
 
