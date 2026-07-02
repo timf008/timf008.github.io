@@ -456,12 +456,13 @@ async function showCompareModal() {
             return;
         }
 
-        // ⭐ Apply name normalization for display
-        const p1_display = formatName(p1_raw);
-        const p2_display = formatName(p2_raw);
+        // ⭐ Use backend names (correct capitalization)
+const p1_display = formatName(data1.Name || p1_raw);
+const p2_display = formatName(data2.Name || p2_raw);
 
-        document.getElementById("compareName1").textContent = `${p1_display} (${s1})`;
-        document.getElementById("compareName2").textContent = `${p2_display} (${s2})`;
+document.getElementById("compareName1").textContent = `${p1_display} (${s1})`;
+document.getElementById("compareName2").textContent = `${p2_display} (${s2})`;
+
 
         const s1_ERA   = scoreERA(data1.ERA);
         const s1_WHIP  = scoreWHIP(data1.WHIP);
