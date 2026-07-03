@@ -696,7 +696,7 @@ function handleReset() {
 
     document.querySelectorAll(".battery").forEach(el => {
         el.style.setProperty("--fill", "0%");
-        el.style.setProperty("--color", "#111");  // empty battery color
+        el.style.setProperty("--color", "#d50000");  // empty battery color
     });
 
     document.getElementById("overallScore").textContent = "--";
