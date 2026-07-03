@@ -72,9 +72,10 @@ function updateBattery(id, score) {
         color = "#00c853";
     }
 
-    el.style.setProperty("--fillWidth", `${fill}%`);
-    el.style.setProperty("--fillColor", color);
+    el.style.setProperty("--fill", `${fill}%`);
+    el.style.setProperty("--color", color);
 }
+
 
 
 // -------------------------------
