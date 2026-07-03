@@ -423,62 +423,53 @@ button.reset:hover {
 }
 
 /* -----------------------------------------
-   Leaders Table
+   Leaders Modal
 ----------------------------------------- */
-#leadersModal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.6); /* dimmed backdrop */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-}
 
-
-
-.leaders-box {
-    width: 100%;
-    background: #1e1e1e;
+#leadersModal .modal-content {
+    width: 600px;
+    max-width: 90%;
+    background: #1e1e1e !important;
     padding: 20px;
     border-radius: 10px;
     color: white;
-    margin-top: 20px;
 }
 
-#leadersTable {
+/* Title */
+#leadersTitle {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+/* Leaders Table */
+.leaders-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 15px;
 }
 
-#leadersTable th,
-#leadersTable td {
+.leaders-table th,
+.leaders-table td {
     padding: 8px;
     border-bottom: 1px solid #444;
     text-align: center;
 }
 
-#leadersTable th {
+.leaders-table th {
     font-weight: bold;
 }
 
-#leadersTitle {
-    text-align: center;
-    width: 100%;
-    font-size: 1.4rem;
-    margin-bottom: 10px;
+/* Close button */
+#leadersClose {
+    float: right;
+    font-size: 1.6em;
+    cursor: pointer;
+    color: #bbb;
 }
 
-.leaders-modal {
-    background: #1e1e1e;
-    padding: 20px;
-    border-radius: 10px;
-    color: white;
-    width: 400px;
+#leadersClose:hover {
+    color: #fff;
 }
 
 
