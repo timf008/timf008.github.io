@@ -535,8 +535,84 @@ async function showCompareModal() {
     }
 }
 
+// -------------------------------
+// Pitching Leaders Button
+// -------------------------------
+async function loadLeaders() {
+    const spin = document.getElementById("spinner1");
+    spin.classList.add("spin");
 
+    try {
+        const season = document.getElementById("seasonSelect").value;
 
+        const data = await fetch(
+            `https://pitcher-analyzer-backend.onrender.com/api/leaders?season=${season}`
+        ).then(r => r.json());
+
+        if (!Array.isArray(data)) {
+            alert("No leaderboard data available.");
+            return;
+        }
+
+        buildLeadersTable(data);
+
+    } catch (err) {
+        console.error("Pitching Leaders error:", err);
+        alert("Error loading leaderboard.");
+    } finally {
+        spin.classList.remove("spin");
+    }
+}
+
+// -------------------------------
+// Pitching Leaders Table (XP + Badge)
+// -------------------------------
+function buildLeadersTable(arr) {
+    const tbody = document.getElementById("leadersBody");
+    tbody.innerHTML = "";
+
+    // Compute XP score (pitching version)
+    arr.forEach(p => {
+        p.XP =
+            (p.Kpct * 2) +        // strikeouts are good
+            (p.KBB * 10) -        // high K/BB is excellent
+            (p.ERA * 3) -         // lower ERA is better
+            (p.WHIP * 5);         // lower WHIP is better
+    });
+
+    // Top 10
+    const top10 = [...arr]
+        .sort((a, b) => b.XP - a.XP)
+        .slice(0, 10);
+
+    // Assign badges
+    top10.forEach((p, i) => {
+        if (i === 0) {
+            p.Badge = "🔥 #1 Ace";
+        } else if (i === 1) {
+            p.Badge = "⭐ #2 Elite";
+        } else if (i === 2) {
+            p.Badge = "⭐ #3 Dominator";
+        } else {
+            p.Badge = "🏅 Top 10";
+        }
+    });
+
+    // Build table
+    top10.forEach(p => {
+        const row = document.createElement("tr");
+
+        row.innerHTML = `
+            <td>${p.Player}</td>
+            <td>${p.XP.toFixed(0)}</td>
+            <td>${p.Badge}</td>
+        `;
+
+        tbody.appendChild(row);
+    });
+
+    document.getElementById("leadersModal").style.display = "flex";
+}
 
 
 
