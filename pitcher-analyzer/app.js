@@ -76,6 +76,11 @@ function updateBattery(id, score) {
     el.style.setProperty("--color", color);
 }
 
+function updateOverall(score) {
+    document.getElementById("overallScore").textContent = safeFixed(score, 1);
+    updateBattery("battery-overall", safeScore(score));
+}
+
 
 // -------------------------------
 // Universal metric updater
@@ -690,14 +695,15 @@ function handleReset() {
     document.querySelectorAll(".metric-score").forEach(el => el.textContent = "--");
 
     document.querySelectorAll(".battery").forEach(el => {
-        el.style.setProperty("--fillWidth", "0%");
-        el.style.setProperty("--fillColor", "#d50000");
+        el.style.setProperty("--fill", "0%");
+        el.style.setProperty("--color", "#111");  // empty battery color
     });
 
     document.getElementById("overallScore").textContent = "--";
     document.getElementById("overallTier").innerHTML = "";
     document.getElementById("scoutingNote").innerHTML = "";
 }
+
 
 
 // -------------------------------
