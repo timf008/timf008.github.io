@@ -442,6 +442,19 @@ button.reset:hover {
     margin-bottom: 10px;
 }
 
+.pitcher-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #1e1e1e;
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    z-index: 9999;
+}
+
+
 
 /* -----------------------------------------
    Compare Win - Lose Indicator
