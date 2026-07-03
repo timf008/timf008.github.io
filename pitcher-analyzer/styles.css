@@ -1,5 +1,5 @@
 /* -----------------------------------------
-   Pitcher Analyzer CSS Styles
+   Batter Analyzer CSS Styles
 ----------------------------------------- */
 
 /* -----------------------------------------
@@ -24,6 +24,7 @@ body {
     border: 3px solid #000000;
     padding: 20px;
 }
+
 
 
 /* -----------------------------------------
@@ -120,21 +121,6 @@ button.reset:hover {
     margin-bottom: 15px;
 }
 
-/* Spinner */
-.spinner {
-    width: 20px;
-    height: 20px;
-    border: 3px solid #ccc;
-    border-top-color: #0078ff;
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    display: none; /* hidden by default */
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-
 
 .input-group {
     display: flex;
@@ -145,7 +131,6 @@ button.reset:hover {
     height: 38px;
     padding: 0 14px;
 }
-
 
 /* -----------------------------------------
    Metric Grid
@@ -164,7 +149,6 @@ button.reset:hover {
 
 .metric-row {
     display: flex;
-    grid-template-columns: 120px 70px 1fr 60px;
     align-items: center;
     gap: 8px;
     padding: 10px 14px;
@@ -176,84 +160,83 @@ button.reset:hover {
 .metric-label {
     font-weight: 600;
     width: 70px;
-    display: inline-block;
-}
-
-/* Glossy battery bars */
-.battery {
-    height: 16px;
-    background: #dfe6ef;
-    border-radius: 10px;
-    overflow: hidden;
-    position: relative;
-    box-shadow: inset 0 0 6px rgba(0,0,0,0.15);
+    display: inline block;
 }
 
 .metric-raw {
     font-weight: 600;
-    color: #333;
-    text-align: right;
     width: 50px;
-    display: inline-block;
+    text-align: right;
 }
-
 
 .metric-score {
-    text-align: right;
     font-weight: 700;
-    font-size: 1.05em;
     width: 40px;
-    display: inline-block;
+    text-align: right;
 }
 
+/* -----------------------------------------
+   Unified Battery System (metrics + overall)
+----------------------------------------- */
+
+
+/* ⭐ Metric battery width — fixes narrow bars */
 .metric-row .battery {
-    flex: 1;   /* battery grows to fill space */
+    min-width: 400px;   /* matches your screenshot */
+    height: 16px;
 }
-
 
 /* -----------------------------------------
    Overall Section
 ----------------------------------------- */
 
+.overall {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
 .overall-top {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 15px;
-    font-size: 1.1em;
-    font-weight: 600;
+    max-width: 600px;
 }
 
+/* ⭐ Overall battery — FIXED (now visible) */
 .overall-battery {
     height: 26px;
-    background: #dfe6ef;
-    border-radius: 12px;
-    margin-bottom: 18px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: inset 0 0 6px rgba(0,0,0,0.15);
+    width: 600px;
+    max-width: 600px;
+    margin: 0 auto !important;
 }
 
 .overall-battery::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 0%; /* JS updates */
-    background: linear-gradient(90deg, #ffb400, #ff8c00);
-    border-radius: 12px;
-    transition: width 0.4s ease;
+    background: var(--color);
 }
+
 
 .scouting-note label {
     font-weight: 700;
-    display: block;
     margin-bottom: 4px;
 }
+
+
+
+
+
+
 
 /* -----------------------------------------
    Trend Modal
 ----------------------------------------- */
+.modal-container {
+    position: fixed;
+    z-index: 99999;
+    background: #fff; /* prevents transparency */
+}
+
+
 
 .modal {
     position: fixed;
@@ -405,6 +388,7 @@ button.reset:hover {
     width: 100%;
 }
 
+
 /* -----------------------------------------
    Compare Win - Lose Indicator
 ----------------------------------------- */
@@ -423,7 +407,7 @@ button.reset:hover {
 }
 
 /* -----------------------------------------
-   Leaders Modal
+   Leaders Modal (Dark Theme)
 ----------------------------------------- */
 
 #leadersModal .modal-content {
@@ -487,27 +471,11 @@ button.reset:hover {
 
 
 
-/* -----------------------------------------
-   Batteries
------------------------------------------ */
-.battery {
-    position: relative;
-    background: #dfe6ef;
-    border-radius: 10px;
-    overflow: hidden;
-}
 
-.battery::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: var(--fillWidth, 0%);
-    background-color: var(--fillColor, #d50000); /* default red */
-    transition: width .4s ease, background-color .2s ease;
-    border-radius: 10px;
-}
+
+
+
+
 
 /* -----------------------------------------
    Trend Emoji Buttons
@@ -572,29 +540,6 @@ button.reset:hover {
   position: relative;
 }
 
-.rank-table {
-    margin: 0 auto;      /* centers the table */
-    width: 100%;         /* makes it fill the modal */
-    border-collapse: collapse;
-}
-
-
-.close {
-    font-size: 1.6em;
-    cursor: pointer;
-    color: #444;
-}
-
-#rankClose {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    cursor: pointer;
-    font-size: 1.6em;
-    color: #444;
-    z-index: 10; /* ensure it's above everything */
-}
-
 .no-data-message {
     text-align: center;
     padding: 20px;
@@ -643,49 +588,6 @@ button.reset:hover {
 
 
 /* -----------------------------------------
-   Preload Progress Bar
------------------------------------------ */
-.preload-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.75);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 99999;
-}
-
-.preload-box {
-    width: 420px;
-    background: #111;
-    padding: 25px;
-    border-radius: 12px;
-    text-align: center;
-    color: white;
-    font-size: 1.2rem;
-    box-shadow: 0 0 20px rgba(0,0,0,0.6);
-}
-
-.preload-bar {
-    width: 100%;
-    height: 18px;
-    background: #333;
-    border-radius: 10px;
-    margin-top: 15px;
-    overflow: hidden;
-}
-
-#preloadFill {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, #00c6ff, #0072ff);
-    transition: width 0.15s ease-out;
-}
-
-/* -----------------------------------------
    Latest Update Timestamp
 ----------------------------------------- */
 .update-date {
@@ -694,6 +596,18 @@ button.reset:hover {
   margin-top: 6px;
 }
 
+/* -----------------------------------------
+   Baseball Spinner
+----------------------------------------- */
+.spin {
+    display: inline-block;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
 
 
 
@@ -708,3 +622,62 @@ button.reset:hover {
     font-size: 0.85em;
     color: #777;
 }
+
+/* -----------------------------------------
+   FINAL OVERRIDE — Forces overall battery to render
+----------------------------------------- */
+.overall-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+
+.battery {
+    position: relative !important;
+    background: #dfe6ef !important;
+    border-radius: 10px !important;
+    overflow: hidden !important;
+
+    height: 16px !important;
+    flex: 1 !important;
+
+    --fill: 0%;
+    --color: #00c853;
+
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.15) !important;
+}
+
+.battery::after {
+    content: "" !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    height: 100% !important;
+    width: var(--fill) !important;
+    background: var(--color) !important;
+    transition: width 0.4s ease !important;
+    border-radius: 10px !important;
+    display: block !important;
+}
+
+.overall-battery {
+    height: 26px !important;
+    width: 100% !important;
+    max-width: 600px !important;
+}
+
+.overall-battery::after {
+    background: var(--color) !important;
+}
+
+
+/* FINAL FIX — force overall battery height */
+.overall .overall-battery {
+    height: 26px !important;
+    min-height: 26px !important;
+}
+
+
