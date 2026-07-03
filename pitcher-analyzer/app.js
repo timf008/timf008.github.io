@@ -677,17 +677,6 @@ document.getElementById("swapBtn").onclick = function () {
 
 
 // -------------------------------
-// Spinner Helpers
-// -------------------------------
-function showSpinner(id) {
-    document.getElementById(id).style.display = "inline-block";
-}
-
-function hideSpinner(id) {
-    document.getElementById(id).style.display = "none";
-}
-
-// -------------------------------
 // Reset UI
 // -------------------------------
 function handleReset() {
@@ -695,7 +684,7 @@ function handleReset() {
     document.querySelectorAll(".metric-score").forEach(el => el.textContent = "--");
 
     document.querySelectorAll(".battery").forEach(el => {
-        el.style.setProperty("--fill", "0%");
+        el.style.setProperty("--fill", "1%");
         el.style.setProperty("--color", "#d50000");  // empty battery color
     });
 
