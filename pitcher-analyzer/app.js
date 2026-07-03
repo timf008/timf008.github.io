@@ -246,7 +246,8 @@ function scoreKBB(kbb) {
 // Main: Load player + update UI (backend-only)
 // -------------------------------
 async function handleLoad() {
-    showSpinner("spinner1");
+    const spin = document.getElementById("spinner1");
+    spin.classList.add("spin");
 
     try {
         const name = document.getElementById("playerName").value.trim();
@@ -296,7 +297,7 @@ async function handleLoad() {
     } catch (err) {
         console.error("Error loading player:", err);
     } finally {
-        hideSpinner("spinner1");
+        spin.classList.remove("spin");
     }
 }
 
@@ -304,7 +305,8 @@ async function handleLoad() {
 // Trend Handler (Season Comparison)
 // -------------------------------
 async function handleTrend() {
-    showSpinner("spinner1");
+    const spin = document.getElementById("spinner1");
+    spin.classList.add("spin");
 
     try {
         const rawName = document.getElementById("playerName").value.trim();
@@ -317,11 +319,13 @@ async function handleTrend() {
         const lastSeason = season - 1;
 
         // Fetch both seasons using stathead.r API
-        const currArr = await fetch(`https://pitcher-analyzer-backend.onrender.com/api/pitchers?name=${encodeURIComponent(rawName)}&season=${season}`)
-            .then(r => r.json());
+        const currArr = await fetch(
+            `https://pitcher-analyzer-backend.onrender.com/api/pitchers?name=${encodeURIComponent(rawName)}&season=${season}`
+        ).then(r => r.json());
 
-        const prevArr = await fetch(`https://pitcher-analyzer-backend.onrender.com/api/pitchers?name=${encodeURIComponent(rawName)}&season=${lastSeason}`)
-            .then(r => r.json());
+        const prevArr = await fetch(
+            `https://pitcher-analyzer-backend.onrender.com/api/pitchers?name=${encodeURIComponent(rawName)}&season=${lastSeason}`
+        ).then(r => r.json());
 
         const curr = Array.isArray(currArr) ? currArr[0] : currArr;
         const prev = Array.isArray(prevArr) ? prevArr[0] : prevArr;
@@ -345,9 +349,10 @@ async function handleTrend() {
         document.getElementById("trendModal").style.display = "flex";
 
     } finally {
-        hideSpinner("spinner1");
+        spin.classList.remove("spin");
     }
 }
+
 
 
 
@@ -414,7 +419,9 @@ function buildSeasonComparison(curr, prev, season, lastSeason) {
 // -------------------------------
 
 async function showCompareModal() {
-    showSpinner("spinner1");
+    const spin = document.getElementById("spinner1");
+    spin.classList.add("spin");
+
     console.log("COMPARE BUTTON CLICKED");
 
     function formatName(name) {
@@ -486,16 +493,14 @@ async function showCompareModal() {
             kbbScore: s2_KBB
         });
 
-        // ⭐ RAW + FORMATTED VALUES
         const stats = [
-    ["ERA",  Number(data1.ERA),  Number(data2.ERA),  Number(data1.ERA).toFixed(2),  Number(data2.ERA).toFixed(2)],
-    ["WHIP", Number(data1.WHIP), Number(data2.WHIP), Number(data1.WHIP).toFixed(2), Number(data2.WHIP).toFixed(2)],
-    ["K%",   Number(data1.Kpct), Number(data2.Kpct), Number(data1.Kpct).toFixed(2), Number(data2.Kpct).toFixed(2)],
-    ["BB%",  Number(data1.BBpct),Number(data2.BBpct),Number(data1.BBpct).toFixed(2),Number(data2.BBpct).toFixed(2)],
-    ["K/BB", Number(data1.KBB),  Number(data2.KBB),  Number(data1.KBB).toFixed(2),  Number(data2.KBB).toFixed(2)],
-    ["Overall Score", Number(overall1), Number(overall2), Number(overall1).toFixed(2), Number(overall2).toFixed(2)]
-];
-
+            ["ERA",  Number(data1.ERA),  Number(data2.ERA),  Number(data1.ERA).toFixed(2),  Number(data2.ERA).toFixed(2)],
+            ["WHIP", Number(data1.WHIP), Number(data2.WHIP), Number(data1.WHIP).toFixed(2), Number(data2.WHIP).toFixed(2)],
+            ["K%",   Number(data1.Kpct), Number(data2.Kpct), Number(data1.Kpct).toFixed(2), Number(data2.Kpct).toFixed(2)],
+            ["BB%",  Number(data1.BBpct),Number(data2.BBpct),Number(data1.BBpct).toFixed(2),Number(data2.BBpct).toFixed(2)],
+            ["K/BB", Number(data1.KBB),  Number(data2.KBB),  Number(data1.KBB).toFixed(2),  Number(data2.KBB).toFixed(2)],
+            ["Overall Score", Number(overall1), Number(overall2), Number(overall1).toFixed(2), Number(overall2).toFixed(2)]
+        ];
 
         const tbody = document.getElementById("compareBody");
         tbody.innerHTML = "";
@@ -516,7 +521,6 @@ async function showCompareModal() {
                 }
             }
 
-            // ⭐ DISPLAY FORMATTED VALUES ONLY
             row.innerHTML = `
                 <td>${label}</td>
                 <td class="${class1}">${disp1}</td>
@@ -531,9 +535,10 @@ async function showCompareModal() {
     } catch (err) {
         console.error("Compare error:", err);
     } finally {
-        hideSpinner("spinner1");
+        spin.classList.remove("spin");
     }
 }
+
 
 
 // -------------------------------
