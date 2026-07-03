@@ -18,6 +18,15 @@ function safeScore(value) {
         : 0;
 }
 
+function clearLeaderState() {
+    document.getElementById("overallScore").textContent = "--";
+    document.getElementById("overallTier").innerHTML = "";
+    document.getElementById("scoutingNote").innerHTML = "";
+}
+
+window.addEventListener("DOMContentLoaded", clearLeaderState);
+
+
 // =====================================================
 // Utility: Normalize name to match R script (First Last)
 // =====================================================
@@ -679,14 +688,29 @@ document.getElementById("swapBtn").onclick = function () {
 // -------------------------------
 // Reset UI
 // -------------------------------
+// -------------------------------
+// Reset UI
+// -------------------------------
 function handleReset() {
-    document.querySelectorAll(".metric-raw").forEach(el => el.textContent = "--");
-    document.querySelectorAll(".metric-score").forEach(el => el.textContent = "--");
 
+    // Clear leader-related UI FIRST
+    clearLeaderState();
+
+    // Clear raw metric values
+    document.querySelectorAll(".metric-raw")
+        .forEach(el => el.textContent = "--");
+
+    // Clear score values
+    document.querySelectorAll(".metric-score")
+        .forEach(el => el.textContent = "--");
+
+    // Clear all batteries (true empty state)
     document.querySelectorAll(".battery").forEach(el => {
-        el.style.setProperty("--fill", "1%");
-        el.style.setProperty("--color", "#d50000");  // empty battery color
+        el.style.setProperty("--fill", "0%");     // fully empty
+        el.style.setProperty("--color", "#444");  // neutral empty color
     });
+}
+
 
     document.getElementById("overallScore").textContent = "--";
     document.getElementById("overallTier").innerHTML = "";
