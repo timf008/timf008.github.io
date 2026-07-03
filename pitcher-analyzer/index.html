@@ -38,6 +38,7 @@
 
     <button id="loadBtn">Load🔍</button>
     <button id="trendBtn">Trend📈</button>
+    <button id="leadersBtn">Leaders🏅</button>
 
     <!-- Spinner for row 1 -->
     <div class="spinner" id="spinner1"></div>
@@ -171,6 +172,26 @@
             </thead>
             <tbody id="compareBody">
                 <!-- Filled dynamically -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="leadersModal" class="modal">
+    <div class="modal-content leaders-modal">
+        <span id="leadersClose" class="close">&times;</span>
+        <h2 id="leadersTitle">League Leaders</h2>
+
+        <table class="leaders-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+		    <th>XP</th>
+		    <th>Badge</th>
+                </tr>
+            </thead>
+            <tbody id="leadersBody">
+                <!-- JS will inject rows here -->
             </tbody>
         </table>
     </div>
