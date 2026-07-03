@@ -164,16 +164,6 @@ button.reset:hover {
     display: inline-block;
 }
 
-/* Glossy battery bars */
-.battery {
-    height: 16px;
-    background: #dfe6ef;
-    border-radius: 10px;
-    overflow: hidden;
-    position: relative;
-    box-shadow: inset 0 0 6px rgba(0,0,0,0.15);
-}
-
 .metric-raw {
     font-weight: 600;
     color: #333;
@@ -657,9 +647,9 @@ button.reset:hover {
 .battery {
     position: relative !important;
     background: #dfe6ef !important;
-    border-radius: 10px !important;
+    border-radius: 4px !important;
     overflow: hidden !important;
-
+    border: none;
     height: 16px !important;
     flex: 1 !important;
 
