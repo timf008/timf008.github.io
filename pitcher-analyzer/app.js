@@ -535,6 +535,17 @@ async function showCompareModal() {
     }
 }
 
+
+// -------------------------------
+// Pitching Leaders Function
+// -------------------------------
+
+function handleLeaders() {
+    loadLeaders();
+    document.getElementById("leadersModal").style.display = "block";
+}
+
+
 // -------------------------------
 // Pitching Leaders Button
 // -------------------------------
@@ -731,6 +742,10 @@ async function loadLastUpdated(season) {
     }
 }
 
+
+// -------------------------------
+// Wire up UI buttons
+// -------------------------------
 
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("loadBtn").addEventListener("click", handleLoad);
