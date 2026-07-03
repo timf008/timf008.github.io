@@ -557,7 +557,7 @@ async function loadLeaders() {
         const season = document.getElementById("seasonSelect").value;
 
         const data = await fetch(
-            `https://pitcher-analyzer-backend.onrender.com/api/leaders?season=${season}`
+            `https://pitcher-analyzer-backend.onrender.com/api/pitching/leaders?season=${season}`
         ).then(r => r.json());
 
         if (!Array.isArray(data)) {
@@ -574,6 +574,7 @@ async function loadLeaders() {
         spin.classList.remove("spin");
     }
 }
+
 
 // -------------------------------
 // Pitching Leaders Table (XP + Badge)
