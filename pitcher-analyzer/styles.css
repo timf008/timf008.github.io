@@ -200,41 +200,37 @@ button.reset:hover {
    Overall Section
 ----------------------------------------- */
 
+.overall {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
 .overall-top {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 15px;
-    font-size: 1.1em;
-    font-weight: 600;
+    max-width: 600px;
 }
 
+/* ⭐ Overall battery — FIXED (now visible) */
 .overall-battery {
     height: 26px;
-    background: #dfe6ef;
-    border-radius: 12px;
-    margin-bottom: 18px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: inset 0 0 6px rgba(0,0,0,0.15);
+    width: 600px;
+    max-width: 600px;
+    margin: 0 auto !important;
 }
 
 .overall-battery::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 0%; /* JS updates */
-    background: linear-gradient(90deg, #ffb400, #ff8c00);
-    border-radius: 12px;
-    transition: width 0.4s ease;
+    background: var(--color);
 }
+
 
 .scouting-note label {
     font-weight: 700;
-    display: block;
     margin-bottom: 4px;
 }
+
 
 /* -----------------------------------------
    Trend Modal
