@@ -474,33 +474,18 @@ button.reset:hover {
     height: 24px;
     border: 2px solid #333;
     border-radius: 4px;
-    position: relative;
     overflow: hidden;
     background: #111;
+
+    background: linear-gradient(
+        to right,
+        var(--color, #00c853) var(--fill, 0%),
+        transparent var(--fill, 0%)
+    );
+
+    transition: background 0.4s ease;
 }
 
-
-/* -----------------------------------------
-   Batteries
------------------------------------------ */
-.battery {
-    position: relative;
-    background: #dfe6ef;
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.battery::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: var(--fillWidth, 0%);
-    background-color: var(--fillColor, #d50000); /* default red */
-    transition: width .4s ease, background-color .2s ease;
-    border-radius: 10px;
-}
 
 /* -----------------------------------------
    Trend Emoji Buttons
