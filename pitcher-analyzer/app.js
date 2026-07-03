@@ -76,11 +76,6 @@ function updateBattery(id, score) {
     el.style.setProperty("--color", color);
 }
 
-function updateOverall(score) {
-    document.getElementById("overallScore").textContent = safeFixed(score, 1);
-    updateBattery("battery-overall", safeScore(score));
-}
-
 
 // -------------------------------
 // Universal metric updater
