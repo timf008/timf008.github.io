@@ -405,6 +405,43 @@ button.reset:hover {
     width: 100%;
 }
 
+/* -----------------------------------------
+   Leaders Table
+----------------------------------------- */
+
+.leaders-box {
+    width: 100%;
+    background: #1e1e1e;
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+    margin-top: 20px;
+}
+
+#leadersTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+#leadersTable th,
+#leadersTable td {
+    padding: 8px;
+    border-bottom: 1px solid #444;
+    text-align: center;
+}
+
+#leadersTable th {
+    font-weight: bold;
+}
+
+#leadersTitle {
+    text-align: center;
+    width: 100%;
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+}
+
 
 /* -----------------------------------------
    Compare Win - Lose Indicator
