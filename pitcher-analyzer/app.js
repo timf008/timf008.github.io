@@ -600,11 +600,11 @@ function buildLeadersTable(arr) {
     // Assign badges
     top10.forEach((p, i) => {
         if (i === 0) {
-            p.Badge = "🔥 #1 Ace";
+            p.Badge = "🔥 #1";
         } else if (i === 1) {
-            p.Badge = "⭐ #2 Elite";
+            p.Badge = "⭐ #2";
         } else if (i === 2) {
-            p.Badge = "⭐ #3 Dominator";
+            p.Badge = "⭐ #3";
         } else {
             p.Badge = "🏅 Top 10";
         }
