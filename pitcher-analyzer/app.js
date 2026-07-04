@@ -570,6 +570,14 @@ function handleLeaders() {
     loadLeaders();
 }
 
+function showLeaders() {
+    leadersRequested = true;
+
+    buildLeadersTable(allPitchers);
+
+    document.getElementById("leadersModal").style.display = "flex";
+}
+
 
 // -------------------------------
 // Pitching Leaders Loader
@@ -608,51 +616,37 @@ function buildLeadersTable(arr) {
     const tbody = document.getElementById("leadersBody");
     tbody.innerHTML = "";
 
-    // Compute XP score (pitching version)
     arr.forEach(p => {
         p.XP =
-            (p.Kpct * 2) +        // strikeouts are good
-            (p.KBB * 10) -        // high K/BB is excellent
-            (p.ERA * 3) -         // lower ERA is better
-            (p.WHIP * 5);         // lower WHIP is better
+            (p.Kpct * 2) +
+            (p.KBB * 10) -
+            (p.ERA * 3) -
+            (p.WHIP * 5);
     });
 
-    // Top 10
     const top10 = [...arr]
         .sort((a, b) => b.XP - a.XP)
         .slice(0, 10);
 
-    // Assign badges
     top10.forEach((p, i) => {
-        if (i === 0) {
-            p.Badge = "🔥 #1";
-        } else if (i === 1) {
-            p.Badge = "⭐ #2";
-        } else if (i === 2) {
-            p.Badge = "⭐ #3";
-        } else {
-            p.Badge = "🏅 Top 10";
-        }
+        p.Badge =
+            i === 0 ? "🔥 #1" :
+            i === 1 ? "⭐ #2" :
+            i === 2 ? "⭐ #3" :
+            "🏅 Top 10";
     });
 
-    // Build table
     top10.forEach(p => {
         const row = document.createElement("tr");
-
         row.innerHTML = `
             <td>${p.Player}</td>
             <td>${p.XP.toFixed(0)}</td>
             <td>${p.Badge}</td>
         `;
-
         tbody.appendChild(row);
     });
-
-    // Only show modal if user actually clicked the Leaders button
-    if (leadersRequested) {
-        document.getElementById("leadersModal").style.display = "flex";
-    }
 }
+
 
 
 
