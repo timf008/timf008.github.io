@@ -554,14 +554,6 @@ async function showCompareModal() {
 }
 
 
-// -----------------------------------------------------
-// Pitching Leaders – Patched Version
-// -----------------------------------------------------
-
-// Guard flag: prevents modal from auto‑opening on startup/reset
-let leadersRequested = false;
-
-
 // -------------------------------
 // Pitching Leaders Function
 // -------------------------------
@@ -570,17 +562,16 @@ function handleLeaders() {
     loadLeaders();
 }
 
+// -------------------------------
+// Leaders Button Click
+// -------------------------------
 function showLeaders() {
-    leadersRequested = true;
-
     buildLeadersTable(allPitchers);
-
     document.getElementById("leadersModal").style.display = "flex";
 }
 
-
 // -------------------------------
-// Pitching Leaders Loader
+// Leaders Loader
 // -------------------------------
 async function loadLeaders() {
     const spin = document.getElementById("spinner1");
@@ -608,9 +599,8 @@ async function loadLeaders() {
     }
 }
 
-
 // -------------------------------
-// Pitching Leaders Table (XP + Badge)
+// Leaders Table Builder
 // -------------------------------
 function buildLeadersTable(arr) {
     const tbody = document.getElementById("leadersBody");
