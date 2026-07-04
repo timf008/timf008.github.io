@@ -684,10 +684,6 @@ document.getElementById("swapBtn").onclick = function () {
     document.getElementById("loadBtn").click();
 };
 
-
-// -------------------------------
-// Reset UI
-// -------------------------------
 // -------------------------------
 // Reset UI
 // -------------------------------
@@ -709,13 +705,13 @@ function handleReset() {
         el.style.setProperty("--fill", "0%");     // fully empty
         el.style.setProperty("--color", "#444");  // neutral empty color
     });
-}
 
-
+    // Clear overall fields (these MUST be inside the function)
     document.getElementById("overallScore").textContent = "--";
     document.getElementById("overallTier").innerHTML = "";
     document.getElementById("scoutingNote").innerHTML = "";
 }
+
 
 
 
