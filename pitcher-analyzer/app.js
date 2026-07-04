@@ -693,7 +693,7 @@ function handleReset() {
     // Clear all batteries (true empty state)
     document.querySelectorAll(".battery").forEach(el => {
         el.style.setProperty("--fill", "0%");     // fully empty
-        el.style.setProperty("--color", "#444");  // neutral empty color
+        el.style.setProperty("--color", "d50000");  // neutral empty color
     });
 
     // Clear overall fields (these MUST be inside the function)
