@@ -773,7 +773,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("trendBtn").addEventListener("click", handleTrend);
 
     // Leaders button
-    document.getElementById("leadersBtn").addEventListener("click", handleLeaders);
+    document.getElementById("leadersBtn").addEventListener("click", showLeaders);
 
     // Close modals
     document.getElementById("trendClose").onclick = () =>
