@@ -191,7 +191,7 @@ button.reset:hover {
 ----------------------------------------- */
 
 .overall {
-    margin-top: 25px;
+    margin-top: 10px;
     display: flex;
     flex-direction: column;
     gap: 12px;
