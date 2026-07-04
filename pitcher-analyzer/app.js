@@ -592,7 +592,7 @@ async function loadLeaders() {
 }
 
 // -------------------------------
-// Leaders Table Builder
+// Leaders Table Builder (PATCHED)
 // -------------------------------
 function buildLeadersTable(arr) {
     const tbody = document.getElementById("leadersBody");
@@ -627,7 +627,11 @@ function buildLeadersTable(arr) {
         `;
         tbody.appendChild(row);
     });
+
+    // ⭐ PATCH: Open the modal (this was missing)
+    document.getElementById("leadersModal").style.display = "flex";
 }
+
 
 
 
