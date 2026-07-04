@@ -563,14 +563,6 @@ function handleLeaders() {
 }
 
 // -------------------------------
-// Leaders Button Click
-// -------------------------------
-function showLeaders() {
-    buildLeadersTable(allPitchers);
-    document.getElementById("leadersModal").style.display = "flex";
-}
-
-// -------------------------------
 // Leaders Loader
 // -------------------------------
 async function loadLeaders() {
