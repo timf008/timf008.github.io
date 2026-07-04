@@ -456,26 +456,6 @@ button.reset:hover {
     z-index: 9999;
 }
 
-/* -----------------------------------------
-   New Battery System
------------------------------------------ */
-.battery {
-    width: 120px;
-    height: 24px;
-    border: 2px solid #333;
-    border-radius: 4px;
-    overflow: hidden;
-    background: #111;
-
-    background: linear-gradient(
-        to right,
-        var(--color, #00c853) var(--fill, 0%),
-        transparent var(--fill, 0%)
-    );
-
-    transition: background 0.4s ease;
-}
-
 
 /* -----------------------------------------
    Trend Emoji Buttons
