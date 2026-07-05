@@ -692,9 +692,12 @@ function handleReset() {
 
     // Clear all batteries (true empty state)
     document.querySelectorAll(".battery").forEach(el => {
-        el.style.setProperty("--fill", "0%");     // fully empty
-        el.style.setProperty("--color", "d50000");  // neutral empty color
-    });
+    el.style.setProperty("--fill", "1%");
+    void el.offsetWidth;
+    el.style.setProperty("--fill", "0%");
+    el.style.setProperty("--color", "#d50000");
+});
+
 
     // Clear overall fields (these MUST be inside the function)
     document.getElementById("overallScore").textContent = "--";
