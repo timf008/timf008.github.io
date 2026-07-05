@@ -598,8 +598,8 @@ function buildLeadersTable(arr) {
     const tbody = document.getElementById("leadersBody");
     tbody.innerHTML = "";
 
-    // ⭐ Filter: only pitchers with >5 games
-    const filtered = arr.filter(p => p.G > 5);
+    // ⭐ Filter: only pitchers with >5 games started
+    const filtered = arr.filter(p => p.GS > 5);
 
     // ⭐ XP formula with BBpct added
     filtered.forEach(p => {
@@ -611,12 +611,16 @@ function buildLeadersTable(arr) {
             (p.BBpct * 2);
     });
 
-    // ⭐ Sort and take top 10
-    const top10 = [...filtered]
-        .sort((a, b) => b.XP - a.XP)
-        .slice(0, 10);
+    // ⭐ Sort all pitchers
+    const sorted = [...filtered].sort((a, b) => b.XP - a.XP);
 
-    // ⭐ Badges
+    // ⭐ Top 20 displayed
+    const top20 = sorted.slice(0, 20);
+
+    // ⭐ Top 10 get badges
+    const top10 = sorted.slice(0, 10);
+
+    // Assign badges only to Top 10
     top10.forEach((p, i) => {
         p.Badge =
             i === 0 ? "🔥 #1" :
@@ -625,13 +629,13 @@ function buildLeadersTable(arr) {
             "🏅 Top 10";
     });
 
-    // ⭐ Build table rows
-    top10.forEach(p => {
+    // ⭐ Build table rows (Top 20)
+    top20.forEach(p => {
         const row = document.createElement("tr");
         row.innerHTML = `
             <td>${p.Player}</td>
             <td>${p.XP.toFixed(0)}</td>
-            <td>${p.Badge}</td>
+            <td>${p.Badge || ""}</td>   <!-- ⭐ Blank if not Top 10 -->
         `;
         tbody.appendChild(row);
     });
