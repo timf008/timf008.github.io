@@ -664,14 +664,15 @@ function buildLeadersTable(arr) {
 
     // ⭐ Build table rows (Top 20)
     top20.forEach(p => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-            <td>${p.Player}</td>
-            <td>${p.XP.toFixed(0)}</td>
-            <td>${p.Badge || ""}</td>   <!-- ⭐ Blank if not Top 10 -->
-        `;
-        tbody.appendChild(row);
-    });
+    const row = document.createElement("tr");
+    row.innerHTML = `
+        <td>${p.Player}</td>
+        <td>${Math.round(p.XP)}</td>
+        <td>${p.Badge || ""}</td>   <!-- ⭐ Blank if not Top 10 -->
+    `;
+    tbody.appendChild(row);
+});
+
 
     // ⭐ Open modal
     document.getElementById("leadersModal").style.display = "flex";
