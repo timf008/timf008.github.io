@@ -271,14 +271,18 @@ async function handleLoadPitcher() {
     const p = pitchers[0];
 
     const xp =
-        (p.Kpct * 2) +
-        (p.KBB * 10) -
-        (p.ERA * 3) -
-        (p.WHIP * 5) -
-        (p.BBpct * 2);
+    (p.Kpct * 2) +
+    (p.KBB * 10) -
+    (p.ERA * 3) -
+    (p.WHIP * 5) -
+    (p.BBpct * 2);
 
-    document.getElementById("xpScore").textContent = xp.toFixed(2);
-}
+// Add 1000
+const finalXP = xp + 1000;
+
+// No decimals
+document.getElementById("xpScore").textContent = Math.round(finalXP);
+
 
 
 
@@ -625,17 +629,19 @@ function buildLeadersTable(arr) {
     const tbody = document.getElementById("leadersBody");
     tbody.innerHTML = "";
 
-    // ⭐ Filter: only pitchers with >5 games started
+    // Only pitchers with >5 GS
     const filtered = arr.filter(p => p.GS > 5);
 
-    // ⭐ XP formula with BBpct added
     filtered.forEach(p => {
-        p.XP =
+        const xp =
             (p.Kpct * 2) +
             (p.KBB * 10) -
             (p.ERA * 3) -
             (p.WHIP * 5) -
             (p.BBpct * 2);
+
+        // ⭐ Add 1000 and remove decimals
+        p.XP = Math.round(xp + 1000);
     });
 
     // ⭐ Sort all pitchers
