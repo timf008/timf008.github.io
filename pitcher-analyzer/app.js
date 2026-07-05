@@ -598,18 +598,25 @@ function buildLeadersTable(arr) {
     const tbody = document.getElementById("leadersBody");
     tbody.innerHTML = "";
 
-    arr.forEach(p => {
+    // ⭐ Filter: only pitchers with >5 games
+    const filtered = arr.filter(p => p.G > 5);
+
+    // ⭐ XP formula with BBpct added
+    filtered.forEach(p => {
         p.XP =
             (p.Kpct * 2) +
             (p.KBB * 10) -
             (p.ERA * 3) -
-            (p.WHIP * 5);
+            (p.WHIP * 5) -
+            (p.BBpct * 2);
     });
 
-    const top10 = [...arr]
+    // ⭐ Sort and take top 10
+    const top10 = [...filtered]
         .sort((a, b) => b.XP - a.XP)
         .slice(0, 10);
 
+    // ⭐ Badges
     top10.forEach((p, i) => {
         p.Badge =
             i === 0 ? "🔥 #1" :
@@ -618,6 +625,7 @@ function buildLeadersTable(arr) {
             "🏅 Top 10";
     });
 
+    // ⭐ Build table rows
     top10.forEach(p => {
         const row = document.createElement("tr");
         row.innerHTML = `
@@ -628,9 +636,10 @@ function buildLeadersTable(arr) {
         tbody.appendChild(row);
     });
 
-    // ⭐ PATCH: Open the modal (this was missing)
+    // ⭐ Open modal
     document.getElementById("leadersModal").style.display = "flex";
 }
+
 
 
 
