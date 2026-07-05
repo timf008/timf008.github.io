@@ -746,6 +746,7 @@ function handleReset() {
     document.getElementById("overallScore").textContent = "--";
     document.getElementById("overallTier").innerHTML = "";
     document.getElementById("scoutingNote").innerHTML = "";
+    document.getElementById("xpScore").innerHTML = "";
 }
 
 
