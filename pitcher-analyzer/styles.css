@@ -182,7 +182,7 @@ button.reset:hover {
 }
 
 .metric-row .battery {
-    flex: 1;   /* battery grows to fill space */
+    flex: 1;
 }
 
 
@@ -623,13 +623,12 @@ button.reset:hover {
     font-weight: 600;
 }
 
-
 .battery {
     position: relative;
     background: #dfe6ef;
     border-radius: 4px;
     overflow: hidden;
-    height: 24px;
+    height: 14px;
     width: 120px;
 
     --fill: 0%;
@@ -644,6 +643,7 @@ button.reset:hover {
     background: var(--color);
     transition: width 0.4s ease;
 }
+
 
 
 
