@@ -221,29 +221,6 @@ button.reset:hover {
     margin-bottom: 4px;
 }
 
-/* -----------------------------------------
-   XP Section
------------------------------------------ */
-
-.xp-section {
-    margin-top: 8px;
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-
-.xp-section p {
-    margin: 0;
-    font-size: 1rem;
-    font-weight: 500;
-}
-
-#xpScore {
-    font-weight: 700;
-    color: #2e8b57; /* green highlight */
-}
-
-
 
 /* -----------------------------------------
    Trend Modal
