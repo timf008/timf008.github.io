@@ -237,6 +237,9 @@ function updateXPScore(p) {
     document.getElementById("xpScore").textContent = xp.toFixed(1);
 }
 
+function updateOverallSection(p) {
+    updateXPScore(p);
+
 
 // ------------------------------
 // Scoring functions (5‑metric model)
