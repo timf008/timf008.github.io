@@ -258,8 +258,8 @@ function scoreKBB(kbb) {
 // Calculate XP
 // -------------------------------
 async function handleLoadPitcher() {
-    const name = document.getElementById("pitcherName").value;
-    const season = document.getElementById("seasonInput").value;
+    const name = document.getElementById("playerName").value;
+    const season = document.getElementById("seasonSelect").value;
 
     const pitchers = await loadPitcher(name, season);
 
@@ -268,9 +268,8 @@ async function handleLoadPitcher() {
         return;
     }
 
-    const p = pitchers[0]; // use first match
+    const p = pitchers[0];
 
-    // ⭐ XP formula
     const xp =
         (p.Kpct * 2) +
         (p.KBB * 10) -
@@ -278,9 +277,9 @@ async function handleLoadPitcher() {
         (p.WHIP * 5) -
         (p.BBpct * 2);
 
-    // ⭐ Display XP
     document.getElementById("xpScore").textContent = xp.toFixed(2);
 }
+
 
 
 
