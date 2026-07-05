@@ -239,7 +239,7 @@ function updateXPScore(p) {
 
 function updateOverallSection(p) {
     updateXPScore(p);
-
+}
 
 // ------------------------------
 // Scoring functions (5‑metric model)
