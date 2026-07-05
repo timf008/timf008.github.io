@@ -237,10 +237,6 @@ function updateXPScore(p) {
     document.getElementById("xpScore").textContent = xp.toFixed(1);
 }
 
-function updateOverallSection(p) {
-    updateXPScore(p);
-}
-
 // ------------------------------
 // Scoring functions (5‑metric model)
 // ------------------------------
@@ -805,7 +801,3 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("leadersClose").onclick = () =>
         document.getElementById("leadersModal").style.display = "none";
 });
-
-
-
-
