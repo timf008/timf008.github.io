@@ -221,22 +221,6 @@ function clamp(x, min, max) {
     return Math.max(min, Math.min(max, x));
 }
 
-// -------------------------------
-// Calculate XP
-// -------------------------------
-function calculateXP(p) {
-    return (
-        (p.Kpct * 2) +
-        (p.KBB * 10) -
-        (p.ERA * 3) -
-        (p.WHIP * 5)
-    );
-}
-function updateXPScore(p) {
-    const xp = calculateXP(p);
-    document.getElementById("xpScore").textContent = xp.toFixed(1);
-}
-
 // ------------------------------
 // Scoring functions (5‑metric model)
 // ------------------------------
