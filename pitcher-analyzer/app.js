@@ -283,7 +283,7 @@ const finalXP = xp + 1000;
 // No decimals
 document.getElementById("xpScore").textContent = Math.round(finalXP);
 
-
+}
 
 
 
@@ -676,9 +676,6 @@ function buildLeadersTable(arr) {
     // ⭐ Open modal
     document.getElementById("leadersModal").style.display = "flex";
 }
-
-
-
 
 
 
