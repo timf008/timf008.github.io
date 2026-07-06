@@ -666,10 +666,12 @@ function buildLeadersTable(arr) {
     top20.forEach(p => {
     const row = document.createElement("tr");
     row.innerHTML = `
-        <td>${p.Player}</td>
-        <td>${Math.round(p.XP)}</td>
-        <td>${p.Badge || ""}</td>   <!-- ⭐ Blank if not Top 10 -->
-    `;
+       <td>${p.Player}</td>
+       <td>${p.Team}</td>
+       <td>${Math.round(p.XP)}</td>
+       <td>${p.Badge || ""}</td>
+`;
+
     tbody.appendChild(row);
 });
 
