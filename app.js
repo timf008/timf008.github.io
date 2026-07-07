@@ -75,4 +75,73 @@ async function loadUserFromServer(userId) {
     return await res.json();
 }
 
+// --------------------------------------
+// Log-In Validation
+// --------------------------------------
+function showError(element, message) {
+    element.textContent = message;
+    element.style.display = "block";
+}
+
+function clearErrors() {
+    document.querySelectorAll(".error").forEach(e => {
+        e.style.display = "none";
+        e.textContent = "";
+    });
+
+    document.querySelectorAll("input").forEach(i => {
+        i.classList.remove("invalid");
+    });
+}
+
+async function login() {
+    clearErrors();
+
+    const codeInput = document.getElementById("loginCode");
+    const passInput = document.getElementById("loginPassword");
+
+    const codeError = document.getElementById("codeError");
+    const passError = document.getElementById("passwordError");
+
+    const userId = codeInput.value.trim();
+    const password = passInput.value.trim();
+
+    let valid = true;
+
+    // Validate code
+    if (!/^\d{6}$/.test(userId)) {
+        codeInput.classList.add("invalid");
+        showError(codeError, "Code must be exactly 6 digits.");
+        valid = false;
+    }
+
+    // Validate password
+    if (password.length < 6) {
+        passInput.classList.add("invalid");
+        showError(passError, "Password must be at least 6 characters.");
+        valid = false;
+    }
+
+    if (!valid) return;
+
+    // Send login request
+    const res = await fetch("/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, password })
+    });
+
+    const data = await res.json();
+
+    if (data.error) {
+        // Show server error inline
+        passInput.classList.add("invalid");
+        showError(passError, data.error);
+        return;
+    }
+
+    localStorage.setItem("userCode", userId);
+    loadUser(data);
+}
+
 
