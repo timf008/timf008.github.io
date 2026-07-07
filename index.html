@@ -26,14 +26,20 @@
 
     <div id="loginBox">
 
-    <h3>Log In</h3>
-    <input id="loginCode" placeholder="6-digit code">
-    <input id="loginPassword" type="password" placeholder="Password">
-    <button onclick="login()">Log In</button>
+  <h3>Log In</h3>
 
-    <button onclick="createAccount()">Generate Code</button>
+  <input id="loginCode" placeholder="6-digit code">
+  <div id="codeError" class="error"></div>
+
+  <input id="loginPassword" type="password" placeholder="Password">
+  <div id="passwordError" class="error"></div>
+
+  <button onclick="login()">Log In</button>
+
+  <button onclick="createAccount()">Generate Code</button>
 
 </div>
+
 
 
     <div class="footer">© 2026 Timothy Fuller · timf008.github.io</div>
