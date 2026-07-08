@@ -2,12 +2,13 @@
 // timf008.github.io Log In Screen
 // --------------------------------------
 
+const API = "https://collect-backend-tg58.onrender.com";
 
 // --------------------------------------
 // Create New Account
 // --------------------------------------
 async function createAccount() {
-    const res = await fetch("/createUser", { method: "POST" });
+    const res = await fetch(`${API}/createUser`, { method: "POST" });
     const data = await res.json();
 
     const userId = data.userId;
@@ -17,7 +18,7 @@ async function createAccount() {
 
     const password = prompt("Set a password for your new account:");
 
-    await fetch("/setPassword", {
+    await fetch(`${API}/setPassword`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, password })
@@ -28,7 +29,6 @@ async function createAccount() {
 
     loadUser(await loadUserFromServer(userId));
 }
-
 
 // --------------------------------------
 // Auto Log-In
@@ -45,7 +45,7 @@ window.onload = async () => {
 // Helper - Load User From Server
 // --------------------------------------
 async function loadUserFromServer(userId) {
-    const res = await fetch("/loadUser", {
+    const res = await fetch(`${API}/loadUser`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId })
@@ -104,7 +104,7 @@ async function login() {
     if (!valid) return;
 
     // Send login request
-    const res = await fetch("/login", {
+    const res = await fetch(`${API}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, password })
@@ -122,5 +122,4 @@ async function login() {
     localStorage.setItem("userCode", userId);
     loadUser(data);
 }
-
 
