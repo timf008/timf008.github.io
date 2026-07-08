@@ -2,6 +2,9 @@
 // timf008.github.io Log In Screen
 // --------------------------------------
 
+let currentUser = null;
+
+
 const API = "https://collect-backend-tg58.onrender.com";
 
 
@@ -9,8 +12,10 @@ const API = "https://collect-backend-tg58.onrender.com";
 // Log Out (GLOBAL)
 // --------------------------------------
 window.logout = function () {
+    // Remove stored login
     localStorage.removeItem("userCode");
-    alert("Logged Out");
+
+    // Reload UI so login screen appears again
     location.reload();
 };
 
@@ -141,6 +146,9 @@ async function login() {
 // --------------------------------------
 function loadUser(user) {
     console.log("User loaded:", user);
+    currentUser = user;
+}
+
 
     // If you have UI elements, update them here.
     // Example:
