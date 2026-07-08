@@ -120,6 +120,9 @@ async function login() {
 
     localStorage.setItem("userCode", userId);
     loadUser(data);
+
+    // ✅ Success message
+    alert("Log In Successful");
 }
 
 // --------------------------------------
