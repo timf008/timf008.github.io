@@ -147,7 +147,6 @@ async function login() {
 function loadUser(user) {
     console.log("User loaded:", user);
     currentUser = user;
-}
 
 
     // If you have UI elements, update them here.
