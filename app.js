@@ -128,12 +128,9 @@ async function login() {
 // --------------------------------------
 // Log Out
 // --------------------------------------
-function logout() {
-  fetch('/logout', { method: 'POST' })
-    .then(() => {
-      window.location.href = '/login';
-    });
-}
+localStorage.removeItem("userCode");
+window.location.href = "/login";
+
 
 
 // --------------------------------------
