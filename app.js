@@ -3,32 +3,6 @@
 // --------------------------------------
 
 
-
-// --------------------------------------
-// Log-In
-// --------------------------------------
-async function login() {
-    const userId = document.getElementById("loginCode").value;
-    const password = document.getElementById("loginPassword").value;
-
-    const res = await fetch("/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, password })
-    });
-
-    const data = await res.json();
-
-    if (data.error) {
-        alert(data.error);
-        return;
-    }
-
-    localStorage.setItem("userCode", userId);
-    loadUser(data);
-}
-
-
 // --------------------------------------
 // Create New Account
 // --------------------------------------
