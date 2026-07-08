@@ -126,6 +126,17 @@ async function login() {
 }
 
 // --------------------------------------
+// Log Out
+// --------------------------------------
+function logout() {
+  fetch('/logout', { method: 'POST' })
+    .then(() => {
+      window.location.href = '/login';
+    });
+}
+
+
+// --------------------------------------
 // PATCH: Add missing loadUser()
 // --------------------------------------
 function loadUser(user) {
