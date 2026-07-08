@@ -121,7 +121,7 @@ body {
 
 /* Buttons */
 #loginBox button {
-    width: 100%;
+    width: 30%;
     padding: 10px 14px;
     margin-top: 6px;
     border-radius: 10px;
