@@ -113,7 +113,6 @@ async function login() {
     const data = await res.json();
 
     if (data.error) {
-        // Show server error inline
         passInput.classList.add("invalid");
         showError(passError, data.error);
         return;
@@ -123,3 +122,16 @@ async function login() {
     loadUser(data);
 }
 
+// --------------------------------------
+// PATCH: Add missing loadUser()
+// --------------------------------------
+function loadUser(user) {
+    console.log("User loaded:", user);
+
+    // If you have UI elements, update them here.
+    // Example:
+    // document.getElementById("tokenCount").textContent = user.tokens;
+    // document.getElementById("dailyEarned").textContent = user.dailyEarned;
+
+    // For now, this prevents crashes and allows login to work.
+}
