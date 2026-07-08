@@ -129,9 +129,6 @@ async function login() {
 // Log Out
 // --------------------------------------
 localStorage.removeItem("userCode");
-window.location.href = "/login";
-
-
 
 // --------------------------------------
 // PATCH: Add missing loadUser()
