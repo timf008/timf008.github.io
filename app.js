@@ -9,10 +9,8 @@ const API = "https://collect-backend-tg58.onrender.com";
 // Log Out (GLOBAL)
 // --------------------------------------
 window.logout = function () {
-    // Remove stored login
     localStorage.removeItem("userCode");
-
-    // Reload UI so login screen appears again
+    alert("Logged Out");
     location.reload();
 };
 
