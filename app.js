@@ -4,6 +4,19 @@
 
 const API = "https://collect-backend-tg58.onrender.com";
 
+
+// --------------------------------------
+// Log Out (GLOBAL)
+// --------------------------------------
+window.logout = function () {
+    // Remove stored login
+    localStorage.removeItem("userCode");
+
+    // Reload UI so login screen appears again
+    location.reload();
+};
+
+
 // --------------------------------------
 // Create New Account
 // --------------------------------------
@@ -124,11 +137,6 @@ async function login() {
     // ✅ Success message
     alert("Log In Successful");
 }
-
-// --------------------------------------
-// Log Out
-// --------------------------------------
-localStorage.removeItem("userCode");
 
 // --------------------------------------
 // PATCH: Add missing loadUser()
