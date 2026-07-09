@@ -148,11 +148,19 @@ const tokenRes = await fetch(`${API}/awardTokens`, {
 
 const tokenData = await tokenRes.json();
 
+// ⭐ Only show award message if tokens were actually given
+if (tokenData.ok) {
+    alert("Daily Tokens Awarded!");
+} else {
+    console.log("No tokens awarded:", tokenData.reason);
+}
+
 // Reload user from server so UI gets updated token count
 const updatedUser = await loadUserFromServer(userId);
 loadUser(updatedUser);
 
-alert("Log In Successful — Daily Tokens Awarded!");
+alert("Log In Successful");
+
 
 }
 
