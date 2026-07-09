@@ -15,6 +15,9 @@ window.logout = function () {
     // Remove stored login
     localStorage.removeItem("userCode");
 
+    // Show logout alert
+    alert("Logged out");
+
     // Reload UI so login screen appears again
     location.reload();
 };
