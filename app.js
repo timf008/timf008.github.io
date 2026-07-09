@@ -161,8 +161,40 @@ loadUser(updatedUser);
 
 alert("Log In Successful");
 
-
 }
+
+// --------------------------------------
+// Pitcher Analyzer Token Reward Upon Click
+// --------------------------------------
+document.querySelector('a[href="/pitcher-analyzer"]').addEventListener("click", async (e) => {
+    const userId = localStorage.getItem("userCode");
+
+    const res = await fetch(`${API}/awardPitcherTokens`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId })
+    });
+
+    const data = await res.json();
+    if (data.ok) alert("Pitcher Analyzer Tokens Awarded!");
+});
+
+// --------------------------------------
+// Batter Analyzer Token Reward Upon Click
+// --------------------------------------
+document.querySelector('a[href="/batter-analyzer"]').addEventListener("click", async (e) => {
+    const userId = localStorage.getItem("userCode");
+
+    const res = await fetch(`${API}/awardBatterTokens`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId })
+    });
+
+    const data = await res.json();
+    if (data.ok) alert("Batter Analyzer Tokens Awarded!");
+});
+
 
 // --------------------------------------
 // PATCH: Add missing loadUser()
