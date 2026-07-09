@@ -132,16 +132,28 @@ async function login() {
     const data = await res.json();
 
     if (data.error) {
-        passInput.classList.add("invalid");
-        showError(passError, data.error);
-        return;
-    }
+    passInput.classList.add("invalid");
+    showError(passError, data.error);
+    return;
+}
 
-    localStorage.setItem("userCode", userId);
-    loadUser(data);
+localStorage.setItem("userCode", userId);
 
-    // ✅ Success message
-    alert("Log In Successful");
+// ⭐ Award daily login tokens (5 tokens)
+const tokenRes = await fetch(`${API}/awardTokens`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ userId, amount: 5 })
+});
+
+const tokenData = await tokenRes.json();
+
+// Reload user from server so UI gets updated token count
+const updatedUser = await loadUserFromServer(userId);
+loadUser(updatedUser);
+
+alert("Log In Successful — Daily Tokens Awarded!");
+
 }
 
 // --------------------------------------
