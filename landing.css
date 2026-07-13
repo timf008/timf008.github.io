@@ -110,7 +110,7 @@ body {
 
 /* Inputs — smaller + centered */
 #loginBox input {
-    width: 80%;              /* <<< reduced from 95% */
+    width: 80%;            /* tighter, centered */
     padding: 10px 12px;
     margin-bottom: 12px;
     border-radius: 10px;
@@ -122,19 +122,21 @@ body {
     transition: border-color 0.18s ease, box-shadow 0.18s ease;
 }
 
+
 /* Buttons — smaller + cleaner */
 #loginBox button {
-    width: 22%;              /* <<< reduced from 30% */
-    padding: 8px 12px;       /* <<< slightly smaller */
+    width: 24%;            /* fits 3 buttons side-by-side */
+    padding: 8px 12px;     /* slightly smaller */
     margin-top: 6px;
     border-radius: 10px;
     border: 1px solid rgba(148, 163, 184, 0.6);
     background: rgba(37, 99, 235, 0.9);
     color: #e5e7eb;
-    font-size: 0.9rem;       /* <<< slightly smaller */
+    font-size: 0.9rem;
     cursor: pointer;
     transition: background 0.18s ease, transform 0.12s ease, box-shadow 0.18s ease;
 }
+
 
 /* Button hover */
 #loginBox button:hover {
