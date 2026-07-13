@@ -146,10 +146,13 @@ body {
 /* Button row — ensures clean alignment */
 #buttonRow {
     display: flex;
+    flex-direction: row;
     justify-content: center;
-    gap: 10px;
+    align-items: center;
+    gap: 12px;
     width: 100%;
 }
+
 
 
 /* Error Messages */
