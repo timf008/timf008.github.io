@@ -202,6 +202,32 @@ if (batterLink) {
     });
 }
 
+async function awardPitcherTokens() {
+    const userId = localStorage.getItem("userCode");
+
+    const res = await fetch(`${API}/awardPitcherTokens`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId })
+    });
+
+    const data = await res.json();
+    if (data.ok) alert("Pitcher Analyzer Tokens Awarded!");
+}
+
+async function awardBatterTokens() {
+    const userId = localStorage.getItem("userCode");
+
+    const res = await fetch(`${API}/awardBatterTokens`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId })
+    });
+
+    const data = await res.json();
+    if (data.ok) alert("Batter Analyzer Tokens Awarded!");
+}
+
 
 
 // --------------------------------------
@@ -217,3 +243,4 @@ function loadUser(user) {
     const batterLink = document.querySelector('a[href="/batter-analyzer"]');
     if (batterLink) batterLink.addEventListener("click", awardBatterTokens);
 }
+
