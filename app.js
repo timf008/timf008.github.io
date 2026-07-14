@@ -168,7 +168,9 @@ alert("Log In Successful");
 // --------------------------------------
 const pitcherLink = document.querySelector('a[href="/pitcher-analyzer"]');
 if (pitcherLink) {
-    pitcherLink.addEventListener("click", async () => {
+    pitcherLink.addEventListener("click", async (e) => {
+        e.preventDefault(); // STOP navigation
+
         const userId = localStorage.getItem("userCode");
 
         const res = await fetch(`${API}/awardPitcherTokens`, {
@@ -179,8 +181,12 @@ if (pitcherLink) {
 
         const data = await res.json();
         if (data.ok) alert("Pitcher Analyzer Tokens Awarded!");
+
+        // NOW navigate
+        window.location.href = "/pitcher-analyzer";
     });
 }
+
 
 
 // --------------------------------------
@@ -188,7 +194,9 @@ if (pitcherLink) {
 // --------------------------------------
 const batterLink = document.querySelector('a[href="/batter-analyzer"]');
 if (batterLink) {
-    batterLink.addEventListener("click", async () => {
+    batterLink.addEventListener("click", async (e) => {
+        e.preventDefault();
+
         const userId = localStorage.getItem("userCode");
 
         const res = await fetch(`${API}/awardBatterTokens`, {
@@ -199,9 +207,15 @@ if (batterLink) {
 
         const data = await res.json();
         if (data.ok) alert("Batter Analyzer Tokens Awarded!");
+
+        window.location.href = "/batter-analyzer";
     });
 }
 
+
+// --------------------------------------
+// Pitcher Award Function
+// --------------------------------------
 async function awardPitcherTokens() {
     const userId = localStorage.getItem("userCode");
 
@@ -215,6 +229,10 @@ async function awardPitcherTokens() {
     if (data.ok) alert("Pitcher Analyzer Tokens Awarded!");
 }
 
+
+// --------------------------------------
+// Batter Award Function
+// --------------------------------------
 async function awardBatterTokens() {
     const userId = localStorage.getItem("userCode");
 
