@@ -166,34 +166,42 @@ alert("Log In Successful");
 // --------------------------------------
 // Pitcher Analyzer Token Reward Upon Click
 // --------------------------------------
-document.querySelector('a[href="/pitcher-analyzer"]').addEventListener("click", async (e) => {
-    const userId = localStorage.getItem("userCode");
+const pitcherLink = document.querySelector('a[href="/pitcher-analyzer"]');
+if (pitcherLink) {
+    pitcherLink.addEventListener("click", async () => {
+        const userId = localStorage.getItem("userCode");
 
-    const res = await fetch(`${API}/awardPitcherTokens`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId })
+        const res = await fetch(`${API}/awardPitcherTokens`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId })
+        });
+
+        const data = await res.json();
+        if (data.ok) alert("Pitcher Analyzer Tokens Awarded!");
     });
+}
 
-    const data = await res.json();
-    if (data.ok) alert("Pitcher Analyzer Tokens Awarded!");
-});
 
 // --------------------------------------
 // Batter Analyzer Token Reward Upon Click
 // --------------------------------------
-document.querySelector('a[href="/batter-analyzer"]').addEventListener("click", async (e) => {
-    const userId = localStorage.getItem("userCode");
+const batterLink = document.querySelector('a[href="/batter-analyzer"]');
+if (batterLink) {
+    batterLink.addEventListener("click", async () => {
+        const userId = localStorage.getItem("userCode");
 
-    const res = await fetch(`${API}/awardBatterTokens`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId })
+        const res = await fetch(`${API}/awardBatterTokens`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId })
+        });
+
+        const data = await res.json();
+        if (data.ok) alert("Batter Analyzer Tokens Awarded!");
     });
+}
 
-    const data = await res.json();
-    if (data.ok) alert("Batter Analyzer Tokens Awarded!");
-});
 
 
 // --------------------------------------
@@ -203,11 +211,9 @@ function loadUser(user) {
     console.log("User loaded:", user);
     currentUser = user;
 
+    const pitcherLink = document.querySelector('a[href="/pitcher-analyzer"]');
+    if (pitcherLink) pitcherLink.addEventListener("click", awardPitcherTokens);
 
-    // If you have UI elements, update them here.
-    // Example:
-    // document.getElementById("tokenCount").textContent = user.tokens;
-    // document.getElementById("dailyEarned").textContent = user.dailyEarned;
-
-    // For now, this prevents crashes and allows login to work.
+    const batterLink = document.querySelector('a[href="/batter-analyzer"]');
+    if (batterLink) batterLink.addEventListener("click", awardBatterTokens);
 }
