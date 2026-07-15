@@ -757,6 +757,8 @@ function handleReset() {
     document.getElementById("overallTier").innerHTML = "--";
     document.getElementById("scoutingNote").innerHTML = "--";
     document.getElementById("xpScore").innerHTML = "--";
+    document.getElementById("playerTab").textContent = "Player:--";
+
 }
 
 
