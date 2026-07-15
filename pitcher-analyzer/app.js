@@ -59,9 +59,7 @@ async function loadPitcher(name, season) {
     // ⭐ Update the tab with the loaded player's name
     if (data && data.length > 0) {
         const playerName = data[0].Name || clean;
-        document.getElementById("playerTab").textContent = `${playerName} (${season})`;
-
-    }
+        document.getElementById("playerTab").textContent = `Player: ${playerName} (${season})`;
 
     return Array.isArray(data) ? data : [data];
 }
