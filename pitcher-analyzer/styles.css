@@ -221,6 +221,19 @@ button.reset:hover {
     margin-bottom: 4px;
 }
 
+/* -----------------------------------------
+   Overall Card Wrapper
+----------------------------------------- */
+.overall-card {
+    background: #f8f9fc;
+    border: 1px solid #d4d9e2;
+    border-radius: 10px;
+    padding: 20px 24px;
+    max-width: 650px;
+    margin: 20px auto;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
 
 /* -----------------------------------------
    Trend Modal
