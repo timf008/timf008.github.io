@@ -251,6 +251,17 @@ button.reset:hover {
     box-shadow: 0 -2px 4px rgba(0,0,0,0.05);
 }
 
+.overall-top {
+    min-height: 40px; /* keeps score/tier area stable */
+}
+
+.scouting-note {
+    min-height: 40px; /* keeps note area stable */
+}
+
+#battery-overall {
+    min-height: 60px; /* keeps battery area stable */
+}
 
 
 /* -----------------------------------------
