@@ -65,7 +65,7 @@ body {
 }
 
 .input-group label {
-    font-size: 0.9em;
+    font-size: 14px;
     margin-bottom: 4px;
     font-weight: 600;
 }
@@ -652,7 +652,7 @@ button.reset:hover {
     display: flex;
     justify-content: space-between;
     margin-bottom: 15px;
-    font-size: 1.1em;
+    font-size: 16px;
     font-weight: 600;
 }
 
