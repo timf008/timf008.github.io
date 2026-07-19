@@ -630,6 +630,25 @@ async function loadLeaders() {
 }
 
 // -------------------------------
+// Leaders Table Name Normalization
+// -------------------------------
+function normalizeName(raw) {
+    if (!raw) return raw;
+
+    let cleaned = raw.replace(/<c3><ad>/g, "í")
+                     .replace(/<c3><a1>/g, "á")
+                     .replace(/<c3><b1>/g, "ñ")
+                     .replace(/<c3><a9>/g, "é")
+                     .replace(/<c3><b3>/g, "ó")
+                     .replace(/<c3><ba>/g, "ú");
+
+    cleaned = cleaned.normalize("NFD").replace(/\p{Diacritic}/gu, "");
+
+    return cleaned;
+}
+
+
+// -------------------------------
 // Leaders Table Builder (PATCHED)
 // -------------------------------
 function buildLeadersTable(arr) {
@@ -671,21 +690,25 @@ function buildLeadersTable(arr) {
 
     // ⭐ Build table rows (Top 20)
     top20.forEach(p => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-       <td>${p.Player}</td>
-       <td>${p.Team}</td>
-       <td>${Math.round(p.XP)}</td>
-       <td>${p.Badge || ""}</td>
-`;
 
-    tbody.appendChild(row);
-});
+        // ⭐ Normalize corrupted UTF-8 names
+        p.Player = normalizeName(p.Player);
+        p.Name   = normalizeName(p.Name);
 
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${p.Player}</td>
+            <td>${p.Team}</td>
+            <td>${Math.round(p.XP)}</td>
+            <td>${p.Badge || ""}</td>
+        `;
+        tbody.appendChild(row);
+    });
 
     // ⭐ Open modal
     document.getElementById("leadersModal").style.display = "flex";
 }
+
 
 
 
