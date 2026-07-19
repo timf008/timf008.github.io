@@ -204,7 +204,7 @@ button.reset:hover {
     display: flex;
     justify-content: space-between;
     max-width: 600px;
-    gap: 2rem;
+    gap: 14px;
     justify-content: center;
     align-items: center;
 }
