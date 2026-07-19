@@ -150,6 +150,14 @@ function updateTier(score) {
 }
 
 // -------------------------------
+// Overall Percentile
+// -------------------------------
+document.getElementById("overallPercentile").textContent =
+    data.Overall_pct !== undefined
+        ? Math.round(data.Overall_pct)
+        : "--";
+
+// -------------------------------
 // Scouting note generator (5‑metric model)
 // -------------------------------
 function updateScoutingNote(p) {
