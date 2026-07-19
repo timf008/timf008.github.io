@@ -150,14 +150,6 @@ function updateTier(score) {
 }
 
 // -------------------------------
-// Overall Percentile
-// -------------------------------
-document.getElementById("overallPercentile").textContent =
-    data.Overall_pct !== undefined
-        ? Math.round(data.Overall_pct)
-        : "--";
-
-// -------------------------------
 // Scouting note generator (5‑metric model)
 // -------------------------------
 function updateScoutingNote(p) {
@@ -300,8 +292,6 @@ document.getElementById("xpScore").textContent = Math.round(finalXP);
 
 }
 
-
-
 // -------------------------------
 // Main: Load player + update UI (backend-only)
 // -------------------------------
@@ -354,12 +344,19 @@ async function handleLoad() {
         updateTier(overall);
         updateScoutingNote(p);
 
+        // ⭐ ADD THIS — now data is defined
+        document.getElementById("overallPercentile").textContent =
+            p.Overall_pct !== undefined
+                ? Math.round(p.Overall_pct)
+                : "--";
+
     } catch (err) {
         console.error("Error loading player:", err);
     } finally {
         spin.classList.remove("spin");
     }
 }
+
 
 // -------------------------------
 // Trend Handler (Season Comparison)
