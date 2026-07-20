@@ -662,26 +662,30 @@ function buildLeadersTable(arr) {
     // Only pitchers with >5 GS
     const filtered = arr.filter(p => p.GS > 5);
 
-    // ⭐ Sort by OVERALL score (backend computed)
+    // Sort by OVERALL score (backend computed)
     const sorted = [...filtered].sort((a, b) => b.overall - a.overall);
 
-    // ⭐ Assign badges FIRST (to avoid hiding rows)
-    sorted.forEach((p, i) => {
+    // ⭐ Top 10 badges (same pattern as batters)
+    const top10 = sorted.slice(0, 10);
+    top10.forEach((p, i) => {
         p.Badge =
             i === 0 ? "🔥 #1" :
             i === 1 ? "⭐ #2" :
             i === 2 ? "⭐ #3" :
-            i < 10 ? "🏅 Top 10" :
-            ""; // ⭐ IMPORTANT: rows 11–20 get empty string, not undefined
+            "🏅 Top 10";
     });
 
-    // ⭐ Now slice top 20
+    // ⭐ Ensure pitchers 11–20 have no badge (empty string, not undefined)
+    const rest = sorted.slice(10, 20);
+    rest.forEach(p => {
+        p.Badge = "";
+    });
+
+    // ⭐ Now slice top 20 for display
     const top20 = sorted.slice(0, 20);
 
-    // ⭐ Build table rows (Top 20)
+    // Build table rows (Top 20)
     top20.forEach(p => {
-
-        // Normalize corrupted UTF-8 names
         p.Player = normalizeName(p.Player);
         p.Name   = normalizeName(p.Name);
 
@@ -696,12 +700,9 @@ function buildLeadersTable(arr) {
         tbody.appendChild(row);
     });
 
-console.log("Rows:", document.querySelectorAll("#leadersBody tr").length);
-
-
-    // Open modal
     document.getElementById("leadersModal").style.display = "flex";
 }
+
 
 
 
