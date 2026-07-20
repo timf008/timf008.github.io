@@ -665,25 +665,23 @@ function buildLeadersTable(arr) {
     // ⭐ Sort by OVERALL score (backend computed)
     const sorted = [...filtered].sort((a, b) => b.overall - a.overall);
 
-    // ⭐ Top 20 displayed
-    const top20 = sorted.slice(0, 20);
-
-    // ⭐ Top 10 get badges
-    const top10 = sorted.slice(0, 10);
-
-    // Assign badges only to Top 10
-    top10.forEach((p, i) => {
+    // ⭐ Assign badges FIRST (to avoid hiding rows)
+    sorted.forEach((p, i) => {
         p.Badge =
             i === 0 ? "🔥 #1" :
             i === 1 ? "⭐ #2" :
             i === 2 ? "⭐ #3" :
-            "🏅 Top 10";
+            i < 10 ? "🏅 Top 10" :
+            ""; // ⭐ IMPORTANT: rows 11–20 get empty string, not undefined
     });
+
+    // ⭐ Now slice top 20
+    const top20 = sorted.slice(0, 20);
 
     // ⭐ Build table rows (Top 20)
     top20.forEach(p => {
 
-        // ⭐ Normalize corrupted UTF-8 names
+        // Normalize corrupted UTF-8 names
         p.Player = normalizeName(p.Player);
         p.Name   = normalizeName(p.Name);
 
@@ -691,14 +689,14 @@ function buildLeadersTable(arr) {
         row.innerHTML = `
             <td>${p.Player}</td>
             <td>${p.Team}</td>
-            <td>${Math.round(p.XP)}</td>  
-            <td>${p.overall.toFixed(2)}</td>  
-            <td>${p.Badge || ""}</td>
+            <td>${Math.round(p.XP)}</td>
+            <td>${p.overall.toFixed(2)}</td>
+            <td>${p.Badge}</td>   <!-- Always defined now -->
         `;
         tbody.appendChild(row);
     });
 
-    // ⭐ Open modal
+    // Open modal
     document.getElementById("leadersModal").style.display = "flex";
 }
 
