@@ -691,10 +691,13 @@ function buildLeadersTable(arr) {
             <td>${p.Team}</td>
             <td>${Math.round(p.XP)}</td>
             <td>${p.overall.toFixed(2)}</td>
-            <td>${p.Badge}</td>   <!-- Always defined now -->
+            <td>${p.Badge}</td>
         `;
         tbody.appendChild(row);
     });
+
+console.log("Rows:", document.querySelectorAll("#leadersBody tr").length);
+
 
     // Open modal
     document.getElementById("leadersModal").style.display = "flex";
