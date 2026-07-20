@@ -784,6 +784,7 @@ function handleReset() {
     document.getElementById("overallScore").textContent = "--";
     document.getElementById("overallTier").innerHTML = "--";
     document.getElementById("scoutingNote").innerHTML = "--";
+    document.getElementById("overallPercentile").textContent = "--";
     document.getElementById("xpScore").innerHTML = "--";
     document.getElementById("playerTab").textContent = "Player:--";
     document.getElementById("playerPhoto").src = "images/pitcher.png";
