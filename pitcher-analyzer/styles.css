@@ -442,7 +442,12 @@ button.reset:hover {
     padding: 20px;
     border-radius: 10px;
     color: white;
+
+    /* ⭐ FIX: allow scrolling so all 20 rows appear */
+    overflow-y: auto;
+    max-height: 90vh;
 }
+
 
 /* Title */
 #leadersTitle {
