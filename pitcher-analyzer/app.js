@@ -652,7 +652,6 @@ function normalizeName(raw) {
     return cleaned;
 }
 
-
 // -------------------------------
 // Leaders Table Builder (PATCHED)
 // -------------------------------
@@ -663,20 +662,8 @@ function buildLeadersTable(arr) {
     // Only pitchers with >5 GS
     const filtered = arr.filter(p => p.GS > 5);
 
-    filtered.forEach(p => {
-        const xp =
-            (p.Kpct * 2) +
-            (p.KBB * 10) -
-            (p.ERA * 3) -
-            (p.WHIP * 5) -
-            (p.BBpct * 2);
-
-        // ⭐ Add 1000 and remove decimals
-        p.XP = Math.round(xp + 1000);
-    });
-
-    // ⭐ Sort all pitchers
-    const sorted = [...filtered].sort((a, b) => b.XP - a.XP);
+    // ⭐ Sort by OVERALL score (backend computed)
+    const sorted = [...filtered].sort((a, b) => b.overall - a.overall);
 
     // ⭐ Top 20 displayed
     const top20 = sorted.slice(0, 20);
@@ -704,7 +691,8 @@ function buildLeadersTable(arr) {
         row.innerHTML = `
             <td>${p.Player}</td>
             <td>${p.Team}</td>
-            <td>${Math.round(p.XP)}</td>
+            <td>${Math.round(p.XP)}</td>  
+            <td>${p.overall.toFixed(2)}</td>  
             <td>${p.Badge || ""}</td>
         `;
         tbody.appendChild(row);
@@ -713,6 +701,7 @@ function buildLeadersTable(arr) {
     // ⭐ Open modal
     document.getElementById("leadersModal").style.display = "flex";
 }
+
 
 
 
