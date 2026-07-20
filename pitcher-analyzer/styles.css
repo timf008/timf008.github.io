@@ -280,11 +280,18 @@ button.reset:hover {
 
 .modal-content {
     background: #ffffff;
-    padding: 30px;
-    width: 650px;
     border-radius: 14px;
+    max-width: 650px;
+    width: 100%;
+    max-height: 90vh;        /* ⭐ keeps all 20 rows visible */
+    overflow-y: auto;        /* ⭐ scrolls inside modal */
+    padding: 30px;
     box-shadow: 0 0 18px rgba(0,0,0,0.25);
+    box-sizing: border-box;
+    text-align: center;
+    position: relative;
 }
+
 
 .close {
     float: right;
@@ -550,18 +557,6 @@ button.reset:hover {
     display: none;
 }
 
-.modal-content {
-  background: white;
-  border-radius: 10px;
-  max-width: 600px;         /* prevents full-width stretching */
-  width: 100%;
-  max-height: 90vh;         /* ⭐ prevents vertical overflow */
-  overflow-y: auto;         /* ⭐ scrolls INSIDE the modal */
-  padding: 20px;
-  box-sizing: border-box;
-  text-align: center;
-  position: relative;
-}
 
 .rank-table {
     margin: 0 auto;      /* centers the table */
