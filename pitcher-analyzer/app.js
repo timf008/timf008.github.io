@@ -54,19 +54,21 @@ async function loadPitcher(name, season) {
     }
 
     const data = await res.json();
-    console.log("Backend returned:", data);
 
-    // ⭐ Update the tab with the loaded player's name
-    if (data && data.length > 0) {
-    const playerName = data[0].Name || clean;
-    const team = arr[0].Team || "";
-document.getElementById("playerTab").textContent =
-    `${playerName}${team ? " — " + team : ""} (${season})`;
+    // ⭐ Normalize backend output: ALWAYS return an array
+    const arr = Array.isArray(data) ? data : [data];
 
+    // ⭐ Update the tab with the loaded pitcher’s name + team
+    if (arr && arr.length > 0) {
+        const playerName = arr[0].Name || clean;
+        const team = arr[0].Team || "";
+        document.getElementById("playerTab").textContent =
+            `${playerName}${team ? " — " + team : ""} (${season})`;
+    }
+
+    return arr;
 }
 
-    return Array.isArray(data) ? data : [data];
-}
 
 
 
