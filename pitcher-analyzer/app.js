@@ -42,7 +42,7 @@ function normalizeNameFrontend(x) {
 // -------------------------------
 // Utility: Fetch pitcher data
 // -------------------------------
-async function loadPitcher(name, season) {
+async function loadPitcher(name, season, silent = false) {
     const clean = normalizeNameFrontend(name);
 
     const url = `https://pitcher-analyzer-backend.onrender.com/api/pitchers?name=${encodeURIComponent(clean)}&season=${season}`;
@@ -54,12 +54,10 @@ async function loadPitcher(name, season) {
     }
 
     const data = await res.json();
-
-    // ⭐ Normalize backend output: ALWAYS return an array
     const arr = Array.isArray(data) ? data : [data];
 
-    // ⭐ Update the tab with the loaded pitcher’s name + team
-    if (arr && arr.length > 0) {
+    // ⭐ Only update tab if NOT silent
+    if (!silent && arr && arr.length > 0) {
         const playerName = arr[0].Name || clean;
         const team = arr[0].Team || "";
         document.getElementById("playerTab").textContent =
@@ -68,6 +66,7 @@ async function loadPitcher(name, season) {
 
     return arr;
 }
+
 
 
 
@@ -505,8 +504,9 @@ async function showCompareModal() {
             return;
         }
 
-        const data1Arr = await loadPitcher(p1_raw, s1);
-        const data2Arr = await loadPitcher(p2_raw, s2);
+        const data1Arr = await loadPitcher(p1_raw, s1, true);
+        const data2Arr = await loadPitcher(p2_raw, s2, true);
+
 
         const data1 = Array.isArray(data1Arr) ? data1Arr[0] : data1Arr;
         const data2 = Array.isArray(data2Arr) ? data2Arr[0] : data2Arr;
