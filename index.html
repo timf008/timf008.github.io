@@ -3,51 +3,88 @@
 <head>
 <meta charset="UTF-8">
 <title>timbaseball.com</title>
-
-<!-- Correct external CSS link -->
 <link rel="stylesheet" href="/landing.css">
-
 </head>
-<body>
 
+<body>
 <div class="main-wrapper">
   <div class="card">
-    <img src="bluetechlogo.png" class="site-logo" alt="Logo">
-    <h1>timbaseball.com</h1>
-    <h2>Search Players · Earn Tokens · Collect Items </h2>
 
-    <p>Quick links:</p>
+    <img src="bluetechlogo.png" class="site-logo" alt="Logo">
+
+    <h1>Timothy Baseball Analytics</h1>
+    <h2>Modern Sabermetrics · XP Model · 5‑Metric Skill Score</h2>
+
+    <p class="intro">
+      Welcome to <strong>timbaseball.com</strong> — a data‑driven baseball analytics hub
+      built around two complementary scoring systems that reveal how hitters and pitchers
+      truly perform. Explore the analyzers below and dive into the numbers.
+    </p>
+
     <div class="link-list">
-      <a href="/pitcher-analyzer">Pitcher Analyzer</a>
-      <a href="/batter-analyzer">Batter Analyzer</a>
-      <a href="collect/collect.html">Collect</a>
+      <a href="https://pitcher.timbaseball.com">Pitcher Analyzer</a>
+      <a href="https://batter.timbaseball.com">Batter Analyzer</a>
       <a href="https://github.com/timf008">GitHub</a>
     </div>
 
-    <div id="loginBox">
-  <h3>Log In</h3>
+    <hr>
 
-  <input id="loginCode" placeholder="6-digit code">
-  <div id="codeError" class="error"></div>
+    <h2>Scoring Philosophy</h2>
 
-  <input id="loginPassword" type="password" placeholder="Password">
-  <div id="passwordError" class="error"></div>
+    <h3>XP Score — Raw Impact Index</h3>
+    <p>
+      The <strong>XP Score</strong> is a high‑resolution performance metric that captures
+      a player’s <em>impact</em> on the field. It’s intentionally unfiltered — built from
+      core stats like BA, OBP, SLG, BB%, and K% — and scaled so explosive players stand out.
+    </p>
 
-  <div id="buttonRow">
-    <button onclick="login()">Log In</button>
-    <button onclick="createAccount()">Generate Code</button>
-    <button onclick="logout()">Log Out</button>
+    <p>
+      XP rewards:
+      <ul>
+        <li>High batting average</li>
+        <li>Strong on‑base skill</li>
+        <li>Slugging power</li>
+        <li>Walk discipline</li>
+        <li>Low strikeout rates</li>
+      </ul>
+    </p>
+
+    <p>
+      XP is designed to <strong>pop</strong>. When a hitter like Ben Rice posts a 1246 XP,
+      it tells you he’s doing something special — even if his traditional stats don’t
+      immediately show it. XP reveals outliers, breakout candidates, and fantasy sleepers.
+    </p>
+
+    <h3>Overall Score — 5‑Metric Skill Model (0–10)</h3>
+    <p>
+      The <strong>Overall Score</strong> is a balanced, normalized rating built from five
+      skill components:
+    </p>
+
+    <ul>
+      <li><strong>BA</strong> — Contact Ability</li>
+      <li><strong>OBP</strong> — Discipline & On‑Base Skill</li>
+      <li><strong>SLG</strong> — Power</li>
+      <li><strong>K%</strong> — Bat‑to‑Ball Skill</li>
+      <li><strong>BB%</strong> — Walk Discipline</li>
+    </ul>
+
+    <p>
+      Each metric is scaled from 0–10 and weighted to produce a final <strong>Overall Score</strong>.
+      This model reflects <em>true skill</em> and consistency — the kind of rating scouts and
+      analysts rely on.
+    </p>
+
+    <h3>Why Both Scores Matter</h3>
+    <p>
+      XP shows <strong>impact</strong>.  
+      Overall Score shows <strong>skill</strong>.  
+      Together, they tell the full story of a player’s performance.
+    </p>
+
+    <div class="footer">© 2026 Timothy Fuller · Designed for 💻 PC / 📱 Tablet</div>
   </div>
 </div>
-
-
-
-
-    <div class="footer">© 2026 Timothy Fuller · Designed for:  💻PC / 📱Tablet</div>
-  </div>
-</div>
-
-<script src="app.js"></script>
 
 </body>
 </html>
