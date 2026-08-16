@@ -125,6 +125,16 @@ section {
     margin-top: 28px;
 }
 
+.current-research img.research-chart {
+    max-width: 100%;
+    height: auto;
+    margin: 1rem 0;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+
 /* Footer */
 footer {
     margin-top: 28px;
