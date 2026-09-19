@@ -48,3 +48,87 @@ signupTab.onclick = () => {
     signupTab.classList.add("active");
     loginTab.classList.remove("active");
 };
+
+// ==================================
+// TimBaseball Authentication
+// ==================================
+
+const AUTH_API = "https://timbaseball-auth.onrender.com";
+
+// ------------------------------
+// Create Account
+// ------------------------------
+
+signupForm.addEventListener("submit", async (event) => {
+
+    event.preventDefault();
+
+    const email =
+        document.getElementById("signupEmail").value.trim();
+
+    const password =
+        document.getElementById("signupPassword").value;
+
+    const confirmPassword =
+        document.getElementById("signupConfirm").value;
+
+    authMessage.textContent = "";
+
+    // Make sure passwords match
+    if (password !== confirmPassword) {
+        authMessage.textContent =
+            "Passwords do not match.";
+        return;
+    }
+
+    try {
+
+        authMessage.textContent =
+            "Creating account...";
+
+        const response = await fetch(
+            `${AUTH_API}/api/auth/register`,
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                credentials: "include",
+
+                body: JSON.stringify({
+                    email,
+                    password
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.error || "Unable to create account."
+            );
+        }
+
+        authMessage.textContent =
+            "Account created!";
+
+        console.log(
+            "TimBaseball user:",
+            data.user
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Registration error:",
+            error
+        );
+
+        authMessage.textContent =
+            error.message;
+    }
+
+});
