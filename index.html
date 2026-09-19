@@ -378,30 +378,52 @@
 
         </form>
 
-      <!-- ACCOUNT VIEW -->
+<!-- ACCOUNT VIEW -->
 
 <div
     id="accountView"
-    class="auth-form"
+    class="auth-form account-view"
     hidden>
 
-    <div class="account-info">
+    <div class="account-card">
 
-        <div class="account-email">
-            <span>Email: </span>
-            <strong id="accountEmail">--</strong>
+        <div class="account-row">
+            <div>
+                <span class="account-label">Signed in as</span>
+                <strong
+                    id="accountEmail"
+                    class="account-email">
+                    --
+                </strong>
+            </div>
+
+            <span class="account-status">
+                Active
+            </span>
         </div>
 
-        <div class="account-plan">
-            <span>Plan: </span>
-            <strong id="accountPlan">Free</strong>
+        <div class="account-divider"></div>
+
+        <div class="account-row">
+            <div>
+                <span class="account-label">Current Plan</span>
+                <strong
+                    id="accountPlan"
+                    class="account-plan">
+                    Free
+                </strong>
+            </div>
+
+            <span class="plan-badge">
+                FREE
+            </span>
         </div>
 
     </div>
 
     <button
         id="logoutButton"
-        class="auth-submit"
+        class="auth-logout"
         type="button">
         Log Out
     </button>
