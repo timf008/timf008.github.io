@@ -200,3 +200,49 @@ loginForm.addEventListener("submit", async (event) => {
     }
 
 });
+
+// ------------------------------
+// Check Current Login
+// ------------------------------
+
+async function checkCurrentUser() {
+
+    try {
+
+        const response = await fetch(
+            `${AUTH_API}/api/auth/me`,
+            {
+                method: "GET",
+                credentials: "include"
+            }
+        );
+
+        const data = await response.json();
+
+        if (data.loggedIn) {
+
+            console.log(
+                "Logged in as:",
+                data.user
+            );
+
+            authMessage.textContent =
+                `Logged in as ${data.user.email}`;
+
+        } else {
+
+            console.log(
+                "No active TimBaseball session."
+            );
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Session check error:",
+            error
+        );
+    }
+}
+
+checkCurrentUser();
