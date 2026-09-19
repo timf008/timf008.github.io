@@ -33,6 +33,21 @@ const signupForm = document.getElementById("signupForm");
 const loginTab = document.getElementById("loginTab");
 const signupTab = document.getElementById("signupTab");
 
+const accountView =
+    document.getElementById("accountView");
+
+const accountEmail =
+    document.getElementById("accountEmail");
+
+const accountPlan =
+    document.getElementById("accountPlan");
+
+const logoutButton =
+    document.getElementById("logoutButton");
+
+const authTabs =
+    document.querySelector(".auth-tabs");
+
 loginTab.onclick = () => {
     loginForm.hidden = false;
     signupForm.hidden = true;
@@ -226,13 +241,28 @@ async function checkCurrentUser() {
                 data.user
             );
 
-            // Change navigation button
+            // Navigation
             document.getElementById("openAuth").textContent =
                 "My Account";
 
-            // Show account status in modal
-            authMessage.textContent =
-                `Logged in as ${data.user.email}`;
+            // Hide login/create-account interface
+            authTabs.hidden = true;
+            loginForm.hidden = true;
+            signupForm.hidden = true;
+
+            // Populate account information
+            accountEmail.textContent =
+                data.user.email;
+
+            accountPlan.textContent =
+                data.user.subscriptionStatus === "free"
+                    ? "Free"
+                    : data.user.subscriptionStatus;
+
+            // Show account interface
+            accountView.hidden = false;
+
+            authMessage.textContent = "";
 
         } else {
 
@@ -240,9 +270,18 @@ async function checkCurrentUser() {
                 "No active TimBaseball session."
             );
 
-            // Restore default navigation button
+            // Navigation
             document.getElementById("openAuth").textContent =
                 "Log In / Create Account";
+
+            // Restore login interface
+            authTabs.hidden = false;
+            loginForm.hidden = false;
+            signupForm.hidden = true;
+            accountView.hidden = true;
+
+            loginTab.classList.add("active");
+            signupTab.classList.remove("active");
 
             authMessage.textContent = "";
         }
@@ -257,3 +296,48 @@ async function checkCurrentUser() {
 }
 
 checkCurrentUser();
+
+// ------------------------------
+// Log Out
+// ------------------------------
+
+logoutButton.addEventListener("click", async () => {
+
+    try {
+
+        authMessage.textContent =
+            "Logging out...";
+
+        const response = await fetch(
+            `${AUTH_API}/api/auth/logout`,
+            {
+                method: "POST",
+                credentials: "include"
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.error || "Unable to log out."
+            );
+        }
+
+        // Re-check session and rebuild UI
+        await checkCurrentUser();
+
+        authMessage.textContent =
+            "Logged out.";
+
+    } catch (error) {
+
+        console.error(
+            "Logout error:",
+            error
+        );
+
+        authMessage.textContent =
+            error.message;
+    }
+});
