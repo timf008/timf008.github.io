@@ -584,3 +584,369 @@ footer a:hover {
         min-height: 56px;
     }
 }
+
+/* ------------------------------------
+   Authentication Button
+------------------------------------ */
+
+.auth-button {
+    width: 165px;
+    min-height: 58px;
+
+    border: 1px solid #aebfd0;
+    background: rgba(238, 244, 250, 0.90);
+
+    color: #102743;
+    cursor: pointer;
+
+    font-family: inherit;
+}
+
+.auth-button:hover {
+    background: #f4f8fc;
+    border-color: #879eb7;
+}
+
+
+/* ------------------------------------
+   Authentication Modal Overlay
+------------------------------------ */
+
+.auth-modal {
+    display: none;
+
+    position: fixed;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: rgba(16, 39, 67, 0.45);
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    z-index: 9999;
+}
+
+
+/* JS adds this class when modal opens */
+
+.auth-modal.open {
+    display: flex;
+}
+
+
+/* ------------------------------------
+   Authentication Box
+------------------------------------ */
+
+.auth-box {
+    width: 100%;
+    max-width: 390px;
+
+    position: relative;
+
+    padding: 30px 32px 28px;
+
+    background: #fffdf7;
+
+    border: 1px solid #d4cdbd;
+    border-radius: 10px;
+
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.18);
+
+    overflow: hidden;
+}
+
+
+/* Notebook lines inside modal */
+
+.auth-box::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    background-image:
+        repeating-linear-gradient(
+            to bottom,
+            transparent 0,
+            transparent 27px,
+            rgba(63, 107, 148, 0.07) 28px,
+            transparent 29px
+        );
+
+    pointer-events: none;
+
+    z-index: 0;
+}
+
+
+/* Keep modal content above notebook lines */
+
+.auth-box > * {
+    position: relative;
+    z-index: 1;
+}
+
+
+/* ------------------------------------
+   Close Button
+------------------------------------ */
+
+.auth-close {
+    position: absolute;
+
+    top: 10px;
+    right: 12px;
+
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: 0;
+    background: transparent;
+
+    color: #536b89;
+
+    font-size: 1.6rem;
+    line-height: 1;
+
+    cursor: pointer;
+}
+
+.auth-close:hover {
+    color: #102743;
+}
+
+
+/* ------------------------------------
+   Modal Logo
+------------------------------------ */
+
+.auth-logo {
+    display: block;
+
+    width: 72px;
+    height: auto;
+
+    margin: 0 auto 8px;
+}
+
+
+/* ------------------------------------
+   Modal Title
+------------------------------------ */
+
+.auth-title {
+    margin: 0 0 20px;
+
+    text-align: center;
+
+    color: #102743;
+
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+
+/* ------------------------------------
+   Login / Create Account Tabs
+------------------------------------ */
+
+.auth-tabs {
+    display: flex;
+
+    margin-bottom: 22px;
+
+    border-bottom: 1px solid #ccd5df;
+}
+
+
+.auth-tab {
+    flex: 1;
+
+    padding: 10px 6px;
+
+    border: 0;
+    border-bottom: 2px solid transparent;
+
+    background: transparent;
+
+    color: #718096;
+
+    font-family: inherit;
+    font-size: 0.88rem;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+.auth-tab:hover {
+    color: #102743;
+}
+
+
+.auth-tab.active {
+    color: #102743;
+
+    border-bottom-color: #102743;
+}
+
+
+/* ------------------------------------
+   Authentication Forms
+------------------------------------ */
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.auth-form[hidden] {
+    display: none;
+}
+
+
+.auth-form label {
+    margin: 0 0 5px;
+
+    color: #334e68;
+
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+
+/* Email / Password Inputs */
+
+.auth-form input {
+    width: 100%;
+
+    margin-bottom: 16px;
+
+    padding: 10px 11px;
+
+    border: 1px solid #c9d2dc;
+    border-radius: 6px;
+
+    background: rgba(255, 255, 255, 0.92);
+
+    color: #252525;
+
+    font-family: inherit;
+    font-size: 0.92rem;
+
+    outline: none;
+
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+
+.auth-form input:focus {
+    border-color: #536f8e;
+
+    box-shadow:
+        0 0 0 3px rgba(83, 111, 142, 0.12);
+}
+
+
+/* ------------------------------------
+   Submit Button
+------------------------------------ */
+
+.auth-submit {
+    width: 100%;
+
+    margin-top: 4px;
+
+    padding: 11px 16px;
+
+    border: 1px solid #102743;
+    border-radius: 6px;
+
+    background: #102743;
+
+    color: #ffffff;
+
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        transform 0.12s ease,
+        box-shadow 0.15s ease;
+}
+
+
+.auth-submit:hover {
+    background: #183b63;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 5px 12px rgba(16, 39, 67, 0.18);
+}
+
+
+/* ------------------------------------
+   Authentication Message
+------------------------------------ */
+
+.auth-message {
+    min-height: 18px;
+
+    margin: 14px 0 0;
+
+    text-align: center;
+
+    color: #607286;
+
+    font-size: 0.78rem;
+}
+
+
+/* ------------------------------------
+   Mobile Authentication
+------------------------------------ */
+
+@media (max-width: 640px) {
+
+    .auth-modal {
+        padding: 14px;
+    }
+
+
+    .auth-box {
+        max-width: 360px;
+
+        padding: 28px 22px 24px;
+    }
+
+
+    .auth-logo {
+        width: 64px;
+    }
+
+
+    .auth-button {
+        width: 165px;
+        max-width: 100%;
+    }
+}
