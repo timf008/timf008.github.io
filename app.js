@@ -49,6 +49,12 @@ const authTabs =
     document.querySelector(".auth-tabs");
 
 loginTab.onclick = () => {
+
+    // Do nothing if user is already logged in
+    if (!accountView.hidden) {
+        return;
+    }
+
     loginForm.hidden = false;
     signupForm.hidden = true;
 
@@ -56,7 +62,14 @@ loginTab.onclick = () => {
     signupTab.classList.remove("active");
 };
 
+
 signupTab.onclick = () => {
+
+    // Do nothing if user is already logged in
+    if (!accountView.hidden) {
+        return;
+    }
+
     loginForm.hidden = true;
     signupForm.hidden = false;
 
