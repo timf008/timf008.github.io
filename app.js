@@ -132,3 +132,71 @@ signupForm.addEventListener("submit", async (event) => {
     }
 
 });
+
+// ------------------------------
+// Log In
+// ------------------------------
+
+loginForm.addEventListener("submit", async (event) => {
+
+    event.preventDefault();
+
+    const email =
+        document.getElementById("loginEmail").value.trim();
+
+    const password =
+        document.getElementById("loginPassword").value;
+
+    authMessage.textContent = "";
+
+    try {
+
+        authMessage.textContent =
+            "Logging in...";
+
+        const response = await fetch(
+            `${AUTH_API}/api/auth/login`,
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                credentials: "include",
+
+                body: JSON.stringify({
+                    email,
+                    password
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(
+                data.error || "Unable to log in."
+            );
+        }
+
+        authMessage.textContent =
+            "Logged in!";
+
+        console.log(
+            "TimBaseball user:",
+            data.user
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Login error:",
+            error
+        );
+
+        authMessage.textContent =
+            error.message;
+    }
+
+});
