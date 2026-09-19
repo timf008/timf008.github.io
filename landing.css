@@ -1022,3 +1022,189 @@ footer a:hover {
     outline: 2px solid #536f8e;
     outline-offset: 2px;
 }
+
+/* ====================================
+   AUTH MODAL - FINAL OVERRIDES
+   Keep at absolute bottom of CSS
+==================================== */
+
+
+/* ---------- Tabs Container ---------- */
+
+.auth-box .auth-tabs {
+    display: flex;
+    width: 100%;
+    gap: 6px;
+
+    margin: 0 0 24px 0;
+    padding: 4px;
+
+    background: #f0eadc;
+    border: 1px solid #d8d3c4;
+    border-radius: 8px;
+}
+
+
+/* ---------- Tab Buttons ---------- */
+
+.auth-box .auth-tabs .auth-tab {
+    appearance: none;
+    -webkit-appearance: none;
+
+    display: block;
+    flex: 1;
+
+    width: auto;
+    min-width: 0;
+    height: auto;
+
+    margin: 0;
+    padding: 9px 10px;
+
+    border: 1px solid transparent;
+    border-radius: 6px;
+
+    background: transparent;
+
+    color: #607286;
+
+    font-family: inherit;
+    font-size: 0.88rem;
+    font-weight: 700;
+    line-height: 1.2;
+
+    text-align: center;
+
+    cursor: pointer;
+
+    box-shadow: none;
+    text-shadow: none;
+}
+
+.auth-box .auth-tabs .auth-tab:hover {
+    background: rgba(255, 255, 255, 0.65);
+    color: #102743;
+}
+
+.auth-box .auth-tabs .auth-tab.active {
+    background: #ffffff;
+    color: #102743;
+
+    border: 1px solid #c9d2dc;
+
+    box-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.06),
+        0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+
+/* ---------- Forms ---------- */
+
+.auth-box .auth-form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.auth-box .auth-form[hidden] {
+    display: none !important;
+}
+
+
+/* ---------- Labels ---------- */
+
+.auth-box .auth-form label {
+    display: block;
+
+    width: 100%;
+
+    margin: 0 0 5px 0;
+    padding: 0;
+
+    color: #334e68;
+
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+
+/* ---------- Inputs ---------- */
+
+.auth-box .auth-form input {
+    appearance: none;
+    -webkit-appearance: none;
+
+    display: block;
+
+    width: 100%;
+    height: 42px;
+
+    margin: 0 0 16px 0;
+    padding: 9px 11px;
+
+    border: 1px solid #c9d2dc;
+    border-radius: 6px;
+
+    background: #ffffff;
+
+    color: #252525;
+
+    font-family: inherit;
+    font-size: 0.92rem;
+
+    box-shadow: none;
+    outline: none;
+}
+
+.auth-box .auth-form input:focus {
+    border-color: #536f8e;
+
+    box-shadow:
+        0 0 0 3px rgba(83, 111, 142, 0.12);
+}
+
+
+/* ---------- Submit Button ---------- */
+
+.auth-box .auth-form .auth-submit {
+    appearance: none;
+    -webkit-appearance: none;
+
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+    margin: 4px 0 0 0;
+    padding: 11px 16px;
+
+    border: 1px solid #102743;
+    border-radius: 7px;
+
+    background: #102743;
+
+    color: #ffffff;
+
+    font-family: inherit;
+    font-size: 0.92rem;
+    font-weight: 700;
+
+    text-align: center;
+
+    cursor: pointer;
+
+    box-shadow: none;
+}
+
+.auth-box .auth-form .auth-submit:hover {
+    background: #183b63;
+
+    box-shadow:
+        0 5px 12px rgba(16, 39, 67, 0.18);
+}
