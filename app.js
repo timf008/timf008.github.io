@@ -53,7 +53,7 @@ signupTab.onclick = () => {
 // TimBaseball Authentication
 // ==================================
 
-const AUTH_API = "https://timbaseball-auth.onrender.com";
+const AUTH_API = "https://auth.timbaseball.com";
 
 // ------------------------------
 // Create Account
