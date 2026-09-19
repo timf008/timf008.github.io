@@ -226,6 +226,11 @@ async function checkCurrentUser() {
                 data.user
             );
 
+            // Change navigation button
+            document.getElementById("openAuth").textContent =
+                "My Account";
+
+            // Show account status in modal
             authMessage.textContent =
                 `Logged in as ${data.user.email}`;
 
@@ -234,6 +239,12 @@ async function checkCurrentUser() {
             console.log(
                 "No active TimBaseball session."
             );
+
+            // Restore default navigation button
+            document.getElementById("openAuth").textContent =
+                "Log In / Create Account";
+
+            authMessage.textContent = "";
         }
 
     } catch (error) {
