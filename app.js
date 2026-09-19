@@ -48,6 +48,9 @@ const logoutButton =
 const authTabs =
     document.querySelector(".auth-tabs");
 
+const planBadge =
+    document.getElementById("planBadge");
+
 loginTab.onclick = () => {
 
     // Do nothing if user is already logged in
@@ -267,10 +270,46 @@ async function checkCurrentUser() {
             accountEmail.textContent =
                 data.user.email;
 
-            accountPlan.textContent =
-                data.user.subscriptionStatus === "free"
-                    ? "Free"
-                    : data.user.subscriptionStatus;
+            // ------------------------------
+            // Account Plan
+            // ------------------------------
+
+            if (data.user.subscriptionStatus === "free") {
+
+                accountPlan.textContent =
+                    "Free Trial";
+
+                planBadge.textContent =
+                    "FREE";
+
+                planBadge.classList.remove("paid");
+                planBadge.classList.add("free");
+
+            } else if (
+                data.user.subscriptionStatus === "active"
+            ) {
+
+                accountPlan.textContent =
+                    "All Access";
+
+                planBadge.textContent =
+                    "PAID";
+
+                planBadge.classList.remove("free");
+                planBadge.classList.add("paid");
+
+            } else {
+
+                // Fallback for unexpected account states
+                accountPlan.textContent =
+                    "Free Trial";
+
+                planBadge.textContent =
+                    "FREE";
+
+                planBadge.classList.remove("paid");
+                planBadge.classList.add("free");
+            }
 
             // Show account interface
             accountView.hidden = false;
