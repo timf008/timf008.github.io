@@ -600,6 +600,8 @@ footer a:hover {
     cursor: pointer;
 
     font-family: inherit;
+    font-weight: 600;
+    text-align: center;
 }
 
 .auth-button:hover {
