@@ -298,8 +298,11 @@ body {
 }
 
 
-.nav-icon {
-    font-size: 1.15rem;
+.nav-silhouette {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+    flex-shrink: 0;
 }
 
 
