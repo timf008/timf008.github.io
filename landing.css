@@ -771,6 +771,10 @@ footer a:hover {
     border-bottom: 1px solid #ccd5df;
 }
 
+.auth-tabs[hidden] {
+    display: none !important;
+}
+
 
 .auth-tab {
     flex: 1;
