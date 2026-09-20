@@ -80,6 +80,42 @@ signupTab.onclick = () => {
     loginTab.classList.remove("active");
 };
 
+// ------------------------------
+// Access Control - Test Mode
+// ------------------------------
+
+// true  = simulate Free Trial
+// false = simulate All Access
+
+const TEST_FREE_MODE = true;
+
+
+// ------------------------------
+// Access Helper
+// ------------------------------
+
+function hasAllAccess() {
+
+    return !TEST_FREE_MODE;
+}
+
+// ------------------------------
+// Locked Feature Helper
+// ------------------------------
+
+function requireAllAccess(featureName) {
+
+    if (hasAllAccess()) {
+        return true;
+    }
+
+    console.log(
+        `${featureName} requires TimBaseball All Access.`
+    );
+
+    return false;
+}
+
 // ==================================
 // TimBaseball Authentication
 // ==================================
