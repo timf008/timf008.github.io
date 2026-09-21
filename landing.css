@@ -6,6 +6,16 @@
     box-sizing: border-box;
 }
 
+.version-label {
+    margin-top: 6px;
+
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+
+    color: #8a98a8;
+    text-align: center;
+}
 
 /* ------------------------------------
    Global Layout
