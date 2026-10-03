@@ -1312,80 +1312,6 @@ body {
 
 }
 
-
-/* ------------------------------------
-   Mobile
------------------------------------- */
-
-@media (max-width: 640px) {
-
-    .main-wrapper {
-        padding: 12px;
-    }
-
-
-    .card {
-        padding: 26px 18px 26px 34px;
-
-        border-radius: 8px;
-    }
-
-
-    /* Move notebook margin inward */
-
-    .card::after {
-        left: 21px;
-    }
-
-
-    .site-logo {
-        width: 92px;
-    }
-
-
-    .card h1 {
-        font-size: 1.7rem;
-    }
-
-
-    .card > h2 {
-        font-size: 0.95rem;
-    }
-
-
-    .intro {
-        text-align: left;
-    }
-
-
-    /* Stack navigation */
-
-    .link-list {
-        flex-direction: column;
-
-        gap: 9px;
-    }
-
-
-    .analyzer-button {
-        width: 200px;
-
-        max-width: 100%;
-    }
-
-
-    .github-button {
-        width: 145px;
-
-        max-width: 100%;
-    }
-
-
-    .nav-button {
-        min-height: 56px;
-    }
-}
-
 /* ------------------------------------
    Authentication Button
 ------------------------------------ */
@@ -1454,9 +1380,9 @@ body {
 
     padding: 30px 32px 28px;
 
-    background: #fffdf7;
+    background: #ffffff;
 
-    border: 1px solid #d4cdbd;
+    border: 1px solid #d2dee9;
     border-radius: 10px;
 
     box-shadow:
@@ -1465,31 +1391,6 @@ body {
     overflow: hidden;
 }
 
-
-/* Notebook lines inside modal */
-
-.auth-box::before {
-    content: "";
-
-    position: absolute;
-    inset: 0;
-
-    background-image:
-        repeating-linear-gradient(
-            to bottom,
-            transparent 0,
-            transparent 27px,
-            rgba(63, 107, 148, 0.07) 28px,
-            transparent 29px
-        );
-
-    pointer-events: none;
-
-    z-index: 0;
-}
-
-
-/* Keep modal content above notebook lines */
 
 .auth-box > * {
     position: relative;
@@ -1846,8 +1747,8 @@ body {
     margin: 0 0 24px 0;
     padding: 4px;
 
-    background: #f0eadc;
-    border: 1px solid #d8d3c4;
+    background: #f1f5f9;
+    border: 1px solid #d2dee9;
     border-radius: 8px;
 }
 
@@ -2028,7 +1929,7 @@ body {
 /* Account information card */
 
 .account-card {
-    background: rgba(255, 255, 255, 0.68);
+    background: #f8fafc;
 
     border: 1px solid #ccd5df;
     border-radius: 12px;
