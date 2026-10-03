@@ -1,269 +1,746 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>timbaseball.com</title>
-<link rel="stylesheet" href="/landing.css">
-</head>
-
 <body>
-<div class="main-wrapper">
-  <div class="card">
 
-    <img src="diamondgraph.png" class="site-logo" alt="timbaseball.com logo">
+<div class="site-shell">
 
-<h1>Baseball Analytics Made Simple</h1>
-<h2>A Quick Look at the Player Behind the Numbers</h2>
+    <!-- ==================================
+         Top Navigation
+    =================================== -->
 
-<p class="intro">
-  Welcome to <strong>timbaseball.com</strong> — a baseball analytics project
-  designed to make player evaluation easier to understand. Instead of sorting
-  through dozens of statistics, search any batter or pitcher and get a simple
-  snapshot of their performance. <strong>Overall Score</strong> measures the
-  strength of the player's statistical profile, while <strong>XP</strong>
-  measures their production.
-</p>
+    <header class="topbar">
 
-<div class="link-list">
+        <div class="brand">
 
-  <a href="https://pitcher.timbaseball.com"
-     class="nav-button analyzer-button">
+            <img
+                src="diamondgraph.png"
+                class="brand-logo"
+                alt="TimBaseball">
 
-    <img src="images/pitcher.png"
-         class="nav-silhouette"
-         alt="">
+            <div class="brand-copy">
+                <strong>TIMBASEBALL</strong>
+                <span>PLAYER ANALYTICS</span>
+            </div>
 
-    <span>
-      <strong>Pitcher Analyzer</strong>
-      <small>Pitchers · XP · Overall</small>
-    </span>
+        </div>
 
-  </a>
 
-  <a href="https://batter.timbaseball.com"
-     class="nav-button analyzer-button">
+        <div class="topbar-actions">
 
-    <img src="images/batter.png"
-         class="nav-silhouette"
-         alt="">
+            <a
+                href="https://github.com/timf008"
+                class="github-link"
+                target="_blank"
+                rel="noopener noreferrer">
+                GITHUB
+            </a>
 
-    <span>
-      <strong>Batter Analyzer</strong>
-      <small>Hitters · XP · Overall</small>
-    </span>
+            <button
+                id="openAuth"
+                class="login-button"
+                type="button">
+                LOG IN
+            </button>
 
-  </a>
+        </div>
 
-  <a href="https://github.com/timf008"
-     class="nav-button github-button">
+    </header>
 
-    <span>
-      <strong>GitHub</strong>
-      <small>View Source Code</small>
-    </span>
 
-  </a>
+    <main>
 
-  <button id="openAuth"
-        class="nav-button auth-button">
-    Log In / Create Account
-</button>
-  
+
+        <!-- ==================================
+             Hero
+        =================================== -->
+
+        <section class="hero">
+
+            <div class="hero-badge">
+                ◆ PLAYER ANALYTICS · 2026
+            </div>
+
+            <h1>
+                Baseball Analytics<br>
+                <span>Made Simple.</span>
+            </h1>
+
+            <p class="hero-subtitle">
+                Five core metrics. One statistical profile.
+                Context that helps explain the player behind the numbers.
+            </p>
+
+
+            <div class="hero-actions">
+
+
+                <!-- Batter Analyzer -->
+
+                <a
+                    href="https://batter.timbaseball.com"
+                    class="analyzer-card batter-card">
+
+                    <img
+                        src="images/batter.png"
+                        class="analyzer-silhouette"
+                        alt="">
+
+                    <div class="analyzer-copy">
+
+                        <span class="analyzer-label">
+                            HITTERS
+                        </span>
+
+                        <strong>
+                            Batter Analyzer
+                        </strong>
+
+                        <small>
+                            Overall · XP · Park Context
+                        </small>
+
+                    </div>
+
+                    <span class="arrow">
+                        →
+                    </span>
+
+                </a>
+
+
+                <!-- Pitcher Analyzer -->
+
+                <a
+                    href="https://pitcher.timbaseball.com"
+                    class="analyzer-card pitcher-card">
+
+                    <img
+                        src="images/pitcher.png"
+                        class="analyzer-silhouette"
+                        alt="">
+
+                    <div class="analyzer-copy">
+
+                        <span class="analyzer-label">
+                            PITCHERS
+                        </span>
+
+                        <strong>
+                            Pitcher Analyzer
+                        </strong>
+
+                        <small>
+                            Overall · XP · Command Profile
+                        </small>
+
+                    </div>
+
+                    <span class="arrow">
+                        →
+                    </span>
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==================================
+             The Model
+        =================================== -->
+
+        <section class="engine-section">
+
+            <div class="section-heading">
+
+                <span class="eyebrow">
+                    THE MODEL
+                </span>
+
+                <h2>
+                    Five metrics. One player profile.
+                </h2>
+
+                <p>
+                    TimBaseball starts with a small group of familiar,
+                    meaningful statistics and builds a consistent
+                    statistical portrait of each player.
+                </p>
+
+            </div>
+
+
+            <div class="metric-machine">
+
+
+                <div class="metrics">
+
+                    <div class="metric">
+                        <strong>BA</strong>
+                        <span>Hitting</span>
+                    </div>
+
+                    <div class="metric">
+                        <strong>OBP</strong>
+                        <span>On Base</span>
+                    </div>
+
+                    <div class="metric">
+                        <strong>SLG</strong>
+                        <span>Power</span>
+                    </div>
+
+                    <div class="metric">
+                        <strong>K%</strong>
+                        <span>Discipline</span>
+                    </div>
+
+                    <div class="metric">
+                        <strong>BB%</strong>
+                        <span>Discipline</span>
+                    </div>
+
+                </div>
+
+
+                <div class="flow-line">
+                    <span></span>
+                    <div>↓</div>
+                </div>
+
+
+                <div class="profile-result">
+
+                    <div class="profile-title">
+                        PLAYER PROFILE
+                    </div>
+
+
+                    <div class="score-boxes">
+
+
+                        <div class="score-box">
+
+                            <span>
+                                OVERALL
+                            </span>
+
+                            <strong>
+                                7.4
+                            </strong>
+
+                            <div class="meter">
+                                <div style="width: 74%;"></div>
+                            </div>
+
+                            <small>
+                                Statistical profile
+                            </small>
+
+                        </div>
+
+
+                        <div class="score-box">
+
+                            <span>
+                                XP
+                            </span>
+
+                            <strong>
+                                1086
+                            </strong>
+
+                            <div class="meter">
+                                <div style="width: 62%;"></div>
+                            </div>
+
+                            <small>
+                                Production context
+                            </small>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==================================
+             Beyond the Score
+        =================================== -->
+
+        <section class="features-section">
+
+            <div class="section-heading">
+
+                <span class="eyebrow">
+                    BEYOND THE SCORE
+                </span>
+
+                <h2>
+                    Don't just measure the player.
+                    Understand the profile.
+                </h2>
+
+                <p>
+                    TimBaseball uses the same core player profile
+                    to explore change, comparison, similarity and context.
+                </p>
+
+            </div>
+
+
+            <div class="feature-grid">
+
+
+                <!-- Trend -->
+
+                <article class="feature-card">
+
+                    <div class="feature-icon">
+                        ↗
+                    </div>
+
+                    <span>
+                        CHANGE
+                    </span>
+
+                    <h3>
+                        Trend Analysis
+                    </h3>
+
+                    <p>
+                        See what changed from season to season
+                        and which parts of the profile drove it.
+                    </p>
+
+                </article>
+
+
+                <!-- Compare -->
+
+                <article class="feature-card">
+
+                    <div class="feature-icon">
+                        ⇄
+                    </div>
+
+                    <span>
+                        CONTEXT
+                    </span>
+
+                    <h3>
+                        Player Compare
+                    </h3>
+
+                    <p>
+                        Put two statistical profiles side by side
+                        and see where each player has the advantage.
+                    </p>
+
+                </article>
+
+
+                <!-- Similar Profiles -->
+
+                <article class="feature-card featured">
+
+                    <div class="feature-icon">
+                        ◆
+                    </div>
+
+                    <span>
+                        DISCOVERY
+                    </span>
+
+                    <h3>
+                        Similar Profiles
+                    </h3>
+
+                    <p>
+                        Five-dimensional profile geometry finds
+                        players with similar statistical shapes.
+                    </p>
+
+                    <div class="geometry">
+                        EUCLIDEAN DISTANCE · 5D
+                    </div>
+
+                </article>
+
+
+                <!-- Fantasy Edge -->
+
+                <article class="feature-card">
+
+                    <div class="feature-icon">
+                        ◎
+                    </div>
+
+                    <span>
+                        INTERPRETATION
+                    </span>
+
+                    <h3>
+                        Fantasy Edge
+                    </h3>
+
+                    <p>
+                        Identity, State and Value help translate
+                        the underlying measurements into context.
+                    </p>
+
+                </article>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==================================
+             Philosophy
+        =================================== -->
+
+        <section class="philosophy-section">
+
+
+            <div class="philosophy-copy">
+
+                <span class="eyebrow light">
+                    THE PHILOSOPHY
+                </span>
+
+                <h2>
+                    Enough to dive into.<br>
+                    Not enough to overwhelm.
+                </h2>
+
+                <p>
+                    Modern baseball provides an enormous amount of data.
+                    TimBaseball takes a deliberately narrower approach:
+                    start with a few solid core measurements, build a
+                    consistent profile, then add context where it helps.
+                </p>
+
+                <p>
+                    The result is an analytics system designed to help
+                    you see the player without making you stare at
+                    the entire spreadsheet.
+                </p>
+
+            </div>
+
+
+            <div class="philosophy-stack">
+
+
+                <div>
+                    <span>01</span>
+                    <strong>Measure</strong>
+                    <small>Core statistics</small>
+                </div>
+
+
+                <div>
+                    <span>02</span>
+                    <strong>Profile</strong>
+                    <small>Overall + XP</small>
+                </div>
+
+
+                <div>
+                    <span>03</span>
+                    <strong>Compare</strong>
+                    <small>Geometry + context</small>
+                </div>
+
+
+                <div>
+                    <span>04</span>
+                    <strong>Interpret</strong>
+                    <small>Understand the player</small>
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==================================
+             Current Research
+        =================================== -->
+
+        <section class="research-section">
+
+            <div class="section-heading">
+
+                <span class="eyebrow">
+                    BUILT IN THE GARAGE · TESTED WITH DATA
+                </span>
+
+                <h2>
+                    Current Research
+                </h2>
+
+                <p>
+                    The models are continuously tested against player
+                    populations, historical movement and alternative
+                    approaches.
+                </p>
+
+            </div>
+
+
+            <div class="research-grid">
+
+
+                <article>
+
+                    <span>
+                        XP
+                    </span>
+
+                    <h3>
+                        XP Divergence
+                    </h3>
+
+                    <p>
+                        Examining the relationship between production
+                        and expected production from the Overall profile.
+                    </p>
+
+                </article>
+
+
+                <article>
+
+                    <span>
+                        STATE
+                    </span>
+
+                    <h3>
+                        Forward Validation
+                    </h3>
+
+                    <p>
+                        Testing whether Fantasy State classifications
+                        separate subsequent player outcomes.
+                    </p>
+
+                </article>
+
+
+                <article>
+
+                    <span>
+                        VALUE
+                    </span>
+
+                    <h3>
+                        Overall Divergence
+                    </h3>
+
+                    <p>
+                        Comparing players against statistically similar
+                        profiles using nearest-neighbor geometry.
+                    </p>
+
+                </article>
+
+
+                <article>
+
+                    <span>
+                        PARK
+                    </span>
+
+                    <h3>
+                        Park Factor Analysis
+                    </h3>
+
+                    <p>
+                        Measuring how offensive environments affect
+                        Batter Analyzer Overall Scores.
+                    </p>
+
+                </article>
+
+
+            </div>
+
+
+
+            <!-- Research Materials -->
+
+            <div class="research-materials-modern">
+
+                <div class="research-materials-heading">
+
+                    <span>
+                        RESEARCH MATERIALS
+                    </span>
+
+                    <p>
+                        Methodology documents, validation studies
+                        and supporting analysis.
+                    </p>
+
+                </div>
+
+
+                <div class="research-links">
+
+
+                    <a
+                        href="assets/Batters_XP_Divergence_Identity_Change_by_SD_Band_Final.png"
+                        target="_blank"
+                        rel="noopener noreferrer">
+
+                        <span>PNG</span>
+
+                        Batters XP Divergence Identity Change
+
+                        <strong>→</strong>
+
+                    </a>
+
+
+                    <a
+                        href="assets/XP_Divergence_Standard_Deviation_Research_Methodology.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer">
+
+                        <span>PDF</span>
+
+                        XP Divergence Research Methodology
+
+                        <strong>→</strong>
+
+                    </a>
+
+
+                    <a
+                        href="assets/Batters_Overall_Divergence_Identity_Change_by_SD_Band.png"
+                        target="_blank"
+                        rel="noopener noreferrer">
+
+                        <span>PNG</span>
+
+                        Batters Overall Divergence Identity Change
+
+                        <strong>→</strong>
+
+                    </a>
+
+
+                    <a
+                        href="assets/Overall_Divergence_Standard_Deviation_Research_Methodology_XP_Format-TimL13.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer">
+
+                        <span>PDF</span>
+
+                        Overall Divergence Research Methodology
+
+                        <strong>→</strong>
+
+                    </a>
+
+
+                    <a
+                        href="assets/Batter_Overall_Score_Park_Factor_Research_Methodology_Final.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer">
+
+                        <span>PDF</span>
+
+                        Batter Overall Score Park Factor Analysis
+
+                        <strong>→</strong>
+
+                    </a>
+
+
+                    <a
+                        href="assets/Fantasy_State_Forward_XP_Divergence_Validation_Study.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer">
+
+                        <span>PDF</span>
+
+                        Fantasy State Forward XP Divergence Validation Study
+
+                        <strong>→</strong>
+
+                    </a>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- ==================================
+         Footer
+    =================================== -->
+
+    <footer class="modern-footer">
+
+
+        <div class="footer-brand">
+
+            <strong>
+                TIMBASEBALL
+            </strong>
+
+            <span>
+                Baseball Analytics Made Simple
+            </span>
+
+        </div>
+
+
+        <div class="footer-meta">
+
+            © 2026 Timothy Fuller ·
+            <a href="mailto:info@timbaseball.com">
+                info@timbaseball.com
+            </a>
+
+            <span>
+                V 1.0.2
+            </span>
+
+        </div>
+
+
+    </footer>
+
 </div>
 
-    <hr>
-
-        <section class="overall-section">
-          <h2>Scoring Philosophy</h2>
-      <h3>Overall Score — 5‑Metric Skill Model (0–10)</h3>
-      <p>
-        The <strong>Overall Score</strong> is a balanced, normalized rating built from five
-        core skill components:
-      </p>
-
-      <ul>
-        <li><strong>BA</strong> — Hitting Outcomes</li>
-        <li><strong>OBP</strong> — Reaching Base</li>
-        <li><strong>SLG</strong> — Power/Output</li>
-        <li><strong>K%</strong> — Plate Discipline - Downside</li>
-        <li><strong>BB%</strong> — Plate Discipline - Upside</li>
-      </ul>
-
-      <p>
-        Each metric is scaled from 0–10 and weighted to produce a final <strong>Overall Score</strong>.
-        This model reflects <em>true skill</em> and consistency — the kind of rating scouts and
-        analysts rely on.
-      </p>
-    </section>
 
 
-    <section class="xp-section">
-
-      <h3>XP Score — Raw Impact Index</h3>
-      <p>
-        The <strong>XP Score</strong> is a high‑resolution performance metric that captures
-        a player’s <em>impact</em> on the field. It’s intentionally unfiltered — built from
-        core stats like BA, OBP, SLG, BB%, and K% — and scaled so explosive players stand out.
-      </p>
-
-      <p>XP rewards:</p>
-      <ul>
-        <li>High batting average</li>
-        <li>Strong on‑base skill</li>
-        <li>Slugging power</li>
-        <li>Walk discipline</li>
-        <li>Low strikeout rates</li>
-      </ul>
-
-      <p>
-        XP is designed to <strong>pop</strong>. When a hitter has an Overall Score of 6.5 and an XP of 1100,
-        it tells you he’s doing something special — even if his traditional stats don’t
-        immediately show it. XP reveals outliers, breakout candidates, and fantasy sleepers.
-      </p>
-    </section>
-
-    <section class="why-both">
-      <h3>Why Both Scores Matter</h3>
-      <p>Overall Score shows <strong>skill</strong>.</p>
-      <p>XP shows <strong>impact</strong>.</p>
-      <p>Together, they tell the full story of a player’s performance.</p>
-    </section>
-
-<section class="current-research">
-    <h2>Current Research</h2>
-
-    <h3>XP Divergence and Fantasy Identity Stability</h3>
-
-    <p>
-        The ongoing research examines the relationship between a player's XP score
-        and the XP expected from his Overall Score. Players are grouped by standard
-        deviation bands based on their XP divergence, and subsequent Fantasy Identity
-        changes are measured across those groups.
-    </p>
-
-    <p>
-        The current results suggest that players farther from their expected XP
-        relationship may experience Fantasy Identity changes more frequently. This
-        analysis is preliminary, and additional data will be used to determine whether
-        the observed relationship persists over time.
-    </p>
-
-    <h3>Fantasy State Forward XP Divergence Validation Study</h3>
-
-  <p>
-    The results do not establish Fantasy State as a proven predictor of future 
-    player performance. However, in this 348-player sample, classifications established
-    at the beginning of the study were associated with measurably different subsequent 
-    XP Divergence outcomes. Forward performance followed the model's ordinal structure, 
-    progressing from Strong to Stable to Vulnerable to High Risk. The observed separation 
-    between Stable and warning-state players was statistically significant in the 
-    permutation analysis. Further testing across independent seasons and time windows is 
-    required to determine whether this relationship is reproducible.
-    </p>
-
-    <h3>Overall Divergence and Fantasy Value</h3>
-
-    <p>
-        The ongoing research also examines how a player's Overall Score compares
-        with the Overall Scores of statistically similar players. Expected Overall is
-        calculated using the 10 nearest player profiles based on the five component
-        scores used by the Overall model.
-    </p>
-
-    <p>
-        Players are grouped by standard deviation bands based on their Overall
-        divergence. Early results suggest that larger deviations from Expected Overall
-        may reveal more structured patterns in subsequent player movement, while
-        players closer to expectation exhibit less distinct behavior. This analysis
-        remains preliminary and will continue to be evaluated across additional
-        observations.
-    </p>
-
-
-    <h3>Overall Score and Park Factor Analysis</h3>
-
-    <p>
-        This research examines whether adjusting offensive statistics for ballpark
-        environment materially changes Batter Analyzer Overall Scores or player
-        rankings. A park-adjusted challenger was constructed using 2024–2026 rolling
-        Statcast park factors while preserving the existing five-metric Overall
-        scoring model.
-    </p>
-
-    <p>
-      Among 433 qualified hitters included in the analysis, the mean absolute change in 
-      Overall Score was 0.215 points, while the median absolute change was 0.125 points. 
-      The original and park-adjusted models produced a Spearman rank correlation of 0.987. 
-      Approximately 74.6% of players remained within ±0.30 points and 91.0% remained 
-      within ±0.50 points.
-
-
-    </p>
-
-    <p>
-        The results suggest that the existing Overall model is generally resistant
-        to park effects across most of the player population, while park context may
-        become more consequential in extreme environments. This analysis is
-        exploratory and can be extended across additional seasons and more precise
-        park-by-park player exposure.
-    </p>
-
-    <h3>Research Materials</h3>
-
-    <div class="research-materials">
-        <p>
-            <a href="assets/Batters_XP_Divergence_Identity_Change_by_SD_Band_Final.png"
-               target="_blank">
-                Batters XP Divergence Identity Change Chart (PNG)
-            </a>
-        </p>
-
-        <p>
-            <a href="assets/XP_Divergence_Standard_Deviation_Research_Methodology.pdf"
-               target="_blank">
-                XP Divergence Standard Deviation Research Methodology (PDF)
-            </a>
-        </p>
-
-        <p>
-            <a href="assets/Batters_Overall_Divergence_Identity_Change_by_SD_Band.png"
-               target="_blank">
-                Batters Overall Divergence Identity Change Chart (PNG)
-            </a>
-        </p>
-
-        <p>
-            <a href="assets/Overall_Divergence_Standard_Deviation_Research_Methodology_XP_Format-TimL13.pdf"
-               target="_blank">
-                Overall Divergence Standard Deviation Research Methodology (PDF)
-            </a>
-        </p>
-
-        <p>
-            <a href="assets/Batter_Overall_Score_Park_Factor_Research_Methodology_Final.pdf"
-               target="_blank">
-                Batter Overall Score Park Factor Research Methodology (PDF)
-            </a>
-        </p>
-<p>
-            <a href="assets/Fantasy_State_Forward_XP_Divergence_Validation_Study.pdf""
-               target="_blank">
-                Fantasy State Forward XP Divergence Validation Study (PDF)
-            </a>
-        </p>
-      
-    </div>
-</section>
-      
-    <footer>
-  © 2026 Timothy Fuller · Designed for 💻 PC / 📱 Tablet<br>
-  Contact: <a href="mailto:info@timbaseball.com">info@timbaseball.com</a><br>
-  <span class="version-label">V 1.0.1</span>
-</footer>
-
-
-  </div>
-</div>
+<!-- ==================================
+     KEEP YOUR EXISTING
+     LOGIN / CREATE ACCOUNT MODAL
+     DIRECTLY BELOW THIS POINT
+=================================== -->
 
 <!-- ==================================
      Login / Create Account Modal
