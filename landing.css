@@ -1,524 +1,1315 @@
-/* ------------------------------------
-   TimBaseball Notebook Theme
------------------------------------- */
+/* ==========================================
+   TIMBASEBALL MODERN LANDING PAGE
+   V 1.0.2
+========================================== */
 
 * {
     box-sizing: border-box;
 }
 
-.version-label {
-    margin-top: 6px;
-
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 1.4px;
-
-    color: #8a98a8;
-    text-align: center;
+html {
+    scroll-behavior: smooth;
 }
-
-/* ------------------------------------
-   Global Layout
------------------------------------- */
 
 body {
     margin: 0;
     padding: 0;
-    font-family: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
-    background: #f3efe3;
-    color: #2f2f2f;
+
+    font-family:
+        "IBM Plex Sans",
+        "Segoe UI",
+        system-ui,
+        sans-serif;
+
+    background: #eef3f8;
+    color: #0f243e;
 }
 
 
-/* ------------------------------------
-   Centered Landing Container
------------------------------------- */
+/* ==========================================
+   SITE SHELL
+========================================== */
 
-.main-wrapper {
-    min-height: 100vh;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 32px;
-}
-
-
-/* ------------------------------------
-   Main Notebook Sheet
------------------------------------- */
-
-.card {
-    max-width: 760px;
+.site-shell {
     width: 100%;
-    background: #fffdf7;
-
-    border-radius: 10px;
-    border: 1px solid #d4cdbd;
-
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-
-    padding: 34px 40px 34px 62px;
-
-    position: relative;
-    overflow: hidden;
-}
-
-
-/* ------------------------------------
-   Notebook Paper
------------------------------------- */
-
-/* Horizontal notebook lines */
-
-.card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-
-    background-image:
-        repeating-linear-gradient(
-            to bottom,
-            transparent 0,
-            transparent 27px,
-            rgba(63, 107, 148, 0.09) 28px,
-            transparent 29px
-        );
-
-    pointer-events: none;
-    border-radius: 10px;
-    z-index: 0;
-}
-
-
-/* Red notebook margin */
-
-.card::after {
-    content: "";
-    position: absolute;
-
-    top: 0;
-    bottom: 0;
-    left: 38px;
-
-    width: 1px;
-
-    background: rgba(184, 70, 70, 0.25);
-
-    pointer-events: none;
-}
-
-
-/* Keep content above paper texture */
-
-.card > * {
-    position: relative;
-    z-index: 1;
-}
-
-
-/* ------------------------------------
-   Logo
------------------------------------- */
-
-.site-logo {
-    width: 112px;
-    height: auto;
-
-    display: block;
-
-    margin: 0 auto 16px auto;
-
-    filter: grayscale(10%) contrast(110%);
-}
-
-
-/* ------------------------------------
-   Main Headings
------------------------------------- */
-
-.card h1 {
-    font-size: 2.2rem;
-
-    margin: 0 0 5px 0;
-
-    text-align: center;
-    letter-spacing: 0.01em;
-
-    color: #102743;
-}
-
-
-.card > h2 {
-    font-size: 1.05rem;
-
-    margin: 0 0 20px 0;
-
-    text-align: center;
-
-    color: #536b89;
-
-    font-weight: 600;
-}
-
-
-.card h3 {
-    font-size: 1.1rem;
-
-    margin: 24px 0 10px 0;
-
-    color: #172f4d;
-}
-
-
-/* ------------------------------------
-   Intro
------------------------------------- */
-
-.intro {
-    max-width: 640px;
-
-    margin: 0 auto 20px auto !important;
-
-    text-align: center;
-}
-
-
-/* ------------------------------------
-   Text
------------------------------------- */
-
-.card p {
-    margin: 0 0 14px 0;
-
-    line-height: 1.68;
-
-    color: #343434;
-}
-
-
-/* ------------------------------------
-   Lists
------------------------------------- */
-
-.card ul {
-    margin: 0 0 18px 0;
-
-    padding-left: 22px;
-
-    color: #343434;
-}
-
-
-.card li {
-    margin-bottom: 6px;
-}
-
-
-/* ------------------------------------
-   Analyzer Navigation
------------------------------------- */
-
-.link-list {
-    display: flex;
-    flex-wrap: wrap;
-
-    justify-content: center;
-    align-items: center;
-
-    gap: 10px;
-
-    margin: 24px 0 22px;
-}
-
-
-.link-list a {
-    text-decoration: none;
-}
-
-
-/* Base navigation button */
-
-.nav-button {
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    gap: 10px;
-
-    min-height: 58px;
-
-    padding: 10px 14px;
-
-    background: rgba(255, 253, 247, 0.92);
-
-    border: 1px solid #c9d2dc;
-    border-radius: 8px;
-
-    color: #102743;
-
-    text-align: left;
-
-    box-shadow:
-        0 2px 4px rgba(0, 0, 0, 0.04),
-        0 5px 12px rgba(0, 0, 0, 0.04);
-
-    transition:
-        transform 0.15s ease,
-        box-shadow 0.15s ease,
-        border-color 0.15s ease,
-        background 0.15s ease;
-}
-
-
-.nav-button:hover {
-    transform: translateY(-2px);
-
-    border-color: #879eb7;
+    min-height: 100vh;
 
     background: #ffffff;
-
-    box-shadow:
-        0 3px 6px rgba(0, 0, 0, 0.06),
-        0 8px 18px rgba(0, 0, 0, 0.08);
 }
 
 
-/* Navigation text */
+/* ==========================================
+   TOP NAVIGATION
+========================================== */
 
-.nav-button strong {
+.topbar {
+    min-height: 76px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 24px;
+
+    padding: 0 6%;
+
+    background: #0f243e;
+
+    border-bottom:
+        1px solid rgba(255, 255, 255, 0.10);
+}
+
+
+/* ---------- Brand ---------- */
+
+.brand {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+}
+
+
+.brand-logo {
     display: block;
 
-    font-size: 0.92rem;
+    width: 44px;
+    height: 44px;
 
-    color: #102743;
+    object-fit: contain;
 }
 
 
-.nav-button small {
+.brand-copy strong {
+    display: block;
+
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    letter-spacing: 1.6px;
+}
+
+
+.brand-copy span {
     display: block;
 
     margin-top: 2px;
 
-    font-size: 0.70rem;
+    color: #8fa8c2;
 
-    color: #6c7885;
+    font-size: 9px;
+    font-weight: 700;
 
-    font-weight: 500;
+    letter-spacing: 1.5px;
 }
 
 
-.nav-silhouette {
-    width: 30px;
-    height: 44px;
+/* ---------- Right-side navigation ---------- */
+
+.topbar-actions {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+}
+
+
+.github-link,
+.login-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 36px;
+
+    padding: 9px 16px;
+
+    border-radius: 7px;
+
+    font-family: inherit;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease,
+        transform 0.15s ease;
+}
+
+
+.github-link {
+    color: #b8c9d9;
+
+    border: 1px solid transparent;
+
+    background: transparent;
+}
+
+
+.github-link:hover {
+    color: #ffffff;
+
+    background:
+        rgba(255, 255, 255, 0.06);
+}
+
+
+.login-button {
+    border: 1px solid #526a83;
+
+    background: transparent;
+
+    color: #ffffff;
+}
+
+
+.login-button:hover {
+    background:
+        rgba(255, 255, 255, 0.08);
+
+    border-color: #7890a8;
+
+    transform: translateY(-1px);
+}
+
+
+/* ==========================================
+   HERO
+========================================== */
+
+.hero {
+    padding: 90px 24px 95px;
+
+    text-align: center;
+
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            #f1f7fd 0,
+            #ffffff 52%
+        );
+
+    border-bottom: 1px solid #dce5ee;
+}
+
+
+.hero-badge {
+    display: inline-block;
+
+    margin-bottom: 22px;
+
+    padding: 7px 11px;
+
+    background: #edf5fc;
+
+    border: 1px solid #cbdceb;
+    border-radius: 999px;
+
+    color: #496d91;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 1.3px;
+}
+
+
+.hero h1 {
+    margin: 0;
+
+    color: #0f243e;
+
+    font-size: clamp(44px, 6vw, 72px);
+    font-weight: 800;
+
+    line-height: 0.98;
+
+    letter-spacing: -2.5px;
+}
+
+
+.hero h1 span {
+    color: #2f80ed;
+}
+
+
+.hero-subtitle {
+    max-width: 650px;
+
+    margin: 26px auto 34px;
+
+    color: #61758a;
+
+    font-size: 18px;
+    line-height: 1.65;
+}
+
+
+/* ==========================================
+   ANALYZER CARDS
+========================================== */
+
+.hero-actions {
+    max-width: 790px;
+
+    margin: 0 auto;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 14px;
+}
+
+
+.analyzer-card {
+    min-height: 92px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 18px;
+
+    background: #ffffff;
+
+    border: 1px solid #ccd8e4;
+    border-radius: 12px;
+
+    box-shadow:
+        0 5px 18px rgba(15, 36, 62, 0.07);
+
+    text-decoration: none;
+    text-align: left;
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease,
+        border-color 0.15s ease;
+}
+
+
+.analyzer-card:hover {
+    transform: translateY(-3px);
+
+    border-color: #8fb0cf;
+
+    box-shadow:
+        0 10px 25px rgba(15, 36, 62, 0.11);
+}
+
+
+.analyzer-silhouette {
+    width: 42px;
+    height: 58px;
+
     object-fit: contain;
+
     flex-shrink: 0;
 }
 
 
-/* Pitcher + Batter */
-
-.analyzer-button {
-    width: 200px;
+.analyzer-copy {
+    flex: 1;
 }
 
 
-/* GitHub */
+.analyzer-label {
+    display: block;
 
-.github-button {
-    width: 145px;
+    margin-bottom: 3px;
 
-    min-height: 58px;
+    color: #6c8195;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 1.3px;
+}
+
+
+.analyzer-card strong {
+    display: block;
+
+    color: #0f243e;
+
+    font-size: 17px;
+    font-weight: 700;
+}
+
+
+.analyzer-card small {
+    display: block;
+
+    margin-top: 4px;
+
+    color: #77899a;
+
+    font-size: 11px;
+    font-weight: 500;
+}
+
+
+.analyzer-card .arrow {
+    color: #2f80ed;
+
+    font-size: 22px;
+
+    flex-shrink: 0;
+}
+
+
+/* ==========================================
+   SHARED SECTIONS
+========================================== */
+
+.engine-section,
+.features-section,
+.research-section {
+    padding: 90px 6%;
+}
+
+
+.engine-section,
+.research-section {
+    background: #f7faff;
+}
+
+
+.features-section {
+    background: #ffffff;
+}
+
+
+.section-heading {
+    max-width: 690px;
+
+    margin: 0 auto 46px;
+
+    text-align: center;
+}
+
+
+.eyebrow {
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: #2f80ed;
+
+    font-size: 10px;
+    font-weight: 900;
+
+    letter-spacing: 1.7px;
+}
+
+
+.section-heading h2 {
+    margin: 0 0 15px;
+
+    color: #0f243e;
+
+    font-size: 34px;
+    font-weight: 800;
+
+    letter-spacing: -0.8px;
+}
+
+
+.section-heading p {
+    margin: 0;
+
+    color: #687d91;
+
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+
+/* ==========================================
+   FIVE-METRIC MODEL
+========================================== */
+
+.metric-machine {
+    max-width: 920px;
+
+    margin: 0 auto;
+}
+
+
+.metrics {
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, 1fr);
+
+    gap: 10px;
+}
+
+
+.metric {
+    padding: 20px 10px;
 
     text-align: center;
 
-    background: rgba(240, 234, 220, 0.78);
+    background: #ffffff;
+
+    border: 1px solid #cfdae5;
+    border-radius: 10px;
 }
 
 
-/* ------------------------------------
-   Divider
------------------------------------- */
+.metric strong {
+    display: block;
 
-hr {
-    border: 0;
+    color: #0f243e;
 
-    border-top: 1px solid #8797a8;
-
-    margin: 24px 0 0;
+    font-size: 21px;
+    font-weight: 800;
 }
 
 
-/* ------------------------------------
-   Sections
------------------------------------- */
+.metric span {
+    display: block;
 
-section {
-    margin-top: 30px;
+    margin-top: 5px;
+
+    color: #7a8b9c;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.6px;
 }
 
 
-/* Major section titles */
+/* ---------- Flow ---------- */
 
-section > h2 {
+.flow-line {
+    width: 80%;
+
+    margin: 0 auto;
+
+    text-align: center;
+}
+
+
+.flow-line > span {
+    display: block;
+
+    height: 35px;
+
+    border-bottom: 1px solid #b8c8d8;
+}
+
+
+.flow-line > div {
+    margin-top: -3px;
+
+    color: #6e88a2;
+
+    font-size: 22px;
+}
+
+
+/* ==========================================
+   PLAYER PROFILE EXAMPLE
+========================================== */
+
+.profile-result {
+    max-width: 560px;
+
+    margin: 10px auto 0;
+
+    padding: 22px;
+
+    background: #ffffff;
+
+    border: 1px solid #c8d7e6;
+    border-radius: 12px;
+
+    box-shadow:
+        0 6px 18px rgba(15, 36, 62, 0.06);
+}
+
+
+.profile-title {
+    margin-bottom: 15px;
+
     text-align: center;
 
-    font-size: 1.08rem;
+    color: #61758a;
 
-    color: #102743;
+    font-size: 10px;
+    font-weight: 900;
+
+    letter-spacing: 1.4px;
+}
+
+
+.score-boxes {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 12px;
+}
+
+
+.score-box {
+    padding: 17px;
+
+    background: #f8fafc;
+
+    border: 1px solid #d9e1e9;
+    border-radius: 9px;
+}
+
+
+.score-box > span {
+    display: block;
+
+    color: #728397;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+
+.score-box strong {
+    display: block;
+
+    margin: 4px 0 8px;
+
+    color: #0f243e;
+
+    font-size: 28px;
+    font-weight: 800;
+}
+
+
+.score-box small {
+    display: block;
+
+    margin-top: 8px;
+
+    color: #8190a0;
+
+    font-size: 9px;
+}
+
+
+/* ---------- Mini meters ---------- */
+
+.meter {
+    width: 100%;
+    height: 6px;
+
+    background: #dfe7ef;
+
+    border-radius: 999px;
+
+    overflow: hidden;
+}
+
+
+.meter > div {
+    height: 100%;
+
+    background: #2f80ed;
+
+    border-radius: inherit;
+}
+
+
+/* ==========================================
+   BEYOND THE SCORE
+========================================== */
+
+.feature-grid {
+    max-width: 1050px;
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 14px;
+}
+
+
+.feature-card {
+    position: relative;
+
+    min-height: 245px;
+
+    padding: 24px;
+
+    background: #ffffff;
+
+    border: 1px solid #d5dfe8;
+    border-radius: 12px;
+
+    box-shadow:
+        0 3px 12px rgba(15, 36, 62, 0.04);
+}
+
+
+.feature-card.featured {
+    background: #f5f9ff;
+
+    border-color: #a9c8e8;
+}
+
+
+.feature-icon {
+    width: 40px;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     margin-bottom: 22px;
+
+    background: #edf5fc;
+
+    border-radius: 9px;
+
+    color: #2f80ed;
+
+    font-size: 19px;
 }
 
 
-.overall-section,
-.why-both,
-.current-research {
-    padding-top: 4px;
+.feature-card > span {
+    color: #72879a;
+
+    font-size: 9px;
+    font-weight: 900;
+
+    letter-spacing: 1.3px;
 }
 
 
-/* ------------------------------------
-   Why Both Scores Matter
------------------------------------- */
+.feature-card h3 {
+    margin: 7px 0 11px;
 
-.why-both {
-    margin-top: 32px;
+    color: #0f243e;
 
-    padding: 15px 18px;
-
-    background: rgba(247, 244, 233, 0.80);
-
-    border: 1px solid #d8d3c4;
-    border-radius: 7px;
+    font-size: 18px;
 }
 
 
-.why-both h3 {
-    margin-top: 0;
+.feature-card p {
+    margin: 0;
 
-    color: #172f4d;
+    color: #697c8f;
+
+    font-size: 13px;
+    line-height: 1.65;
 }
 
 
-.why-both p {
-    margin-bottom: 7px;
+.geometry {
+    position: absolute;
+
+    left: 24px;
+    bottom: 19px;
+
+    color: #2f80ed;
+
+    font-size: 8px;
+    font-weight: 900;
+
+    letter-spacing: 1px;
 }
 
 
-.why-both p:last-child {
-    margin-bottom: 0;
+/* ==========================================
+   PHILOSOPHY
+========================================== */
+
+.philosophy-section {
+    display: grid;
+
+    grid-template-columns:
+        1.2fr 1fr;
+
+    gap: 80px;
+
+    align-items: center;
+
+    padding: 95px 8%;
+
+    background: #0f243e;
 }
 
 
-/* ------------------------------------
-   Current Research
------------------------------------- */
-
-.current-research {
-    margin-top: 34px;
+.eyebrow.light {
+    color: #76aeea;
 }
 
 
-.current-research > h2 {
-    padding-bottom: 10px;
+.philosophy-copy h2 {
+    margin: 0 0 23px;
 
-    border-bottom: 1px solid #a9b5c1;
+    color: #ffffff;
+
+    font-size: 40px;
+    font-weight: 800;
+
+    line-height: 1.12;
+
+    letter-spacing: -1px;
 }
 
 
-.current-research h3 {
-    margin-top: 28px;
+.philosophy-copy p {
+    max-width: 600px;
+
+    margin: 0 0 14px;
+
+    color: #b5c3d1;
+
+    font-size: 14px;
+    line-height: 1.75;
 }
 
 
-/* Research images */
+/* ---------- Philosophy steps ---------- */
 
-.current-research img.research-chart {
-    max-width: 100%;
+.philosophy-stack {
+    border: 1px solid #40546a;
+    border-radius: 12px;
 
-    height: auto;
-
-    margin: 1rem 0;
-
-    border: 1px solid #ccd3da;
-
-    border-radius: 6px;
-
-    cursor: pointer;
+    overflow: hidden;
 }
 
 
-/* ------------------------------------
-   Research Materials
------------------------------------- */
+.philosophy-stack > div {
+    display: grid;
 
-.research-materials {
-    margin-top: 12px;
+    grid-template-columns:
+        42px 1fr 1fr;
 
-    padding: 15px 18px;
+    align-items: center;
 
-    background: rgba(247, 244, 233, 0.80);
+    padding: 17px 20px;
 
-    border: 1px solid #d8d3c4;
-    border-radius: 7px;
+    border-bottom:
+        1px solid #40546a;
 }
 
 
-.research-materials p {
-    margin-bottom: 9px;
+.philosophy-stack > div:last-child {
+    border-bottom: 0;
 }
 
 
-.research-materials p:last-child {
-    margin-bottom: 0;
+.philosophy-stack span {
+    color: #6e91b4;
+
+    font-size: 10px;
+    font-weight: 900;
 }
 
 
-.research-materials a {
-    color: #214f7b;
+.philosophy-stack strong {
+    color: #ffffff;
 
-    text-decoration: none;
-
-    font-weight: 600;
+    font-size: 14px;
 }
 
 
-.research-materials a:hover {
-    text-decoration: underline;
+.philosophy-stack small {
+    text-align: right;
+
+    color: #8fa4b8;
+
+    font-size: 10px;
 }
 
 
-/* ------------------------------------
-   Footer
------------------------------------- */
+/* ==========================================
+   RESEARCH
+========================================== */
 
-footer {
-    margin-top: 34px;
+.research-grid {
+    max-width: 1000px;
 
-    padding-top: 18px;
+    margin: 0 auto;
 
-    border-top: 1px solid #b8c1ca;
+    display: grid;
 
-    font-size: 0.78rem;
+    grid-template-columns:
+        repeat(2, 1fr);
 
+    gap: 12px;
+}
+
+
+.research-grid article {
+    padding: 23px;
+
+    background: #ffffff;
+
+    border: 1px solid #d2dee9;
+    border-radius: 10px;
+}
+
+
+.research-grid article > span {
+    color: #2f80ed;
+
+    font-size: 9px;
+    font-weight: 900;
+
+    letter-spacing: 1.2px;
+}
+
+
+.research-grid h3 {
+    margin: 7px 0 9px;
+
+    color: #0f243e;
+
+    font-size: 16px;
+}
+
+
+.research-grid p {
+    margin: 0;
+
+    color: #6f8193;
+
+    font-size: 12px;
     line-height: 1.6;
-
-    text-align: center;
-
-    color: #747d86;
 }
 
 
-footer a {
-    color: #315d85;
+/* ==========================================
+   RESEARCH MATERIALS
+========================================== */
+
+.research-materials-modern {
+    max-width: 1000px;
+
+    margin: 26px auto 0;
+
+    padding: 24px;
+
+    background: #ffffff;
+
+    border: 1px solid #d2dee9;
+    border-radius: 12px;
+}
+
+
+.research-materials-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 25px;
+
+    margin-bottom: 18px;
+    padding-bottom: 16px;
+
+    border-bottom:
+        1px solid #dde5ed;
+}
+
+
+.research-materials-heading > span {
+    color: #0f243e;
+
+    font-size: 11px;
+    font-weight: 900;
+
+    letter-spacing: 1.2px;
+}
+
+
+.research-materials-heading p {
+    margin: 0;
+
+    color: #78899a;
+
+    font-size: 11px;
+}
+
+
+.research-links {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 8px;
+}
+
+
+.research-links a {
+    display: grid;
+
+    grid-template-columns:
+        42px 1fr 20px;
+
+    align-items: center;
+
+    gap: 10px;
+
+    min-height: 52px;
+
+    padding: 10px 12px;
+
+    background: #f8fafc;
+
+    border: 1px solid #dde5ed;
+    border-radius: 8px;
+
+    color: #36536f;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease,
+        transform 0.15s ease;
+}
+
+
+.research-links a:hover {
+    background: #f1f6fb;
+
+    border-color: #b8cce0;
+
+    transform: translateY(-1px);
+}
+
+
+.research-links a > span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 25px;
+
+    background: #eaf2fa;
+
+    border-radius: 5px;
+
+    color: #2f80ed;
+
+    font-size: 8px;
+    font-weight: 900;
+
+    letter-spacing: 0.7px;
+}
+
+
+.research-links a > strong {
+    color: #2f80ed;
+
+    text-align: right;
+
+    font-size: 15px;
+}
+
+
+/* ==========================================
+   FOOTER
+========================================== */
+
+.modern-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 30px;
+
+    padding: 28px 6%;
+
+    background: #0a1b2d;
+
+    color: #8799aa;
+}
+
+
+.footer-brand strong {
+    display: block;
+
+    color: #ffffff;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    letter-spacing: 1.2px;
+}
+
+
+.footer-brand span {
+    display: block;
+
+    margin-top: 3px;
+
+    color: #8799aa;
+
+    font-size: 9px;
+}
+
+
+.footer-meta {
+    color: #8799aa;
+
+    text-align: right;
+
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+
+.footer-meta a {
+    color: #a9bed2;
 
     text-decoration: none;
 }
 
 
-footer a:hover {
-    text-decoration: underline;
+.footer-meta a:hover {
+    color: #ffffff;
+}
+
+
+.footer-meta > span {
+    display: block;
+
+    margin-top: 4px;
+
+    color: #60778d;
+
+    font-size: 8px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@media (max-width: 850px) {
+
+    .feature-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+
+    .philosophy-section {
+        grid-template-columns: 1fr;
+
+        gap: 45px;
+    }
+
+
+    .research-links {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 620px) {
+
+    .topbar {
+        min-height: 68px;
+
+        padding: 0 18px;
+    }
+
+
+    .brand-logo {
+        width: 38px;
+        height: 38px;
+    }
+
+
+    .brand-copy span {
+        display: none;
+    }
+
+
+    .topbar-actions {
+        gap: 4px;
+    }
+
+
+    .github-link {
+        display: none;
+    }
+
+
+    .login-button {
+        padding: 8px 12px;
+    }
+
+
+    /* ---------- Hero ---------- */
+
+    .hero {
+        padding:
+            65px 18px 70px;
+    }
+
+
+    .hero h1 {
+        font-size: 44px;
+
+        letter-spacing: -1.5px;
+    }
+
+
+    .hero-subtitle {
+        font-size: 16px;
+    }
+
+
+    .hero-actions {
+        grid-template-columns: 1fr;
+    }
+
+
+    /* ---------- Sections ---------- */
+
+    .engine-section,
+    .features-section,
+    .research-section {
+        padding:
+            65px 18px;
+    }
+
+
+    .section-heading h2 {
+        font-size: 29px;
+    }
+
+
+    /* ---------- Metrics ---------- */
+
+    .metrics {
+        max-width: 300px;
+
+        margin: 0 auto;
+
+        grid-template-columns: 1fr;
+    }
+
+
+    .flow-line {
+        width: 60%;
+    }
+
+
+    .score-boxes {
+        grid-template-columns: 1fr;
+    }
+
+
+    /* ---------- Features ---------- */
+
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    /* ---------- Philosophy ---------- */
+
+    .philosophy-section {
+        padding:
+            70px 22px;
+    }
+
+
+    .philosophy-copy h2 {
+        font-size: 32px;
+    }
+
+
+    .philosophy-stack > div {
+        grid-template-columns:
+            34px 1fr 1fr;
+
+        padding:
+            15px 14px;
+    }
+
+
+    /* ---------- Research ---------- */
+
+    .research-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .research-materials-modern {
+        padding: 18px;
+    }
+
+
+    .research-materials-heading {
+        display: block;
+    }
+
+
+    .research-materials-heading p {
+        margin-top: 7px;
+    }
+
+
+    .research-links {
+        grid-template-columns: 1fr;
+    }
+
+
+    /* ---------- Footer ---------- */
+
+    .modern-footer {
+        flex-direction: column;
+
+        text-align: center;
+    }
+
+
+    .footer-meta {
+        text-align: center;
+    }
+
 }
 
 
