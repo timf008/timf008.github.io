@@ -99,6 +99,23 @@ body {
     white-space: nowrap;
 }
 
+@media (max-width: 620px) {
+
+    .brand-wordmark {
+        padding: 7px 10px;
+    }
+
+    .brand-logo {
+        width: 145px;
+        height: auto;
+    }
+
+    .brand-tagline {
+        display: none;
+    }
+
+}
+
 
 /* ---------- Right-side navigation ---------- */
 
