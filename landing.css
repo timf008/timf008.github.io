@@ -1451,10 +1451,13 @@ body {
 .auth-logo {
     display: block;
 
-    width: 72px;
+    width: 210px;
+    max-width: 75%;
     height: auto;
 
-    margin: 0 auto 8px;
+    margin: 0 auto 14px;
+
+    object-fit: contain;
 }
 
 
@@ -1660,7 +1663,8 @@ body {
 
 
     .auth-logo {
-        width: 64px;
+        width: 190px;
+        max-width: 78%;
     }
 
 
