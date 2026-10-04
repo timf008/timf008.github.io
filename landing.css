@@ -59,50 +59,44 @@ body {
         1px solid rgba(255, 255, 255, 0.10);
 }
 
-
 /* ---------- Brand ---------- */
 
 .brand {
     display: flex;
     align-items: center;
-
-    gap: 12px;
+    gap: 14px;
 }
 
+.brand-wordmark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 8px 14px;
+
+    background: #ffffff;
+
+    border-radius: 8px;
+}
 
 .brand-logo {
     display: block;
 
-    width: 44px;
-    height: 44px;
+    width: 185px;
+    height: auto;
 
     object-fit: contain;
 }
 
-
-.brand-copy strong {
-    display: block;
-
-    color: #ffffff;
-
-    font-size: 14px;
-    font-weight: 800;
-
-    letter-spacing: 1.6px;
-}
-
-
-.brand-copy span {
-    display: block;
-
-    margin-top: 2px;
-
+.brand-tagline {
     color: #8fa8c2;
 
     font-size: 9px;
-    font-weight: 700;
+    font-weight: 800;
 
     letter-spacing: 1.5px;
+
+    white-space: nowrap;
 }
 
 
