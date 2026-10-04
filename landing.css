@@ -471,6 +471,17 @@ body {
     text-align: center;
 }
 
+.model-profile-image {
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 10px 28px rgba(15, 36, 62, 0.08);
+}
 
 /* ---------- Two-profile grid ---------- */
 
