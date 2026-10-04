@@ -446,24 +446,72 @@ body {
 }
 
 /* ==========================================
-   Model Profile Screenshot
+   Similar Profile Demonstration
 ========================================== */
 
-.model-profile {
+.profile-comparison {
     width: 100%;
-    max-width: 900px;
+    max-width: 1100px;
+
     margin: 0 auto;
 }
 
+
+/* ---------- Section label ---------- */
+
 .model-profile-label {
-    margin-bottom: 12px;
+    margin-bottom: 14px;
 
     color: #6b7f95;
+
     font-size: 10px;
     font-weight: 800;
     letter-spacing: 1.4px;
+
     text-align: center;
 }
+
+
+/* ---------- Two-profile grid ---------- */
+
+.profile-comparison-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 18px;
+
+    align-items: start;
+}
+
+
+.profile-example {
+    min-width: 0;
+
+    padding: 10px;
+
+    background: #ffffff;
+
+    border: 1px solid #d7e1eb;
+    border-radius: 14px;
+
+    box-shadow:
+        0 10px 28px rgba(15, 36, 62, 0.07);
+}
+
+
+.profile-example-title {
+    padding: 3px 4px 10px;
+
+    color: #718399;
+
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 1.2px;
+
+    text-align: center;
+}
+
 
 .model-profile-image {
     display: block;
@@ -471,25 +519,125 @@ body {
     width: 100%;
     height: auto;
 
-    border-radius: 14px;
-
-    box-shadow:
-        0 10px 28px rgba(15, 36, 62, 0.08);
+    border-radius: 10px;
 }
 
-@media (max-width: 620px) {
 
-    .model-profile {
-        width: 100%;
+/* ==========================================
+   Similarity Explanation
+========================================== */
+
+.similarity-message {
+    max-width: 720px;
+
+    margin: 24px auto 0;
+
+    padding: 20px 24px;
+
+    text-align: center;
+
+    background: #f7faff;
+
+    border: 1px solid #d5e2ef;
+    border-radius: 12px;
+}
+
+
+.similarity-eyebrow {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #2f80ed;
+
+    font-size: 9px;
+    font-weight: 900;
+    letter-spacing: 1.4px;
+}
+
+
+.similarity-message strong {
+    display: block;
+
+    color: #0f243e;
+
+    font-size: 18px;
+    font-weight: 800;
+}
+
+
+.similarity-message p {
+    max-width: 580px;
+
+    margin: 8px auto 0;
+
+    color: #687d91;
+
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+
+.similarity-method {
+    display: inline-block;
+
+    margin-top: 13px;
+    padding-top: 11px;
+
+    border-top: 1px solid #d9e4ee;
+
+    color: #7a8da2;
+
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+}
+
+
+/* ==========================================
+   Responsive
+========================================== */
+
+@media (max-width: 760px) {
+
+    .profile-comparison-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
     }
+
+    .profile-example {
+        padding: 8px;
+    }
+
+    .similarity-message {
+        margin-top: 20px;
+        padding: 18px;
+    }
+
+}
+
+
+@media (max-width: 620px) {
 
     .model-profile-label {
         font-size: 9px;
         letter-spacing: 1px;
     }
 
+    .profile-example-title {
+        font-size: 8px;
+    }
+
     .model-profile-image {
-        border-radius: 10px;
+        border-radius: 8px;
+    }
+
+    .similarity-message strong {
+        font-size: 16px;
+    }
+
+    .similarity-message p {
+        font-size: 11px;
     }
 
 }
