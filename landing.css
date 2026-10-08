@@ -796,6 +796,138 @@ body {
 
 
 /* ==========================================
+   PLAYER ARCHETYPES
+========================================== */
+
+.archetype-section {
+    padding: 90px 6%;
+    background: #ffffff;
+}
+
+/* Three-step archetype explanation */
+
+.archetype-grid {
+    max-width: 1050px;
+    margin: 0 auto;
+
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.archetype-card {
+    padding: 28px 24px;
+
+    background: #f7faff;
+    border: 1px solid #d5dfe8;
+    border-radius: 12px;
+
+    box-shadow:
+        0 3px 12px rgba(15, 36, 62, 0.04);
+}
+
+.archetype-number {
+    display: inline-block;
+    margin-bottom: 22px;
+
+    color: #2f80ed;
+
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 1.3px;
+}
+
+.archetype-card h3 {
+    margin: 0 0 12px;
+
+    color: #0f243e;
+
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.archetype-card p {
+    margin: 0;
+
+    color: #697c8f;
+
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+/* Key conceptual distinction */
+
+.archetype-takeaway {
+    max-width: 1050px;
+    margin: 22px auto 0;
+    padding: 26px 30px;
+
+    background: #edf5fc;
+    border: 1px solid #cbdceb;
+    border-left: 3px solid #2f80ed;
+    border-radius: 10px;
+}
+
+.archetype-takeaway > span {
+    display: block;
+    margin-bottom: 10px;
+
+    color: #2f80ed;
+
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 1.4px;
+}
+
+.archetype-takeaway strong {
+    display: block;
+
+    color: #0f243e;
+
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1.4;
+}
+
+.archetype-takeaway p {
+    margin: 10px 0 0;
+
+    color: #687d91;
+
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+/* Tablet */
+
+@media (max-width: 850px) {
+    .archetype-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Mobile */
+
+@media (max-width: 620px) {
+    .archetype-section {
+        padding: 65px 18px;
+    }
+
+    .archetype-card {
+        padding: 24px 20px;
+    }
+
+    .archetype-takeaway {
+        padding: 22px 20px;
+    }
+
+    .archetype-takeaway strong {
+        font-size: 18px;
+    }
+}
+
+
+/* ==========================================
    BEYOND THE SCORE
 ========================================== */
 
